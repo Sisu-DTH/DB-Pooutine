@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&B Poutine Fast Food</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+              <a href="index.html">
+                <img src="logo.jpeg">
+              </a>  
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </nav>
+    </header>
+    <div class="main">
+        <div class="welcome-section" width:100%; height: 14%; style="background-image: url('cara.JPG'); padding:10% 0 0 0;">
+            <img src="cauliflower.JPG" style="width:28%; float: right; padding-top: 20px;" alt="Plate of Cauliflower">
+            <img src="hdcom.jpeg" style="width:28%; float: midle; padding-top: 120px;" alt="Poutine Regular">
+            <img src="Vpoutinc.jpeg" style="width:28%; float: left; padding-top: 20px;">
+        </div>
+        <div style="background-image:url('dbsalad.JPG');">
+          <div class="contact" style="margin:1%; border:5px solid black; border-radius: 20px 20px 85px 0; background-color: silver;">
+            <div>
+              <h2 style="font-weight:bold; background-color:black; color:white;">Contact Us</h2>
+            </div>
+            <hr>
+            <div class="contact-section" style="margin:1%;">
+              <div>
+                <h3>Contact Information</h3>
+                <hr>
+                <p><mark> Business email: info@DBpoutine.com</mark></p>
+                <p>Phone: +1 (613) 265-8545<br>or<br> +1 (613) 400-4898</p>
+              </div>
+              <div>
+                <h3>Social Media</h3>
+                <hr>
+                <p>Follow us on:</p>
+                <p><a href="#Facebook">Facebook</a><br><a href="#Facebook">Instagram</a><br><a href="#Facebook">Twitter</a>
+              </div>
+            </div>
+            <div class="contact-content" style="margin:1%;">
+              <h4 style="font-weight: bold; text-align: centre; ">Send us a message</h4>
+              <section class="contact-section">
+                  <form action="https://formsubmit.co/bisurha@gmail.com" method="post">
+                    <fieldset>
+                      <label for="first-name">Enter Your First Name: <input id="first-name" name="first-name" type="text" required /></label>
+                      <label for="last-name">Enter Your Last Name: <input id="last-name" name="last-name" type="text" required /></label>
+                      <label for="email">Enter Your Email: <input id="email" name="email" type="email" placeholder="example@gmail.com" required /></label>
+                    </fieldset>
+
+                    <fieldset>
+                      <label for="bio">Message:
+                        <textarea id="bio" name="bio" rows="3" cols="30" placeholder="Please type your message here..."></textarea>
+                      </label>
+                    </fieldset>
+                    <input type="submit" value="Send Message" />
+                  </form>
+                </section>
+            </div>
+          </div>
+          <br>
+          <div style="margin:2% 2% 8% 2%;">
+            <a href="menu.html#hot-drinks">
+              <img src="cappuccino.jpeg" width="100%" style="border-radius: 85px 0; ">
+            </a>
+          </div>
+        </div>
+    <!-- end container -->
+    </div>
+    <hr>
+    <footer class="footer">
+        &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "#https://sisudth.online/">Sisu DTH</a>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const logo = document.querySelector('.logo');
+
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                logo.style.display = navLinks.classList.contains('active') ? 'none' : 'block';
+            });
+        });
+
+        function showLinks() {
+            var linksContainer = document.getElementById('linksContainer');
+            if (linksContainer.style.display === "none") {
+                linksContainer.style.display = "block";
+            } else {
+                linksContainer.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
+

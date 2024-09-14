@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&B Poutine Fast Food</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+              <a href="index.html">
+                <img src="logo.jpeg">
+              </a>  
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html" class="active">Menu</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </nav>
+    </header>
+    <div class="main">
+        <div class="welcome-section" style="background-image: url('IMG_2221.jpeg'); margin:0;">
+            <a href="menu.html#vep"><img src="IMG_2221.jpeg" style="width:100%; height: 10%; float: midle; padding-top: 60px;" alt="special Poutine"></a>
+            <div class="content">
+              <p style="font-size:30px;">Discover The Delicious Menu at <br><h1><strong>D<span style="color:#b9770e; font-size:15px;">&</span>B <span style="color:#b9770e;">Poutine,</span></strong></h1><br>Order Online For Delivery or Collection!</p><br>
+              <div class="dropdown">
+                <button class="order-button" onclick="showLinks()">Order Now</button>
+                <div class="links-container" id="linksContainer">
+                   <a class="dropdown-item" href="tel:+1 (613) 400-4898" class="call-button">Call for Collection</a>
+                  <a class="dropdown-item" href="https://www.ubereats.com/store/d-&-b-poutine/NI1Sa9a3UIKG5MOgYD-cNA?diningMode=DELIVERY" target="_blanck">Order On UberEat</a>
+                  <a class="dropdown-item" href="https://deliveroo.co.uk/" target="_blanck">Order On Deliveroo</a>
+                  <a class="dropdown-item" href="https://www.just-eat.co.uk/takeaway/nearme/fast-food" target="_blanck">Order On JustEat</a>
+                </div>
+              </div>
+            </div>
+        </div>
+        <br>
+        <section id="menu" class="menu-section" style="background-image: url('Vpoutinc.jpeg');">
+                <div id="d&b-combos" class="combos-menu-section" style="margin:1%; padding: 2%; border:5px solid black; border-radius: 20px;">
+                    <h2>D&B Combo Meals</h2>
+                    <hr style="margin:2%;">
+                    <div class="combos menu-items">
+                        <!-- Meal 1 -->
+                        <div class="menu-item">
+                            <img src="hdcom.jpeg" alt="D&B Fries Hot Dog Combo">
+                            <h3>D&B Hot Dog Combo</h3>
+                            <p class="price">$10.99</p>
+                            <ul class="recipe-list">
+                                <li>Served with Fries, D&B special sauce & Pop</li>
+                            </ul>
+                        </div>
+                        <!-- Meal 2 -->
+                        <div class="menu-item">
+                            <img src="poutinewithhd.jpeg" alt="D&B Chicken Poutine with Hot Dog Combo">
+                            <h3>D&B Poutine with Hot Dog Combo</h3>
+                            <p class="price">$12.99</p>
+                            <ul class="recipe-list">
+                                <li>Served with D&B special sauce & Pop</li>
+                            </ul>
+                        </div>
+                        <!-- Meal 3 -->
+                        <div class="menu-item">
+                            <img src="tusand.JPG" alt="D&B Tuna Fries Combo">
+                            <h3>D&B Tuna Sandwich Combo</h3>
+                            <p class="price">$14.49</p>
+                            <ul class="recipe-list">
+                                <li>Served with D&B special sauce, Fries & Pop</li>
+                            </ul>
+                        </div>
+                        <!-- Meal 4 -->
+                        <div class="menu-item">
+                            <img src="dbsalad.JPG" alt="D&B Salad Combo">
+                            <h3>D&B Salad Combo</h3>
+                            <p class="price">$12.99</p>
+                            <ul class="recipe-list">
+                                <li>Served with D&B special sauce, Fries & Pop</li>
+                            </ul>
+                        </div>
+                        <!-- Meal 5 -->
+                        <div class="menu-item">
+                            <img src="cara.JPG" alt="D&B Calamaries Combo with Fries">
+                            <h3>D&B Calamaries Combo</h3>
+                            <p class="price">$18.99</p>
+                            <ul class="recipe-list">
+                                <li>Served with D&B special sauce, Fries & Pop</li>
+                            </ul>
+                        </div>
+                        <!-- Meal 6 -->
+                        <div class="menu-item">
+                            <img src="beefp.jpeg" alt="D&B Beef Panini Combo">
+                            <h3>D&B Beef Panini Combo</h3>
+                            <p class="price">$14.49</p>
+                            <ul class="recipe-list">
+                                <li>Served with D&B special sauce, Fries & Pop</li>
+                            </ul>
+                        </div>
+                        <!-- Meal 7 -->
+                        <div class="menu-item">
+                            <img src="chickp.jpg" alt="D&B Chicken Panini Combo">
+                            <h3>D&B Chicken Panini Combo</h3>
+                            <p class="price">$14.49</p>
+                            <ul class="recipe-list">
+                                <li>Served with D&B special sauce, Fries & Pop</li>
+                            </ul>
+                        </div>
+                        <!-- Meal 8 -->
+                        <div class="menu-item">
+                            <img src="turkeyp.jpg" alt="D&B Turkey Panini Combo">
+                            <h3>D&B Turkey Panini Combo</h3>
+                            <p class="price">$15.49</p>
+                            <ul class="recipe-list">
+                                <li>Served with D&B special sauce, Fries & Pop</li>
+                            </ul>
+                        </div>
+                        <!-- Meal  9-->
+                        <div class="menu-item">
+                            <img src="8w.JPG" alt="D&B Wings Combo with Fries">
+                            <h3>D&B 6pcs of Wings Combo</h3>
+                            <p class="price">$12.49</p>
+                            <ul class="recipe-list">
+                                <li>Served with D&B special sauce, Fries & Pop</li>
+                            </ul>
+                        </div>
+                        <!-- Meal 10 -->
+                        <div class="menu-item">
+                            <img src="poutinewingcombo.jpeg" alt="D&B Poutine & wings Combo">
+                            <h3>D&B Poutine & wings Combo</h3>
+                            <p class="price">$13.99</p>
+                            <ul class="recipe-list">
+                                <li>Served with 6 pcs of wings, D&B special sauce & Pop</li>
+                            </ul>
+                        </div>                 
+                    </div>
+                </div>
+                <br>
+                <div id="d&b-veggie" class="veggie-menu-section" style="margin:1%; padding: 2%; border:5px solid black; border-radius: 20px;">
+                    <h2>D&B Veggie</h2>
+                    <hr style="margin:2%;">
+                    <div class="veggie menu-items">
+                        <!-- Meal 1 -->
+                        <div id="vep" class="menu-item">
+                            <img src="Vpoutinc.jpeg" alt="Poutine Combo Pop special">
+                            <h3>Veggie Poutine</h3>
+                            <p class="price">$6.99</p>
+                            <ul class="recipe-list">
+                                <li>Served with D&B special sauce</li>
+                            </ul>
+                        </div>
+                        <!-- Meal 2 -->
+                        <div class="menu-item">
+                            <img src="tusand.JPG" alt="Special Tuna combo Pop">
+                            <h3>Tuna</h3>
+                            <p class="price">$10.99</p>
+                            <ul class="recipe-list">
+                                <li>Tuna Solid</li>
+                                <li>Chopped Onion</li>
+                                <li>Selery</li>
+                                <li>Mayonnaise</li> 
+                                <li>Black Pepper</li> 
+                                <li>Tomato</li> 
+                                <li>Cucumber</li>
+                            </ul>
+                        </div>
+                        <!-- Meal 3 -->
+                        <div id="cara" class="menu-item">
+                            <img src="cara.JPG" alt="d&b's Caramaries">
+                            <h3>D&B Calamaries</h3>
+                            <p class="price">$13.99</p>
+                            <ul class="recipe-list">
+                                <li>Caramari</li> 
+                                <li>Tomato</li>
+                                <li>Green Onion</li> 
+                                <li>Green Oean</li> 
+                                <li>Potato</li> 
+                                <li>Lemon</li>
+                            </ul>
+                        </div>
+                        <!-- Add more meals -->
+                        <div class="menu-item">
+                            <img src="dbsalad.JPG" alt="d&b Salad">
+                            <h3>D&B Salad</h3>
+                            <p class="price">$10.99</p>
+                            <ul class="recipe-list">
+                                <li>Olive</li> 
+                                <li>Onion</li> 
+                                <li>Tomato</li> 
+                                <li>Raddish</li> 
+                                <li>Feta Cheese</li> 
+                                <li>Lemon</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div id ="D&B-Fried" class="fried food-section" style="margin:1%; padding: 2%; border:5px solid black; border-radius: 20px;">
+                    <h2>D&B Fried Food</h2>
+                    <hr style="margin:2%;">
+                    <div class="menu-items">
+                        <!-- Meal 1 -->
+                        <div class="menu-item">
+                            <img src="sproll.jpg" alt="D&B Chicken Spring Roll">
+                            <h3>D&B Chicken Spring Roll (Halal)</h3>
+                            <p class="price">$6.99</p>
+                        </div>
+                        <!-- Meal 2 -->
+                        <div class="menu-item">
+                            <img src="vsproll.jpg" alt="Veggie Spring Roll">
+                            <h3>D&B Veggie Spring Roll with D&B sauce</h3>
+                            <p class="price">$6.99</p>
+                        </div>
+                        <!-- Meal 3 -->
+                        <div class="menu-item">
+                            <img src="cauliflower.JPG" alt="Plate of Cauliflower">
+                            <h3>D&B Cauliflower</h3>
+                            <p class="price">$9.99</p>
+                            <ul class="recipe-list">
+                                <li>Pita Bread</li>
+                                <li>Egg</li>
+                                <li>Cauliflower</li> 
+                                <li>Thina</li> 
+                                <li>Garlic Sauce</li>
+                            </ul>
+                        </div>
+                        <!-- Meal 4 -->
+                        <div class="menu-item">
+                            <img src="fishandChips.png" alt="d&b fish and chips">
+                            <h3>D&B Fish & Chips</h3>
+                            <p class="price">$13.49</p>
+                            <ul class="recipe-list">
+                                <li>Tartar Sauce</li> 
+                                <li>Coleslaw</li> 
+                                <li>Ketchup</li> 
+                                <li>Lemon/Lime</li>
+                            </ul>  
+                        </div>
+                        <!-- Add more meals -->
+                        <div class="menu-item">
+                            <img src="sanbusa.jpeg" alt="d&b Sambusa">
+                            <h3>D&B Beef Sambusa</h3>
+                            <p class="price">$1.99</p>
+                        </div>
+                        <!-- Add more meals -->
+                        <div class="menu-item">
+                            <img src="nuggets.jpeg" alt="D&B Chicken Nuggets with Fries">
+                            <h3>D&B Chicken Nuggets with Fries</h3>
+                            <p class="price">$6.99</p>
+                            <ul>
+                                <li>Ranch Sauce</li> 
+                                <li>Ketchup Sauce</li>
+                            </ul>
+                        </div>
+                        <!-- Meal 8 -->
+                        <div class="menu-item">
+                            <img src="sweetp.jpeg" alt="Sweet Potato ">
+                            <h3>Sweet Potato</h3>
+                            <p class="price">$5.10</p>
+                        </div>
+                        <!-- Meal 9 -->
+                        <div class="menu-item">
+                            <img src="fries.jpeg" alt="Small fries">
+                            <h3>Small Fries</h3>
+                            <p class="price">$4.49</p>
+                        </div>
+                        <!-- Meal 10 -->
+                        <div class="menu-item">
+                            <img src="fries.jpeg" alt="Regular fries">
+                            <h3>Regular Fries</h3>
+                            <p class="price">$5.99</p>
+                        </div>
+                        <!-- Meal 11 -->
+                        <div class="menu-item">
+                            <img src="fries.jpeg" alt="Large fries">
+                            <h3>Large Fries</h3>
+                            <p class="price">$7.50</p>
+                        </div>
+                        <!-- Meal 12 -->
+                        <div class="menu-item">
+                            <img src="onionr.jpeg" alt="Onion Ring">
+                            <h3>Onion Ring</h3>
+                            <p class="price">$5.49</p>
+                        </div>               
+                    </div>
+                </div>
+                <br>
+                <div id="D&B poutine-menu" class="poutine-menu-section" style="margin:1%; padding: 2%; border:5px solid black; border-radius: 20px;">
+                      <h2>D&B Poutine Menu</h2>
+                      <hr style="margin:2%;">
+                      <div class="menu-items">
+                          <!-- Meal 1 -->
+                          <div class="menu-item">
+                              <img src="small-pou.jpeg" alt="Poutine Regular">
+                              <h3>D&B Poutine</h3>
+                              <p class="price">$6.99</p>
+                              <ul class="recipe-list">
+                                <li>Plain</li>
+                              </ul>
+                          </div>
+                          <div class="menu-item">
+                              <img src="chicken-pou.jpeg" alt="D&B Chicken Poutine">
+                              <h3>D&B Chicken Poutine</h3>
+                              <p class="price">$8.40</p>
+                              <ul class="recipe-list">
+                                <li>Chicken</li> 
+                                <li>Green Onion</li> 
+                                <li>Garlic</li> 
+                                <li>Onion</li> 
+                                <li>Gravey</li>
+                              </ul>
+                          </div>
+                          <!-- Meal 2 -->
+                          <div class="menu-item">
+                            <img src="small-pou.jpeg" alt="D&B Poutine Regular">
+                            <h3>D&B Poutine Regular</h3>
+                            <p class="price">$8.50</p>
+                            <ul class="recipe-list">
+                                <li>Green Onion</li> 
+                                <li>Garlic</li> 
+                                <li>Onion</li> 
+                                <li>Gravey</li>
+                            </ul>
+                          </div>
+                          <!-- Meal 3 -->
+                          <div class="menu-item">
+                              <img src="chicken-pou.jpeg" alt="D&B Chicken Poutine Regular">
+                              <h3>D&B Chicken Poutine Regular</h3>
+                              <p class="price">$9.99</p>
+                              <ul class="recipe-list">
+                                <li>Chicken</li>
+                                <li>Green Onion</li> 
+                                <li>Garlic</li> 
+                                <li>Onion</li> 
+                                <li>Gravey</li>
+                              </ul>
+                          </div>
+                          <!-- Meal 4 -->
+                          <div class="menu-item">
+                            <img src="small-pou.jpeg" alt="D&B Poutine Large">
+                            <h3>D&B Poutine Large</h3>
+                            <p class="price">$11.99</p>
+                            <ul class="recipe-list">
+                              <li>Green Onion</li> 
+                              <li>Garlic</li> 
+                              <li>Onion</li> 
+                              <li>Gravey</li>
+                            </ul>
+                          </div>
+                          <!-- Meal 3 -->
+                          <div class="menu-item">
+                              <img src="chicken-pou.jpeg" alt="D&B Chicken Poutine Large">
+                              <h3>D&B Chicken Poutine Large</h3>
+                              <p class="price">$13.50</p>
+                              <ul class="recipe-list">
+                                <li>Chicken</li>
+                                <li>Green Onion</li> 
+                                <li>Garlic</li> 
+                                <li>Onion</li> 
+                                <li>Gravey</li>
+                              </ul>
+                          </div>
+                          <!-- Meal 4 -->
+                          <div class="menu-item">
+                            <img src="poutandhd.jpeg" alt="D&B Poutine with hotdog<br> (Image needed)">
+                            <h3>D&B Poutine with hotdog</h3>
+                            <p class="price">Small: $8.99, Regular:$10.50</p>
+                            <ul class="recipe-list">
+                              <li>Hotdogs</li>
+                              <li>Green Onion</li> 
+                              <li>Garlic</li> 
+                              <li>Onion</li> 
+                              <li>Gravey</li>
+                            </ul>
+                          </div>
+                          <!-- Meal 3 -->
+                          <div class="menu-item">
+                              <img src="poutandhd.jpeg" alt="D&B Poutine with hotdog Large <br> (Image needed)">
+                              <h3>D&B Poutine with hotdog Large</h3>
+                              <p class="price">$13.99</p>
+                              <ul class="recipe-list">
+                                <li>Hotdogs</li>
+                                <li>Green Onion</li> 
+                                <li>Garlic</li> 
+                                <li>Onion</li> 
+                                <li>Gravey</li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+                  <br>
+                  <div id="panini" class="panini-hotdogs-menu-section" style="margin:1%; padding: 2%; border:5px solid black; border-radius: 20px;">
+                      <h2>Panini</h2>
+                      <hr style="margin:2%;">
+                      <div class="special menu-items">
+                          <!-- Meal 1 -->
+                          <div class="menu-item">
+                              <img src="chickp.jpg" alt="Chicken panini">
+                              <h3>Chicken Panini</h3>
+                              <p class="price">$10.99</p>
+                              <ul class="recipe-list">
+                                  <li>Tomato</li>
+                                  <li>Onion</li>
+                                  <li>Spinach</li>
+                                  <li>Hot Peppers</li>
+                                  <li>Banana Peppers</li>
+                                  <li>Pickled</li>
+                                  <li>Cucumber</li>
+                                  <li>Sweet/Cheddar Cheese</li>
+                              </ul>
+                          </div>
+                          <!-- Meal 2 -->
+                          <div class="menu-item">
+                              <img src="turkeyp.jpg" alt="turkey panini">
+                              <h3>Turkey Panini</h3>
+                              <p class="price">$11.99</p>
+                              <ul class="recipe-list">
+                                  <li>Tomato</li>
+                                  <li>Onion</li>
+                                  <li>Spinach</li>
+                                  <li>Hot Peppers</li>
+                                  <li>Banana Peppers</li>
+                                  <li>Pickled</li>
+                                  <li>Cucumber</li>
+                                  <li>Sweet/Cheddar Cheese</li>
+                              </ul>
+                          </div>
+                          <!-- Meal 3 -->
+                          <div class="menu-item">
+                              <img src="beefp.jpeg" alt="beef panini">
+                              <h3>Beef Panini</h3>
+                              <p class="price">$10.99</p>
+                              <ul class="recipe-list">
+                                  <li>Tomato</li>
+                                  <li>Onion</li>
+                                  <li>Spinach</li>
+                                  <li>Hot Peppers</li>
+                                  <li>Banana Peppers</li>
+                                  <li>Pickled</li>
+                                  <li>Cucumber</li>
+                                  <li>Sweet/Cheddar Cheese</li>
+                              </ul>
+                          </div>
+                          <!-- Meal 4 -->
+                          <div class="menu-item">
+                              <img src="Veggiep.jpeg" alt="veggie panini">
+                              <h3>Veggie Panini</h3>
+                              <p class="price">$6.99</p>
+                              <ul class="recipe-list">
+                                  <li>Tomato</li>
+                                  <li>Onion</li>
+                                  <li>Spinach</li>
+                                  <li>Hot Peppers</li>
+                                  <li>Banana Peppers</li>
+                                  <li>Pickled</li>
+                                  <li>Cucumber</li>
+                                  <li>Sweet/Cheddar Cheese</li></li>
+                              </ul>
+                          </div>
+                      </div>
+                   </div>
+                   <br>
+                   <div id="Sandwiches" class="sandwiches-menu-section" style="margin:1%; padding: 2%; border:5px solid black; border-radius: 20px;">
+                       <h2>Sandwiches</h2>
+                       <hr style="margin:2%;">
+                       <div class="special menu-items">
+                           <!-- Meal 1 -->
+                           <div class="menu-item">
+                               <img src="tusand.JPG" alt="Tuna Sandwich">
+                               <h3>D&B Tuna Sandwich</h3>
+                               <p class="price">$10.99</p>
+                               <ul class="recipe-list">
+                                 <li>Tuna Solid</li>
+                                 <li>Chopped Onion</li>
+                                 <li>Selery</li>
+                                 <li>Mayonnaise</li> 
+                                 <li>Black Pepper</li> 
+                                 <li>Tomato</li> 
+                                 <li>Cucumber</li>
+                               </ul>
+                           </div>
+                           <!-- Meal 2 -->
+                           <div class="menu-item">
+                               <img src="chicksand.jpg" alt="Chicken Sandwich">
+                               <h3>D&B Chicken Sandwich</h3>
+                               <p class="price">$10.99</p>
+                               <ul class="recipe-list">
+                                   <li>Slide Chicken</li> 
+                                   <li>Lettuce</li> 
+                                   <li>Chopped Onion</li> 
+                                   <li>Selery</li> 
+                                   <li>Mayonnaise</li> 
+                                   <li>Black Pepper</li>
+                               </ul>
+                           </div>
+                       </div>
+                   </div>
+                   <br>
+                  <div id="wings" class="wings-menu-section" style="margin:1%; padding: 2%; border:5px solid black; border-radius: 20px;">
+                      <h2>Wings</h2>
+                      <hr style="margin:2%;">
+                      <div class="special menu-items">
+                          <!-- Meal 1 -->
+                          <div class="menu-item">
+                              <img src="8w.JPG" alt="8 peices of fried wings ">
+                              <h3>D&B Wings (6 Pcs)</h3>
+                              <p class="price">$9.00</p>
+                              <ul class="recipe-list">
+                                  <li>Served as 6 peices of wings, with your choice of wings sauce</li>
+                              </ul>
+                          </div>
+                          <!-- Meal 2 -->
+                          <div class="menu-item">
+                              <img src="8spicew.jpg" alt="8 peices of spice wings">
+                              <h3>D&B Wings (9 Pcs)</h3>
+                              <p class="price">$11.99</p>
+                              <ul class="recipe-list">
+                                  <li>Served as 9 peices of wings, with your choice of wings sauce</li>
+                              </ul>
+                          </div>
+                          <!-- Meal 3 -->
+                          <div class="menu-item">
+                              <img src="14w.jpg" alt="14 peices of fried wings">
+                              <h3>D&B Wings (12 Pcs)</h3>
+                              <p class="price">$15.99</p>
+                              <ul class="recipe-list">
+                                  <li>Served as 12 peices of wings, with your choice of wings sauce</li>
+                              </ul>
+                          </div>
+                          <!-- Meal 4 -->
+                          <div class="menu-item">
+                              <img src="sauces.jpeg" alt="D&B Wings Sauces">
+                              <h3>D&B Wings Sauces</h3>
+                              <ul class="recipe-list">
+                                  <li>BBQ</li>
+                                  <li>Garlic</li>
+                                  <li>Ranch</li>
+                                  <li>Italian</li>
+                                  <li>Buffalo</li>
+                                  <li>Spicy</li>
+                                  <li>Mustard</li>
+                                  <li>Ketchup</li>
+                                  <li>Sweetchilli</li>
+                                  <li>Hot/Chilli Sauce</li>
+                              </ul>
+                          </div>
+
+                      </div>
+                  </div>
+                  <br>
+                  <div id="hotdogs" class="hotdogs-menu-section" style="margin:1%; padding: 2%; border:5px solid black; border-radius: 20px;">
+                      <h2>Hotdogs</h2>
+                      <hr style="margin:2%;">
+                      <div class="special menu-items">
+                          <!-- Meal 1 -->
+                          <div class="menu-item">
+                              <img src="beefhd.jpg" alt="beef hotdog">
+                              <h3>D&B Beef Hotdog</h3>
+                              <p class="price">$4.49</p>
+                              <ul class="recipe-list">
+                                  <li>Beef Hotdog</li>
+                                  <li>Mustard</li> 
+                                  <li>Ketchup</li> 
+                                  <li>Tomato</li> 
+                                  <li>Onion</li> 
+                                  <li>Green Onion</li> 
+                                  <li>Mayonnaise</li>
+                              </ul>
+                          </div>
+                          <!-- Meal 2 -->
+                          <div class="menu-item">
+                              <img src="baconhd.jpg" alt="bacon hotdog">
+                              <h3>Bacon Hotdog</h3>
+                              <p class="price">$5.50</p>
+                              <ul class="recipe-list">
+                                  <li>Bacon Hotdogs</li> 
+                                  <li>Cheese</li>
+                                  <li>Mustard</li> 
+                                  <li>Ketchup</li> 
+                                  <li>Tomato</li> 
+                                  <li>Onion</li> 
+                                  <li>Green Onion</li> 
+                                  <li>Mayonnaise</li>
+                              </ul>
+                          </div>
+                          <!-- Meal 3 -->
+                          <div class="menu-item">
+                              <img src="loadedhd.jpg" alt="leaded hotdog">
+                              <h3>Loaded Hotdog</h3>
+                              <p class="price">$5.50</p>
+                              <ul class="recipe-list">
+                                  <li>Sweet Cheese</li> 
+                                  <li>Beef Hotdog</li>
+                                  <li>Mustard</li> 
+                                  <li>Ketchup</li> 
+                                  <li>Tomato</li> 
+                                  <li>Onion</li> 
+                                  <li>Green Onion</li> 
+                                  <li>Mayonnaise</li>
+                              </ul>
+                          </div>
+                          <!-- Meal 4 -->
+                          <div class="menu-item">
+                              <img src="veganhd.jpeg" alt="veggie hotdog">
+                              <h3>veggie Hotdog</h3>
+                              <p class="price">$4.49</p>
+                              <ul class="recipe-list">
+                                  <li>Cucumber</li> 
+                                  <li>Avocado</li> 
+                                  <li>Spinach</li> 
+                                  <li>Mustard</li> 
+                                  <li>Ketchup</li> 
+                                  <li>Tomato</li> 
+                                  <li>Onion</li> 
+                                  <li>Green Onion</li> 
+                                  <li>Mayonnaise</li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+                  <br>
+                  <div id ="d&b-sides" class="D&B Sides-section" style="margin:1%; padding: 2%; border:5px solid black; border-radius: 20px;">
+                    <h2>D&B Sides (Extra)</h2>
+                    <hr style="margin:2%;">
+                    <div class="menu-items">
+                        <!-- Meal 1 -->
+                        <div class="menu-item">
+                            <img src="gravey.jpeg" alt="D&B Gravey">
+                            <h3>D&B Gravey</h3>
+                            <p class="price">$2.50</p>
+                        </div>
+                        <!-- Meal 2 -->
+                        <div class="menu-item">
+                            <img src="cheescard.jpeg" alt="D&B Cheese Curds">
+                            <h3>D&B Cheese Curds</h3>
+                            <p class="price">$2.50</p>
+                        </div>
+                        <!-- Meal 3 -->
+                        <div class="menu-item">
+                            <img src="chilli.jpeg" alt="D&B Chili Souces">
+                            <h3>D&B Chili Souces</h3>
+                            <p class="price">$1.25</p>
+                        </div>
+                        <!-- Meal 4 -->
+                        <div class="menu-item">
+                            <img src="1spring.jpeg" alt="D&B Spring Roll">
+                            <h3>D&B Spring Roll</h3>
+                            <p class="price">$2.00</p>  
+                        </div>
+                        <!-- Add more meals -->
+                        <div class="menu-item">
+                            <img src="IMG_2221.jpeg" alt="D&B Calamari">
+                            <h3>D&B Calamari</h3>
+                            <p class="price">$5.49</p>
+                        </div>
+                    </div>
+                  </div>
+                <hr>  
+                  <div id="soft-drinks" class="soft-drinks-section" style="margin:1%; padding: 2%; border:5px solid black; border-radius: 20px;">
+                      <h2 style="background-color:  #9fcac7 ;">D&B Soft Drinks</h2>
+                      <hr style="margin:2%;">
+                      <div class="drink-items">
+                          <!-- Drink 1 -->
+                          <div class="menu-item">
+                              <img src="pepsi.jpeg" alt="Can of pepsi">
+                              <h3>Can of Soft-drinks</h3>
+                              <p class="price">$1.89</p>
+                          </div>
+                          <!-- Drink 2 -->
+                          <div class="menu-item">
+                              <img src="bottle.jpeg" alt="bottle soft-drinks">
+                              <h3>Bottle of Soft-drinks</h3>
+                              <p class="price">$2.89</p>
+                          </div>
+                          <!-- Drink 3 -->
+                          <div class="menu-item">
+                              <img src="Fountedrink.jpeg" alt="Fountien Drink XS">
+                              <h3>Fountien Drink XS</h3>
+                              <p class="price">$1.25</p>
+                          </div>
+                          <!-- Drink 4 -->
+                          <div class="menu-item">
+                              <img src="Fountedrink.jpeg" alt="Fountien Drink S">
+                              <h3>Fountien Drink S</h3>
+                              <p class="price">$1.60</p>
+                          </div>
+                          <!-- Drink 5 -->
+                          <div class="menu-item">
+                              <img src="Fountedrink.jpeg" alt="Fountien Drink Regular">
+                              <h3>Fountien Drink Regular</h3>
+                              <p class="price">$2.00</p>
+                          </div>
+                          <!-- Drink 6 -->
+                          <div class="menu-item">
+                              <img src="Fountedrink.jpeg" alt="Fountien Drink Large">
+                              <h3>Fountien Drink Large</h3>
+                              <p class="price">$2.70</p>
+                          </div>
+                          <!-- Drink 7 -->
+                          <div class="menu-item">
+                              <img src="stillw.jpeg" alt="Bottle of Still Water">
+                              <h3>Still Water</h3>
+                              <p class="price">$2.99</p>
+                          </div>
+                          <!-- Drink 8 -->
+                          <div class="menu-item">
+                              <img src="sparkw.jpeg" alt="Bottle of Sparkling Water">
+                              <h3>Sparkling Water</h3>
+                              <p class="price">$3.49</p>
+                          </div>
+                          <!-- Add more drinks -->
+                      </div>
+                  </div>
+                  <br>
+                  <div id="hot-drinks" class="hot-drinks-section" style="margin:1%; padding: 2%; border:5px solid black; border-radius: 20px;">
+                      <h2 style="background-color: #964b27 ;">Hot-Drinks</h2>
+                      <hr style="margin:2%;">
+                      <div class="drink-items">
+                          <!-- Drink 1 -->
+                          <div class="menu-item">
+                              <img src="coffee.jpeg" alt="cup of coffee">
+                              <h3>Coffee</h3>
+                              <p class="price">$3</p>
+                          </div>
+                          <!-- Drink 2 -->
+                          <div class="menu-item">
+                            <img src="espresso.jpeg" alt="cup of espresso">
+                            <h3>Espresso</h3>
+                            <p class="price">$3</p>
+                          </div>
+                          <!-- Drink 3 -->
+                          <div class="menu-item">
+                            <img src="macchiato.jpeg" alt="cup hot macchiato">
+                            <h3>Macchiato</h3>
+                            <p class="price">$3.50</p>
+                          </div>
+                          <!-- Drink 4 -->
+                          <div class="menu-item">
+                            <img src="cappuccino.jpeg" alt="cup of Cappuccino">
+                            <h3>Cappuccino</h3>
+                            <p class="price">$3.50</p>
+                          </div>
+                          <!-- Drink 5 -->
+                          <div class="menu-item">
+                            <img src="latte.jpg" alt="cup of coffee latte">
+                            <h3>Latte</h3>
+                            <p class="price">$3.20</p>
+                          </div>
+                          <!-- Drink 6 -->
+                          <div class="menu-item">
+                            <img src="gtea.jpeg" alt="cup of Ginger tea">
+                            <h3>Ginger Tea</h3>
+                            <p class="price">$4</p>
+                          </div>
+                      </div>
+                  </div>
+        </section>
+        <div style="margin:2% 2% 8% 2%;">
+          <a href="about.html#map">
+            <img src="db-img.jpeg" width="100%" alt="d&b kitchen">
+          </a>
+        </div>
+    <!-- end container -->
+    </div>
+    <hr>
+    <footer class="footer">
+        &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "#https://sisudth.online/">Sisu DTH</a>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const logo = document.querySelector('.logo');
+
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                logo.style.display = navLinks.classList.contains('active') ? 'none' : 'block';
+            });
+        });
+
+        function showLinks() {
+            var linksContainer = document.getElementById('linksContainer');
+            if (linksContainer.style.display === "none") {
+                linksContainer.style.display = "block";
+            } else {
+                linksContainer.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&B Poutine Fast Food</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+              <a href="index.html">
+                <img src="logo.jpeg">
+              </a>  
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </nav>
+    </header>
+    <div class="main">
+        <div class="welcome-section" style="background-image: url('dbhomepage.jpeg'); margin:0;">
+            <a href="menu.html#d&b-combos">
+              <img src="Mainpage.jpeg" style="width:100%; height: 10%; float: midle; padding-top: 60px;" alt="special Poutine">
+            </a>
+            <div class="content">
+              <h1>Welcome to <br><strong>D<span style="color:#b9770e; font-size:15px;">&</span>B <span style="color:#b9770e;">Poutine</span></strong> Fast Food</h1><br>
+              <p>Discover the best Poutine in Ottawa!</p><br>
+              <div class="dropdown">
+                <button class="order-button" onclick="showLinks()">Order Now</button>
+                <div class="links-container" id="linksContainer">
+                  <a class="dropdown-item" href="tel:+1 (613) 400-4898" class="call-button">Call for Collection</a>
+                  <a class="dropdown-item" href="https://www.ubereats.com/store/d-&-b-poutine/NI1Sa9a3UIKG5MOgYD-cNA?diningMode=DELIVERY" target="_blanck">Order On UberEat</a>
+                  <a class="dropdown-item" href="https://deliveroo.co.uk/" target="_blanck">Order On Deliveroo</a>
+                  <a class="dropdown-item" href="https://www.just-eat.co.uk/takeaway/nearme/fast-food" target="_blanck">Order On JustEat</a>
+                </div>
+              </div>
+            </div>
+        </div>
+        <hr>
+      <div style="background-image:url('14spicew.jpg');">
+        <div class="dishs" style="margin:1%; border:5px solid black; border-radius: 20px 20px 85px 0; background-color: silver;">
+            <div>
+                <h2 style="background-color: black;">D&B Special feature dishes</h2>
+                <p>We are serving mouthwatering meals for dine-in, take-out, and delivery<br>The food at D&B Poutine is incredible! The flavors are amazing and the service is top-notch.</p>
+            </div>
+            <hr style="margin:3%;">
+            <div class="photo-gallery" style="margin:1%;">
+              <div style="background-color: black;">
+                <div>
+                  <h2>D&B combo Meals</h2>
+                  <a href="menu.html#d&b-combos">
+                    <img src="hdcom.jpeg" style="border-radius:0 0 20px 20px;" alt="D&B combos<br> (Image needed)">
+                  </a>
+                </div>
+              </div>
+              <div style="background-color: black;">
+                <div>
+                  <h2>D&B Solo Menu</h2>
+                  <a href="menu.html#D&B poutine-menu">
+                    <img src="chicken-pou.jpeg" style="border-radius:0 0 20px 20px;" alt="D&B Regulars menu picture">
+                  </a>
+                </div>
+              </div>
+              <div style="background-color: black;">
+                <div>
+                  <h2>D&B Sides(Extra)</h2>
+                  <a href="menu.html#d&b-sides">
+                    <img src="cheescard.jpeg" style="border-radius:0 0 20px 20px;" alt="D&B Sides <br>(Image needed)">
+                  </a>
+                </div>
+              </div>
+              <div style="background-color: black; border-radius:0 0 40px 0;">
+                <div>
+                  <h2>D&B Sauces</h2>
+                  <a href="menu.html#wings">
+                    <img src="sauces.jpeg" style="border-radius:0 0 40px 20px;" alt="D&B Souces">
+                  </a>
+                </div>
+              </div>
+            </div>
+        </div>
+        <br>
+        <div class="drinks" style="margin:1%; border:5px solid black; border-radius: 20px 20px 85px 0; background-color: silver;">
+            <div>
+              <h2 style="background-color: black;">Hot and Soft Drinks</h2>
+              <p>Sit back and relax with one of our many hot or cold beverages.</p>
+            </div>
+            <hr style="margin:3%;">
+            <div class="grid-images" style="margin:1%;">
+              <div class="hot" style="margin:1%;">
+                <div style="background-color: black;">
+                  <h2>Hot Drinks</h2>
+                  <a href="menu.html#hot-drinks">
+                  <img src="hotd.jpeg" style="border-radius:0 0 20px 20px;" alt="Hot Drinks Image">
+                  </a>
+                </div>
+              </div>
+              <div class="soft" style="margin:1%;">
+                <div style="background-color: black; border-radius:0 0 40px 0;">
+                  <h2>Soft drinks</h2>
+                  <a href="menu.html#soft-drinks">
+                  <img src="soft-d.jpeg" style="border-radius:0 0 40px 20px;" alt="soft drinks Image">
+                  </a>
+                </div>
+              </div>
+            </div>
+        </div>
+        <br>
+        <div id="reviews" style="margin:1%; border:5px solid black;border-radius: 20px 20px 85px 0; background-color: silver;">
+            <div>
+                <h2 style="background-color: black;">Google Reviews</h2>
+            </div>
+            <hr style="margin:3%;">
+            <div class="review" style="padding: 6%;">
+              <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+              <div class="elfsight-app-b14d7565-d97c-4c86-bfab-b5d774c6fb3b" data-elfsight-app-lazy></div> 
+            </div>
+        </div>
+        <br>
+        <div class="Business info" style="margin:1%; border:5px solid black;border-radius: 20px 20px 85px 0; background-color: silver;">
+            <div>
+                <h2 style="background-color: black;">Business Information</h2>
+            </div>
+            <hr style="margin:3%;">
+            <div class="contact-section">
+                <div>
+                  <h5>Opening Hours</h5>
+                  <hr>
+                  <p>Mon-Fri: 10:00am - 8pm</p>
+                  <p>Sat: 10:00 - 6pm</p>
+                  <p>Sun: 10:00 - 5pm</p>
+                </div>
+                <br>
+                <div>
+                  <h5>Contact Information</h5>
+                  <hr>
+                  <p><mark> Business email: info@DBpoutine.com</mark></p>
+                  <p>Phone: +1 (613) 265-8545<br>or<br> +1 (613) 400-4898</p>
+                </div>
+                <br>
+                <div>
+                  <h5>Social Media</h5>
+                  <hr>
+                  <p>Follow us on:</p>
+                  <p><a href="#Facebook">Facebook</a><br><a href="#Facebook">Instagram</a><br><a href="#Facebook">Twitter</a>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div style="margin:2% 2% 8% 2%;">
+            <a href="menu.html">
+                <img src="dandbrec.jpeg" style="width:100%; border-radius: 85px 0 85px 0; " alt="d&b recipes">
+            </a>
+        </div>
+      </div>
+    <!-- end container -->
+    </div>
+    <hr>
+    <footer class="footer">
+        &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "#https://sisudth.online/">Sisu DTH</a>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const logo = document.querySelector('.logo');
+
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                logo.style.display = navLinks.classList.contains('active') ? 'none' : 'block';
+            });
+        });
+
+        function showLinks() {
+            var linksContainer = document.getElementById('linksContainer');
+            if (linksContainer.style.display === "none") {
+                linksContainer.style.display = "block";
+            } else {
+                linksContainer.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
+
