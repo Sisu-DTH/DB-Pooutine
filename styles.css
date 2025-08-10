@@ -131,6 +131,7 @@
             animation-name: animationBtn;
             animation-duration: infinite;
             animation-delay:5s;
+            animation-iteration-count: infinite;
         
         }
 
