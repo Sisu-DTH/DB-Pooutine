@@ -115,6 +115,10 @@
             width:100%;
             padding:1px;
         }
+        
+        .welcome-section a img{
+                background-image: url('dbhomepage.jpeg'); margin:0;
+        }
 
         .dropdown {
             padding-bottom: 45px;
