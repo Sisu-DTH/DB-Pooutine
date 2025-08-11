@@ -118,7 +118,7 @@
         
         .welcome-section a .slideshow{
              widgt:95%;
-             height:100px;
+             height:250px;
              background-size: cover;
              background-position: center;
             animation: wlecomImg 8s infinite;
