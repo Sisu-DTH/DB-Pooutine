@@ -116,20 +116,21 @@
             padding:1px;
         }
         
-        .welcome-section a img{
-                animation: wlecomImg 5s infinite;
-                background-image: url('dbhomepage.jpeg'); margin:0;
+        .welcome-section a .slideshow{
+             background-size: cover;
+             background-position: center;
+            animation: wlecomImg 8s infinite;
         }
         
         @keyframes welcomeImg{
-          0%{transform:rotate()}
-          15%{}
-          30%{}
-          45%{}
-          60%{}
-          75%{}
-          90%{}
-          100%{}
+          0%{background-image: url("dandbrec.jpeg");}
+          15%{background-image: url("Mainpage.jpeg");}
+          30%{background-image: url("sparkw.jpeg");}
+          45%{background-image: url("dbhomepage.jpeg");}
+          60%{background-image: url("8spicew.jpg");}
+          75%{background-image: url("pepsi.jpeg");}
+          90%{background-image: url("Hotdog.jpeg");}
+          100%{background-image: url("cappuccino.jpeg");}
         }
 
         .dropdown {
