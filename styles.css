@@ -117,7 +117,19 @@
         }
         
         .welcome-section a img{
+                animation: wlecomImg 5s infinite;
                 background-image: url('dbhomepage.jpeg'); margin:0;
+        }
+        
+        @keyframes welcomeImg{
+          0%{transform:rotate()}
+          15%{}
+          30%{}
+          45%{}
+          60%{}
+          75%{}
+          90%{}
+          100%{}
         }
 
         .dropdown {
