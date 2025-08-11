@@ -129,7 +129,6 @@
             font-size: 16px;
             font-weight: bold;
             animation: animationBtn 3s ease-in-out infinite;
-            animation-duration:3s;
         
         }
 
@@ -143,7 +142,7 @@
             0%{transform:scale(1); 
                 background-color:blue;
                 }
-            50%{transform:scale(1.2); 
+            50%{transform:scale(0.5); 
                 background-color:red;
                 }
             100%{transform:scale(1); 
