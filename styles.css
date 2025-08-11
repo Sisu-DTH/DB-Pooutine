@@ -128,7 +128,7 @@
             cursor: pointer;
             font-size: 16px;
             font-weight: bold;
-            animation: animationBtn 3s infinite;
+            animation: animationBtn 3s ease-in-out infinite;
             animation-duration:3s;
         
         }
@@ -140,9 +140,13 @@
         }
         
         @keyframes animationBtn{
-            from{transform:scale(1.5); background-color:blue;}
-            to{transform:scale(1.5); background-color:red;}
+            from{transform:scale(1.2); 
+                  background-color:blue;
+            }
+            to{transform:scale(1.5); 
+                background-color:red;
         }
+           }
 
         .links-container {
             display: none;
