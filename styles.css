@@ -140,8 +140,8 @@
         }
         
         @keyframes animationBtn{
-            from{background-color:blue;}
-            to{background-color:red;}
+            from{transform:scale(1.5); background-color:blue;}
+            to{transform:scale(1.5); background-color:red;}
         }
 
         .links-container {
