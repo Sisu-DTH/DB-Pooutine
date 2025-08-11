@@ -121,11 +121,11 @@
              height:250px;
              background-size: cover;
              background-position: center;*/
-            width:100%;
-            height:60%;
+            width:99%%;
+            height:10%;
             float:middle;
             Padding-top: 60px;
-            animation: wlecomImg 3s linear 1.5s;
+            animation: welcomeImg 3s linear 1.5s;
         }
         
         @keyframes welcomeImg{
