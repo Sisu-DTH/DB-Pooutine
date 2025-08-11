@@ -117,14 +117,15 @@
         }
         
         .welcome-section .slideshow{
-             widgt:95%;
+             /* widgt:95%;
              height:250px;
              background-size: cover;
-             background-position: center;
-            animation: wlecomImg 8s infinite;
+             background-position: center;*/
+            animation: wlecomImg 3s linear 1.5s;
         }
         
         @keyframes welcomeImg{
+        /*
           0%{background-image: url("dandbrec.jpeg");}
           15%{background-image: url("Mainpage.jpeg");}
           30%{background-image: url("sparkw.jpeg");}
@@ -133,6 +134,9 @@
           75%{background-image: url("pepsi.jpeg");}
           90%{background-image: url("Hotdog.jpeg");}
           100%{background-image: url("cappuccino.jpeg");}
+        */
+          from {transform: rotate(0deg);}
+          to {transform: rotate (360deg);}
         }
 
         .dropdown {
