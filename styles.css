@@ -116,19 +116,33 @@
             padding:1px;
         }
         
-        .slideimg{
-            width:99%%;
-            height:100%;
-            animation: welcomeImg 3s linear 1.5s;
+        .slideshow{
+            width:98%%;
+            padding-top:35%;
+            animation: welcomeImg 5s linear infinite;
         }
         
         @keyframes welcomeImg{
-        /*
-          0%{background-image: url("dandbrec.jpeg");}
-          15%{background-image: url("Mainpage.jpeg");}
-          30%{background-image: url("sparkw.jpeg");}
-          45%{background-image: url("dbhomepage.jpeg");}
-          60%{background-image: url("8spicew.jpg");}
+        
+          0%{
+            background-image: url("dandbrec.jpeg");
+            transform: scale(0.01);
+          }
+                    
+          25%{background-image: url("Mainpage.jpeg");}
+                    
+          50%{
+            background-image: url("sparkw.jpeg");
+            transform: scale(1);
+          }
+                    
+          75%{background-image: url("dbhomepage.jpeg");}
+                    
+          100%{
+            background-image: url("8spicew.jpg");
+            transform: scale(0.01);
+          }
+           /*         
           75%{background-image: url("pepsi.jpeg");}
           90%{background-image: url("Hotdog.jpeg");}
           100%{background-image: url("cappuccino.jpeg");}
