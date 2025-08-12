@@ -117,8 +117,8 @@
         }
         
         .slideshow{
-            width:98%%;
-            padding-top:35%;
+            width:95%%;
+            padding:25% 0 25% 0;
             animation: welcomeImg 5s linear infinite;
         }
         
@@ -129,26 +129,20 @@
             transform: scale(0.01);
           }
                     
-          25%{background-image: url("Mainpage.jpeg");}
+          25%{background-image: url("pepsi.jpeg");}
                     
           50%{
-            background-image: url("sparkw.jpeg");
+            background-image: url("dbhomepage.jpeg");
             transform: scale(1);
           }
                     
-          75%{background-image: url("dbhomepage.jpeg");}
+          75%{background-image: url("Hotdog.jpeg");}
                     
           100%{
-            background-image: url("8spicew.jpg");
-            transform: scale(0.01);
-          }
-           /*         
-          75%{background-image: url("pepsi.jpeg");}
-          90%{background-image: url("Hotdog.jpeg");}
-          100%{background-image: url("cappuccino.jpeg");}
-        */
-          from {transform: rotate(0deg);}
-          to {transform: rotate (360deg);}
+            background-image: url("cappuccino.jpeg");
+            transform: scale(0.01);  
+          }  
+                    
         }
 
         .dropdown {
