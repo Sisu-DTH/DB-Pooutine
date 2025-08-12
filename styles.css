@@ -507,14 +507,13 @@
                     
              50%{
                background-image: url("slide1.jpeg");
-               transform: scale(0.9);
              }
                      
              75%{background-image: url("slide3.jpeg");}
                     
             100%{
               background-image: url("cappuccino.jpeg");
-              transform: scale(0.1);  
+              transform: scale(1);  
             }  
                                
            }
