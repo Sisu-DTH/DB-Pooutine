@@ -489,6 +489,34 @@
             .menu-item {
                 width: calc(50% - 20px);
             }
+        .slideshow{
+            width:98%%;
+            padding:35% 0 25% 0;
+            animation: welcomeImg 15s linear infinite;
+        }
+        
+        @keyframes welcomeImg{
+        
+          0%{
+            background-image: url("pepsi.jpeg");
+            transform: scale(0.01);
+          }
+                    
+          25%{background-image: url("slide2.jpeg");}
+                    
+          50%{
+            background-image: url("slide1.jpeg");
+            transform: scale(1.5);
+          }
+                    
+          75%{background-image: url("slide3.jpeg");}
+                    
+          100%{
+            background-image: url("cappuccino.jpeg");
+            transform: scale(0.1);  
+          }  
+                    
+        }
 
             
         }
