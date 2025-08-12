@@ -116,7 +116,7 @@
             padding:1px;
         }
         
-        .slideshow a img{
+        .slideimg{
             width:99%%;
             height:100%;
             animation: welcomeImg 3s linear 1.5s;
