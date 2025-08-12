@@ -123,7 +123,10 @@
         .slideshow{
             width:98%%;
             padding:35% 0 25% 0;
-            animation: welcomeImg 15s linear infinite;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            animation: welcomeImg 15s ease-in-out infinite;
         }
         
         @keyframes welcomeImg{
