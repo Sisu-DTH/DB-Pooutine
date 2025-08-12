@@ -492,6 +492,7 @@
             .slideshow{
               width:98%%;
               padding:35% 0 25% 0;
+              position: relative;
               background-size: auto;
               animation: welcomeImg 15s linear infinite;
            }
