@@ -133,14 +133,14 @@
             transform: scale(0.01);
           }
                     
-          25%{background-image: url("Mainpage.jpeg");}
+          25%{background-image: url("slide2.jpeg");}
                     
           50%{
-            background-image: url("dbhomepage.jpeg");
+            background-image: url("slide1.jpeg");
             transform: scale(1);
           }
                     
-          75%{background-image: url("Hotdog.jpeg");}
+          75%{background-image: url("slide3.jpeg");}
                     
           100%{
             background-image: url("cappuccino.jpeg");
