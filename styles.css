@@ -130,7 +130,7 @@
         
           0%{
             background-image: url("pepsi.jpeg");
-            transform: scale(0.8);
+            transform: scale(0.1);
           }
                     
           25%{background-image: url("slide2.jpeg");}
