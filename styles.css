@@ -117,10 +117,6 @@
         }
         
         .slideshow a img{
-             /* widgt:95%;
-             height:250px;
-             background-size: cover;
-             background-position: center;*/
             width:99%%;
             height:100%;
             animation: welcomeImg 3s linear 1.5s;
