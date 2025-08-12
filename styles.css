@@ -497,18 +497,17 @@
            }
         
             @keyframes welcomeImg{
-              background-size: auto;
         
               0%{
                 background-image: url("pepsi.jpeg");
-                transform: scale(0.01);
+                transform: scale(1);
               }
                     
              25%{background-image: url("slide2.jpeg");}
                     
              50%{
                background-image: url("slide1.jpeg");
-               transform: scale(1.5);
+               transform: scale(0.9);
              }
                      
              75%{background-image: url("slide3.jpeg");}
