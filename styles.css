@@ -121,7 +121,7 @@
         }
         
         .slideshow{
-            width:95%%;
+            width:98%%;
             padding:25% 0 25% 0;
             animation: welcomeImg 10s linear infinite;
         }
@@ -144,7 +144,7 @@
                     
           100%{
             background-image: url("cappuccino.jpeg");
-            transform: scale(0.01);  
+            transform: scale(0.1);  
           }  
                     
         }
