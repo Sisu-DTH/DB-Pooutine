@@ -123,7 +123,7 @@
         .slideshow{
             width:98%%;
             padding:25% 0 25% 0;
-            animation: welcomeImg 10s linear infinite;
+            animation: welcomeImg 15s linear infinite;
         }
         
         @keyframes welcomeImg{
@@ -137,7 +137,7 @@
                     
           50%{
             background-image: url("slide1.jpeg");
-            transform: scale(1);
+            transform: scale(1.5);
           }
                     
           75%{background-image: url("slide3.jpeg");}
