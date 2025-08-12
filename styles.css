@@ -126,10 +126,10 @@
             background-size: cover;
             background-position: center;
             position: relative;
-            animation: welcomeImg 15s ease-in-out infinite;
+            animation: background-image 15s ease-in-out infinite;
         }
         
-        @keyframes welcomeImg{
+        /* @keyframes welcomeImg{
         
           0%{
             background-image: url("pepsi.jpeg");
@@ -150,7 +150,7 @@
             transform: scale(0.1);  
           }  
                     
-        }
+        }*/
 
         .dropdown {
             padding-bottom: 45px;
