@@ -103,6 +103,10 @@
             width:100%;
             height:10%;
             text-align: center;
+            background-image: url('dbhomepage.jpeg');
+            background-size:cover;
+            background-position:center;
+            background-repeat:no-repeat;
             margin:0 auto;
            
         }
@@ -125,11 +129,11 @@
         @keyframes welcomeImg{
         
           0%{
-            background-image: url("dandbrec.jpeg");
+            background-image: url("pepsi.jpeg");
             transform: scale(0.01);
           }
                     
-          25%{background-image: url("pepsi.jpeg");}
+          25%{background-image: url("Mainpage.jpeg");}
                     
           50%{
             background-image: url("dbhomepage.jpeg");
