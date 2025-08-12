@@ -98,19 +98,31 @@
         }
 
         .welcome-section {
-            color:white;
             position: relative;
             width:100%;
-            height:10%;
+            height:100vh;
             text-align: center;
-            background-image: url('dbhomepage.jpeg');
             background-size:cover;
             background-position:center;
-            background-repeat:no-repeat;
-            margin:0 auto;
+            transition: background-image 15s ease-in-out infinite;
            
         }
         
+        .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+        
+        /*
         .welcome-section .content{
             bottom:0;
             background:rgb(0, 0, 0,);
@@ -129,7 +141,7 @@
             animation: background-image 15s ease-in-out infinite;
         }
         
-        /* @keyframes welcomeImg{
+         @keyframes welcomeImg{
         
           0%{
             background-image: url("pepsi.jpeg");
