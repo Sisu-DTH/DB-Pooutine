@@ -176,6 +176,25 @@
                 logo.style.display = navLinks.classList.contains('active') ? 'none' : 'block';
             });
         });
+        
+const images = [
+  'images/bg1.jpg',
+  'images/bg2.jpg',
+  'images/bg3.jpg',
+  'images/bg4.jpg',
+  'images/bg5.jpg'
+];
+
+let currentIndex = 0;
+const section = document.querySelector('.welcome-section');
+
+function changeBackground() {
+  section.style.backgroundImage = `url(${images[currentIndex]})`;
+  currentIndex = (currentIndex + 1) % images.length;
+}
+
+changeBackground(); // First image
+setInterval(changeBackground, 5000); // Change every 5 seconds
 
         function showLinks() {
             var linksContainer = document.getElementById('linksContainer');
