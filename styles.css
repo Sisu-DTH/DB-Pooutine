@@ -266,7 +266,7 @@
         }
 
         #menu h2{
-        font-weight:;
+        font-weight: bold;
         font-family:Arial;
         color:white;
         background-color:#b9770e;
@@ -476,7 +476,7 @@
                 width: calc(50% - 20px);
             }
             .slideshow{
-              width:98%%;
+              width:98%;
               padding:35% 0 25% 0;
               position: relative;
               background-size: auto;
@@ -507,3 +507,26 @@
         }
 
         
+
+/* Responsive usability and accessibility improvements */
+.hamburger { background: transparent; border: 0; padding: 12px; color: inherit; }
+.hamburger:focus-visible, a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 3px solid #fff; outline-offset: 3px;
+}
+.menu-item img { height: auto; }
+@media (max-width: 768px) {
+  .menu-item { width: min(100%, 340px); }
+  .nav-links { top: 100%; max-height: calc(100vh - 70px); overflow-y: auto; }
+  .nav-links a { display: block; padding: 8px 12px; }
+  .logo { width: clamp(52px, 14vw, 80px); }
+}
+@media (max-width: 460px) {
+  .menu-item { width: min(100%, 340px); }
+  .photo-gallery { grid-template-columns: minmax(0, 1fr); }
+  .welcome-section { min-height: 440px; height: auto; }
+  .contact-section { padding: 20px 12px; }
+  form { width: 95%; min-width: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
