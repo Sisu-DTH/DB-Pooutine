@@ -173,7 +173,7 @@
            }
 
         .links-container {
-            display: none;
+            display: block;
             margin-top: 20px;
         }
 
@@ -599,3 +599,6 @@ img { max-width: 100%; height: auto; }
   .main .contact-section a { min-height: 44px; display: inline-flex; align-items: center; }
   .main input[type="submit"] { min-height: 48px; padding: 10px 20px; cursor: pointer; }
 }
+
+/* Ensure the ordering options remain hidden until the button is expanded. */
+.links-container[hidden] { display: none; }
