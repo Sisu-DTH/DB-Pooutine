@@ -557,3 +557,14 @@
  .contact-page-body > .contact { margin: 0 .75rem 1.5rem; }
  .contact-page-body .contact-section { padding: 1rem; }
 }
+
+/* Accessibility polish: preserve brand palette while improving legibility. */
+.navbar .nav-links a { color: #1b1308; }
+.navbar .nav-links a:hover { color: #101010; text-decoration: underline; }
+.footer, .footer a { color: #17120b; }
+.footer a { font-weight: 700; text-decoration: underline; }
+.contact-hero__button { color: #17120b; }
+.contact-hero__button:hover, .contact-hero__button:focus-visible { background: #f3c57e; color: #17120b; }
+.nav-links a:focus-visible, .hamburger:focus-visible, .order-button:focus-visible, .contact-hero__button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+img { max-width: 100%; height: auto; }
+@media (max-width: 768px) { .nav-links a { min-height: 44px; display: flex; justify-content: center; align-items: center; } }
