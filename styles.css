@@ -568,3 +568,20 @@
 .nav-links a:focus-visible, .hamburger:focus-visible, .order-button:focus-visible, .contact-hero__button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 img { max-width: 100%; height: auto; }
 @media (max-width: 768px) { .nav-links a { min-height: 44px; display: flex; justify-content: center; align-items: center; } }
+
+/* Lighthouse accessibility: homepage contrast and target spacing */
+.welcome-section .overlay h1 span { color: #ffd58c !important; }
+.welcome-section .overlay { background-color: rgba(0,0,0,.58); }
+.dishs > div:first-child > p, .drinks > div:first-child > p { color: #181818; }
+.main h2 { color: #fff; background-color: #825000; }
+.main .photo-gallery h2, .main .grid-images h2 { background-color: #825000; color: #fff; }
+.main .contact-section h3 { color: #181818; font-size: 1.15rem; margin-bottom: .5rem; }
+.main .contact-section a { display: inline-block; padding: 8px 6px; text-underline-offset: 3px; }
+.main .contact-section a:focus-visible { outline-color: #151515; }
+.main .contact-section mark { background: #fff0b9; color: #17120b; }
+.order-button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; text-decoration: none; }
+@media (max-width: 768px) {
+ .navbar .nav-links li { margin: 2px 0; }
+ .navbar .nav-links a { min-height: 48px; padding: 12px 18px; }
+ .navbar .hamburger { min-width: 48px; min-height: 48px; align-items: center; justify-content: center; }
+}
