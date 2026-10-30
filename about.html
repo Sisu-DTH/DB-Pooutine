@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-CA">
 <head>
+    <!-- PAGE HEAD: metadata, search previews, styles and resource hints -->
     <title>About D&B Poutine | Ottawa Restaurant at Carlingwood</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +18,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+    <!-- SHARED HEADER: logo > navigation links > language selector > mobile menu -->
+<header>
         <nav class="navbar" aria-label="Main navigation">
             <div class="logo">
               <a href="index.html">
@@ -38,7 +40,8 @@
             </button>
         </nav>
     </header>
-    <main class="main">
+    <!-- PAGE MAIN: content is grouped into parent sections and child components -->
+<main class="main">
         <div class="welcome-section subpage-hero about-page-hero" style="background-color:black; margin:1%;">
             <a href="about.html#map">
               <img src="Aboutdb.webp" width="855" height="1100" style="width:100%;height:auto;" alt="Exterior of D&B Poutine restaurant at Carlingwood Shopping Centre" fetchpriority="high" loading="eager" decoding="sync">
@@ -58,7 +61,8 @@
             <h2 style="font-weight:bold; background-color:black; color:white;">About Us</h2>
           </div>
           <div class="about-content" style="margin:1%;">
-              <section class="just text">
+              <!-- ABOUT CONTENT: story, opening hours, contact details and reviews -->
+<section class="just text">
                 <div class="about-text" style="text-align:left;">
                   <h3>We are <strong>D&B Poutine</strong> located in the Carlingwood shopping centre.</h3>
                   <br>
@@ -122,9 +126,11 @@
     <!-- end container -->
     </main>
     <hr>
-    <footer class="footer">
+    <!-- SHARED FOOTER: business details and developer credit; keep © 2024 unchanged -->
+<footer class="footer">
         &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "https://sisudth-maker.github.io/sisudthofficial/#home" target="_blank" rel="noopener noreferrer">Sisu DTH</a>
     </footer>
+<!-- SHARED BEHAVIOUR: mobile navigation and locale switching -->
 <script src="navigation.js" defer></script>
 <script src="language.js" defer></script>
 </body>
