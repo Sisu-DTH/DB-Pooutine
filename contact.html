@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-CA">
 <head>
+    <!-- PAGE HEAD: metadata, search previews, styles and resource hints -->
     <title>Contact D&B Poutine | Hours & Location in Ottawa</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +17,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+    <!-- SHARED HEADER: logo > navigation links > language selector > mobile menu -->
+<header>
         <nav class="navbar" aria-label="Main navigation">
             <div class="logo">
               <a href="index.html">
@@ -37,8 +39,10 @@
             </button>
         </nav>
     </header>
-    <main class="main">
-        <section class="contact-hero" aria-labelledby="contact-hero-title">
+    <!-- PAGE MAIN: content is grouped into parent sections and child components -->
+<main class="main">
+        <!-- CONTACT HERO: heading > description > primary action -->
+<section class="contact-hero" aria-labelledby="contact-hero-title">
             <div class="contact-hero__content">
                 <span class="contact-hero__eyebrow">D&amp;B Poutine · Ottawa</span>
                 <h1 id="contact-hero-title">Come hungry. Leave happy.</h1>
@@ -68,7 +72,8 @@
             </div>
             <div class="contact-content" style="margin:1%;">
               <h3 style="font-weight: bold; text-align: center; ">Send us a message</h3>
-              <section class="contact-section">
+              <!-- CONTACT DETAILS AND FORM: labels > fields > submit control -->
+<section class="contact-section">
                   <form aria-label="Contact D&B Poutine" action="https://formsubmit.co/contact@dbpoutine.com" method="post">
                     <fieldset>
                       <label for="full-name">Enter Your Full Name: <input id="full-name" name="full-name" type="text" autocomplete="name" placeholder="full name" required /></label>
@@ -95,10 +100,11 @@
     <!-- end container -->
     </main>
     <hr>
-    <footer class="footer">
+    <!-- SHARED FOOTER: business details and developer credit; keep © 2024 unchanged -->
+<footer class="footer">
         &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "https://sisudth-maker.github.io/sisudthofficial/#home" target="_blank" rel="noopener noreferrer">Sisu DTH</a>
     </footer>
-    <script>    </script>
+<!-- SHARED BEHAVIOUR: mobile navigation and locale switching -->
 <script src="navigation.js" defer></script>
 <script src="language.js" defer></script>
 </body>
