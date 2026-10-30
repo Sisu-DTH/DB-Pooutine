@@ -20,7 +20,7 @@
         <nav class="navbar">
             <div class="logo">
               <a href="index.html">
-                <img src="logo.jpeg" alt="D&amp;B Poutine logo">
+                <img src="logo.jpeg" alt="D&amp;B Poutine logo" width="80" height="80" decoding="async">
               </a>
             </div>
             <ul class="nav-links" id="primary-navigation">
@@ -73,7 +73,7 @@
 
                     <fieldset>
                       <label for="bio">Message:
-                        <textarea id="bio" name="bio" rows="3" cols="30" placeholder="Please type your message here..."></textarea>
+                        <textarea id="bio" name="bio" required rows="3" cols="30" placeholder="Please type your message here..."></textarea>
                       </label>
                     </fieldset>
                     <input type="submit" value="Send Message" />
@@ -95,16 +95,7 @@
         &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "https://sisudth-maker.github.io/sisudthofficial/#home" target="_blank">Sisu DTH</a>
     </footer>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const hamburger = document.querySelector('.hamburger');
-            const navLinks = document.querySelector('.nav-links');
-            const logo = document.querySelector('.logo');
-
-            hamburger.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-                logo.style.display = navLinks.classList.contains('active') ? 'none' : 'block';
-            });
-        });
+        
 
         function showLinks() {
             var linksContainer = document.getElementById('linksContainer');
