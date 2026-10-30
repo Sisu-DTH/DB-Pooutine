@@ -651,3 +651,35 @@ img { max-width: 100%; height: auto; }
 }
 /* Footer follows the content instead of obscuring it. */
 .footer { position: static; bottom: auto; }
+
+/* Final cross-device safeguards: no fixed footer or desktop hero overlap. */
+html body .footer { position: static !important; inset: auto !important; width: 100%; }
+html body .main .welcome-section.about-page-hero,
+html body .main .welcome-section.menu-page-hero {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding-top: 0 !important;
+}
+html body .main .welcome-section.about-page-hero .content,
+html body .main .welcome-section.menu-page-hero .content {
+  position: static !important;
+  display: block;
+  transform: none !important;
+  height: auto !important;
+  margin: 0 !important;
+}
+/* Brand credit: a distinct, accessible link colour on the gold footer. */
+html body .footer a[href*="sisudthofficial"] {
+  color: #123b75 !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 700;
+}
+html body .footer a[href*="sisudthofficial"]:hover,
+html body .footer a[href*="sisudthofficial"]:focus-visible {
+  color: #092547 !important;
+  text-decoration-thickness: 2px;
+}
