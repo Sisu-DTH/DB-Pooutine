@@ -70,16 +70,16 @@
               <section class="contact-section">
                   <form aria-label="Contact D&B Poutine" action="https://formsubmit.co/contact@dbpoutine.com" method="post">
                     <fieldset>
-                      <label for="full-name">Enter Your Full Name: <input id="full-name" name="full-name" type="text" placeholder="full name" required /></label>
-                      <label for="email">Enter Your Email: <input id="email" name="email" type="email" placeholder="example@gmail.com" required /></label>
+                      <label for="full-name">Enter Your Full Name: <input id="full-name" name="full-name" type="text" autocomplete="name" placeholder="full name" required /></label>
+                      <label for="email">Enter Your Email: <input id="email" name="email" type="email" autocomplete="email" placeholder="example@gmail.com" required /></label>
                     </fieldset>
 
                     <fieldset>
                       <label for="bio">Message:
-                        <textarea id="bio" name="bio" required rows="3" cols="30" placeholder="Please type your message here..."></textarea>
+                        <textarea id="bio" name="bio" minlength="10" required rows="3" cols="30" placeholder="Please type your message here..."></textarea>
                       </label>
                     </fieldset>
-                    <input type="submit" value="Send Message" />
+                    <input type="submit" value="Send Message" aria-label="Send contact message" />
                   </form>
                 </section>
             </div>
