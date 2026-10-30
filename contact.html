@@ -17,7 +17,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar">
+        <nav class="navbar" aria-label="Main navigation">
             <div class="logo">
               <a href="index.html">
                 <img src="logo.webp" alt="D&amp;B Poutine logo" width="80" height="80" decoding="async">
@@ -27,12 +27,12 @@
                 <li><a href="index.html">Home</a></li>
                 <li><a href="menu.html">Menu</a></li>
                 <li><a href="about.html">About</a></li>
-                <li><a href="contact.html" class="active">Contact</a></li>
+                <li><a href="contact.html" class="active" aria-current="page">Contact</a></li>
             </ul>
             <button class="hamburger" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-navigation">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
             </button>
         </nav>
     </header>
@@ -66,9 +66,9 @@
               </div>
             </div>
             <div class="contact-content" style="margin:1%;">
-              <h4 style="font-weight: bold; text-align: center; ">Send us a message</h4>
+              <h3 style="font-weight: bold; text-align: center; ">Send us a message</h3>
               <section class="contact-section">
-                  <form action="https://formsubmit.co/contact@dbpoutine.com" method="post">
+                  <form aria-label="Contact D&B Poutine" action="https://formsubmit.co/contact@dbpoutine.com" method="post">
                     <fieldset>
                       <label for="full-name">Enter Your Full Name: <input id="full-name" name="full-name" type="text" placeholder="full name" required /></label>
                       <label for="email">Enter Your Email: <input id="email" name="email" type="email" placeholder="example@gmail.com" required /></label>
@@ -95,7 +95,7 @@
     </div>
     <hr>
     <footer class="footer">
-        &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "https://sisudth-maker.github.io/sisudthofficial/#home" target="_blank">Sisu DTH</a>
+        &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "https://sisudth-maker.github.io/sisudthofficial/#home" target="_blank" rel="noopener noreferrer">Sisu DTH</a>
     </footer>
     <script>
         
