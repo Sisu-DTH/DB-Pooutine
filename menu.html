@@ -23,29 +23,29 @@
                 <img src="logo.jpeg" alt="D&amp;B Poutine logo">
               </a>  
             </div>
-            <ul class="nav-links">
+            <ul class="nav-links" id="primary-navigation">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="menu.html" class="active">Menu</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
-            <div class="hamburger">
+            <button class="hamburger" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-navigation">
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
-            </div>
+            </button>
         </nav>
     </header>
     <div class="main">
         <div class="welcome-section" style="background-image: url('slide1.jpeg'); margin:0;">
-            <a href="menu.html#vep"><img src="slie1.jpeg" style="width:100%; height: 10%; float: midle; padding-top: 60px;" alt="special Poutine"></a>
+            <a href="menu.html#vep"><img src="slie1.jpeg" style="width:100%; height: 10%; float: midle; padding-top: 60px;" alt="special Poutine" loading="lazy" decoding="async"></a>
             <div class="content">
               <p style="font-size:30px;">Discover The Delicious Menu at <br><h1><strong>D<span style="color:#b9770e; font-size:15px;">&</span>B <span style="color:#b9770e;">Poutine,</span></strong></h1><br>Order Online For Delivery or Collection!</p><br>
               <div class="dropdown">
                 <button class="order-button" onclick="showLinks()">Order Now</button>
                 <div class="links-container" id="linksContainer">
                   <a class="dropdown-item" href="tel:+1 (613) 400-4898" class="call-button"><button type="button" class="order-button">Call for Collection</button></a>
-                  <a class="dropdown-item" href="https://www.ubereats.com/store/d-&-b-poutine/NI1Sa9a3UIKG5MOgYD-cNA?diningMode=DELIVERY" target="_blanck"><button type="button" class="order-button">Order On UberEat</button></a>
+                  <a class="dropdown-item" href="https://www.ubereats.com/store/d-&-b-poutine/NI1Sa9a3UIKG5MOgYD-cNA?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer"><button type="button" class="order-button">Order On UberEat</button></a>
                 </div>
               </div>
             </div>
@@ -58,7 +58,7 @@
                     <div class="combos menu-items">
                         <!-- Meal 1 -->
                         <div class="menu-item">
-                            <img src="hdcom.jpeg" alt="D&B Fries Hot Dog Combo">
+                            <img src="hdcom.jpeg" alt="D&B Fries Hot Dog Combo" loading="lazy" decoding="async">
                             <h3>D&B Hot Dog Combo</h3>
                             <p class="price">$10.99</p>
                             <ul class="recipe-list">
@@ -67,7 +67,7 @@
                         </div>
                         <!-- Meal 2 -->
                         <div class="menu-item">
-                            <img src="poutinewithhd.jpeg" alt="D&B Chicken Poutine with Hot Dog Combo">
+                            <img src="poutinewithhd.jpeg" alt="D&B Chicken Poutine with Hot Dog Combo" loading="lazy" decoding="async">
                             <h3>D&B Poutine with Hot Dog Combo</h3>
                             <p class="price">$12.99</p>
                             <ul class="recipe-list">
@@ -76,7 +76,7 @@
                         </div>
                         <!-- Meal 3 -->
                         <div class="menu-item">
-                            <img src="tusand.JPG" alt="D&B Tuna Fries Combo">
+                            <img src="tusand.JPG" alt="D&B Tuna Fries Combo" loading="lazy" decoding="async">
                             <h3>D&B Tuna Sandwich Combo</h3>
                             <p class="price">$14.49</p>
                             <ul class="recipe-list">
@@ -85,7 +85,7 @@
                         </div>
                         <!-- Meal 4 -->
                         <div class="menu-item">
-                            <img src="dbsalad.JPG" alt="D&B Salad Combo">
+                            <img src="dbsalad.JPG" alt="D&B Salad Combo" loading="lazy" decoding="async">
                             <h3>D&B Salad Combo</h3>
                             <p class="price">$12.99</p>
                             <ul class="recipe-list">
@@ -94,7 +94,7 @@
                         </div>
                         <!-- Meal 5 -->
                         <div class="menu-item">
-                            <img src="cara.JPG" alt="D&B Calamari Combo with Fries">
+                            <img src="cara.JPG" alt="D&B Calamari Combo with Fries" loading="lazy" decoding="async">
                             <h3>D&B Calamari Combo</h3>
                             <p class="price">$18.99</p>
                             <ul class="recipe-list">
@@ -103,7 +103,7 @@
                         </div>
                         <!-- Meal 6 -->
                         <div class="menu-item">
-                            <img src="beefp.jpeg" alt="D&B Beef Panini Combo">
+                            <img src="beefp.jpeg" alt="D&B Beef Panini Combo" loading="lazy" decoding="async">
                             <h3>D&B Beef Panini Combo</h3>
                             <p class="price">$14.49</p>
                             <ul class="recipe-list">
@@ -112,7 +112,7 @@
                         </div>
                         <!-- Meal 7 -->
                         <div class="menu-item">
-                            <img src="chickp.jpg" alt="D&B Chicken Panini Combo">
+                            <img src="chickp.jpg" alt="D&B Chicken Panini Combo" loading="lazy" decoding="async">
                             <h3>D&B Chicken Panini Combo</h3>
                             <p class="price">$14.49</p>
                             <ul class="recipe-list">
@@ -121,7 +121,7 @@
                         </div>
                         <!-- Meal 8 -->
                         <div class="menu-item">
-                            <img src="turkeyp.jpg" alt="D&B Turkey Panini Combo">
+                            <img src="turkeyp.jpg" alt="D&B Turkey Panini Combo" loading="lazy" decoding="async">
                             <h3>D&B Turkey Panini Combo</h3>
                             <p class="price">$15.49</p>
                             <ul class="recipe-list">
@@ -130,7 +130,7 @@
                         </div>
                         <!-- Meal  9-->
                         <div class="menu-item">
-                            <img src="8w.JPG" alt="D&B Wings Combo with Fries">
+                            <img src="8w.JPG" alt="D&B Wings Combo with Fries" loading="lazy" decoding="async">
                             <h3>D&B 6pcs of Wings Combo</h3>
                             <p class="price">$12.49</p>
                             <ul class="recipe-list">
@@ -139,7 +139,7 @@
                         </div>
                         <!-- Meal 10 -->
                         <div class="menu-item">
-                            <img src="poutinewingcombo.jpeg" alt="D&B Poutine & wings Combo">
+                            <img src="poutinewingcombo.jpeg" alt="D&B Poutine & wings Combo" loading="lazy" decoding="async">
                             <h3>D&B Poutine & wings Combo</h3>
                             <p class="price">$13.99</p>
                             <ul class="recipe-list">
@@ -155,7 +155,7 @@
                     <div class="veggie menu-items">
                         <!-- Meal 1 -->
                         <div id="vep" class="menu-item">
-                            <img src="Vpoutinc.jpeg" alt="Poutine Combo Pop special">
+                            <img src="Vpoutinc.jpeg" alt="Poutine Combo Pop special" loading="lazy" decoding="async">
                             <h3>Veggie Poutine</h3>
                             <p class="price">$6.99</p>
                             <ul class="recipe-list">
@@ -164,7 +164,7 @@
                         </div>
                         <!-- Meal 2 -->
                         <div class="menu-item">
-                            <img src="tusand.JPG" alt="Special Tuna combo Pop">
+                            <img src="tusand.JPG" alt="Special Tuna combo Pop" loading="lazy" decoding="async">
                             <h3>Tuna</h3>
                             <p class="price">$10.99</p>
                             <ul class="recipe-list">
@@ -179,7 +179,7 @@
                         </div>
                         <!-- Meal 3 -->
                         <div id="cara" class="menu-item">
-                            <img src="cara.JPG" alt="d&b's Caramaries">
+                            <img src="cara.JPG" alt="d&b's Caramaries" loading="lazy" decoding="async">
                             <h3>D&B Calamari</h3>
                             <p class="price">$13.99</p>
                             <ul class="recipe-list">
@@ -193,7 +193,7 @@
                         </div>
                         <!-- Add more meals -->
                         <div class="menu-item">
-                            <img src="dbsalad.JPG" alt="d&b Salad">
+                            <img src="dbsalad.JPG" alt="d&b Salad" loading="lazy" decoding="async">
                             <h3>D&B Salad</h3>
                             <p class="price">$10.99</p>
                             <ul class="recipe-list">
@@ -214,19 +214,19 @@
                     <div class="menu-items">
                         <!-- Meal 1 -->
                         <div class="menu-item">
-                            <img src="sproll.jpg" alt="D&B Chicken Spring Roll">
+                            <img src="sproll.jpg" alt="D&B Chicken Spring Roll" loading="lazy" decoding="async">
                             <h3>D&B Chicken Spring Roll (Halal)</h3>
                             <p class="price">$6.99</p>
                         </div>
                         <!-- Meal 2 -->
                         <div class="menu-item">
-                            <img src="vsproll.jpg" alt="Veggie Spring Roll">
+                            <img src="vsproll.jpg" alt="Veggie Spring Roll" loading="lazy" decoding="async">
                             <h3>D&B Veggie Spring Roll with D&B sauce</h3>
                             <p class="price">$6.99</p>
                         </div>
                         <!-- Meal 3 -->
                         <div class="menu-item">
-                            <img src="cauliflower.JPG" alt="Plate of Cauliflower">
+                            <img src="cauliflower.JPG" alt="Plate of Cauliflower" loading="lazy" decoding="async">
                             <h3>D&B Cauliflower</h3>
                             <p class="price">$9.99</p>
                             <ul class="recipe-list">
@@ -239,7 +239,7 @@
                         </div>
                         <!-- Meal 4 -->
                         <div class="menu-item">
-                            <img src="fishandChips.png" alt="d&b fish and chips">
+                            <img src="fishandChips.png" alt="d&b fish and chips" loading="lazy" decoding="async">
                             <h3>D&B Fish & Chips</h3>
                             <p class="price">$13.49</p>
                             <ul class="recipe-list">
@@ -251,13 +251,13 @@
                         </div>
                         <!-- Add more meals -->
                         <div class="menu-item">
-                            <img src="sanbusa.jpeg" alt="d&b Sambusa">
+                            <img src="sanbusa.jpeg" alt="d&b Sambusa" loading="lazy" decoding="async">
                             <h3>D&B Beef Sambusa</h3>
                             <p class="price">$1.99</p>
                         </div>
                         <!-- Add more meals -->
                         <div class="menu-item">
-                            <img src="nuggets.jpeg" alt="D&B Chicken Nuggets with Fries">
+                            <img src="nuggets.jpeg" alt="D&B Chicken Nuggets with Fries" loading="lazy" decoding="async">
                             <h3>D&B Chicken Nuggets with Fries</h3>
                             <p class="price">$6.99</p>
                             <ul>
@@ -267,31 +267,31 @@
                         </div>
                         <!-- Meal 8 -->
                         <div class="menu-item">
-                            <img src="sweetp.jpeg" alt="Sweet Potato ">
+                            <img src="sweetp.jpeg" alt="Sweet Potato " loading="lazy" decoding="async">
                             <h3>Sweet Potato</h3>
                             <p class="price">$5.10</p>
                         </div>
                         <!-- Meal 9 -->
                         <div class="menu-item">
-                            <img src="fries.jpeg" alt="Small fries">
+                            <img src="fries.jpeg" alt="Small fries" loading="lazy" decoding="async">
                             <h3>Small Fries</h3>
                             <p class="price">$4.49</p>
                         </div>
                         <!-- Meal 10 -->
                         <div class="menu-item">
-                            <img src="fries.jpeg" alt="Regular fries">
+                            <img src="fries.jpeg" alt="Regular fries" loading="lazy" decoding="async">
                             <h3>Regular Fries</h3>
                             <p class="price">$5.99</p>
                         </div>
                         <!-- Meal 11 -->
                         <div class="menu-item">
-                            <img src="fries.jpeg" alt="Large fries">
+                            <img src="fries.jpeg" alt="Large fries" loading="lazy" decoding="async">
                             <h3>Large Fries</h3>
                             <p class="price">$7.50</p>
                         </div>
                         <!-- Meal 12 -->
                         <div class="menu-item">
-                            <img src="onionr.jpeg" alt="Onion Ring">
+                            <img src="onionr.jpeg" alt="Onion Ring" loading="lazy" decoding="async">
                             <h3>Onion Ring</h3>
                             <p class="price">$5.49</p>
                         </div>               
@@ -304,7 +304,7 @@
                       <div class="menu-items">
                           <!-- Meal 1 -->
                           <div class="menu-item">
-                              <img src="small-pou.jpeg" alt="Poutine Regular">
+                              <img src="small-pou.jpeg" alt="Poutine Regular" loading="lazy" decoding="async">
                               <h3>D&B Poutine</h3>
                               <p class="price">$6.99</p>
                               <ul class="recipe-list">
@@ -312,7 +312,7 @@
                               </ul>
                           </div>
                           <div class="menu-item">
-                              <img src="chicken-pou.jpeg" alt="D&B Chicken Poutine">
+                              <img src="chicken-pou.jpeg" alt="D&B Chicken Poutine" loading="lazy" decoding="async">
                               <h3>D&B Chicken Poutine</h3>
                               <p class="price">$8.40</p>
                               <ul class="recipe-list">
@@ -325,7 +325,7 @@
                           </div>
                           <!-- Meal 2 -->
                           <div class="menu-item">
-                            <img src="small-pou.jpeg" alt="D&B Poutine Regular">
+                            <img src="small-pou.jpeg" alt="D&B Poutine Regular" loading="lazy" decoding="async">
                             <h3>D&B Poutine Regular</h3>
                             <p class="price">$8.50</p>
                             <ul class="recipe-list">
@@ -337,7 +337,7 @@
                           </div>
                           <!-- Meal 3 -->
                           <div class="menu-item">
-                              <img src="chicken-pou.jpeg" alt="D&B Chicken Poutine Regular">
+                              <img src="chicken-pou.jpeg" alt="D&B Chicken Poutine Regular" loading="lazy" decoding="async">
                               <h3>D&B Chicken Poutine Regular</h3>
                               <p class="price">$9.99</p>
                               <ul class="recipe-list">
@@ -350,7 +350,7 @@
                           </div>
                           <!-- Meal 4 -->
                           <div class="menu-item">
-                            <img src="small-pou.jpeg" alt="D&B Poutine Large">
+                            <img src="small-pou.jpeg" alt="D&B Poutine Large" loading="lazy" decoding="async">
                             <h3>D&B Poutine Large</h3>
                             <p class="price">$11.99</p>
                             <ul class="recipe-list">
@@ -362,7 +362,7 @@
                           </div>
                           <!-- Meal 3 -->
                           <div class="menu-item">
-                              <img src="chicken-pou.jpeg" alt="D&B Chicken Poutine Large">
+                              <img src="chicken-pou.jpeg" alt="D&B Chicken Poutine Large" loading="lazy" decoding="async">
                               <h3>D&B Chicken Poutine Large</h3>
                               <p class="price">$13.50</p>
                               <ul class="recipe-list">
@@ -375,7 +375,7 @@
                           </div>
                           <!-- Meal 4 -->
                           <div class="menu-item">
-                            <img src="poutandhd.jpeg" alt="D&B Poutine with hotdog<br> (Image needed)">
+                            <img src="poutandhd.jpeg" alt="D&B Poutine with hotdog<br loading="lazy" decoding="async"> (Image needed)">
                             <h3>D&B Poutine with hotdog</h3>
                             <p class="price">Small: $8.99, Regular:$10.50</p>
                             <ul class="recipe-list">
@@ -388,7 +388,7 @@
                           </div>
                           <!-- Meal 3 -->
                           <div class="menu-item">
-                              <img src="poutandhd.jpeg" alt="D&B Poutine with hotdog Large <br> (Image needed)">
+                              <img src="poutandhd.jpeg" alt="D&B Poutine with hotdog Large <br loading="lazy" decoding="async"> (Image needed)">
                               <h3>D&B Poutine with hotdog Large</h3>
                               <p class="price">$13.99</p>
                               <ul class="recipe-list">
@@ -408,7 +408,7 @@
                       <div class="special menu-items">
                           <!-- Meal 1 -->
                           <div class="menu-item">
-                              <img src="chickp.jpg" alt="Chicken panini">
+                              <img src="chickp.jpg" alt="Chicken panini" loading="lazy" decoding="async">
                               <h3>Chicken Panini</h3>
                               <p class="price">$10.99</p>
                               <ul class="recipe-list">
@@ -424,7 +424,7 @@
                           </div>
                           <!-- Meal 2 -->
                           <div class="menu-item">
-                              <img src="turkeyp.jpg" alt="turkey panini">
+                              <img src="turkeyp.jpg" alt="turkey panini" loading="lazy" decoding="async">
                               <h3>Turkey Panini</h3>
                               <p class="price">$11.99</p>
                               <ul class="recipe-list">
@@ -440,7 +440,7 @@
                           </div>
                           <!-- Meal 3 -->
                           <div class="menu-item">
-                              <img src="beefp.jpeg" alt="beef panini">
+                              <img src="beefp.jpeg" alt="beef panini" loading="lazy" decoding="async">
                               <h3>Beef Panini</h3>
                               <p class="price">$10.99</p>
                               <ul class="recipe-list">
@@ -456,7 +456,7 @@
                           </div>
                           <!-- Meal 4 -->
                           <div class="menu-item">
-                              <img src="Veggiep.jpeg" alt="veggie panini">
+                              <img src="Veggiep.jpeg" alt="veggie panini" loading="lazy" decoding="async">
                               <h3>Veggie Panini</h3>
                               <p class="price">$6.99</p>
                               <ul class="recipe-list">
@@ -479,7 +479,7 @@
                        <div class="special menu-items">
                            <!-- Meal 1 -->
                            <div class="menu-item">
-                               <img src="tusand.JPG" alt="Tuna Sandwich">
+                               <img src="tusand.JPG" alt="Tuna Sandwich" loading="lazy" decoding="async">
                                <h3>D&B Tuna Sandwich</h3>
                                <p class="price">$10.99</p>
                                <ul class="recipe-list">
@@ -494,7 +494,7 @@
                            </div>
                            <!-- Meal 2 -->
                            <div class="menu-item">
-                               <img src="chicksand.jpg" alt="Chicken Sandwich">
+                               <img src="chicksand.jpg" alt="Chicken Sandwich" loading="lazy" decoding="async">
                                <h3>D&B Chicken Sandwich</h3>
                                <p class="price">$10.99</p>
                                <ul class="recipe-list">
@@ -515,7 +515,7 @@
                       <div class="special menu-items">
                           <!-- Meal 1 -->
                           <div class="menu-item">
-                              <img src="8w.JPG" alt="8 pieces of fried wings ">
+                              <img src="8w.JPG" alt="8 pieces of fried wings " loading="lazy" decoding="async">
                               <h3>D&B Wings (6 Pcs)</h3>
                               <p class="price">$9.00</p>
                               <ul class="recipe-list">
@@ -524,7 +524,7 @@
                           </div>
                           <!-- Meal 2 -->
                           <div class="menu-item">
-                              <img src="8spicew.jpg" alt="8 pieces of spice wings">
+                              <img src="8spicew.jpg" alt="8 pieces of spice wings" loading="lazy" decoding="async">
                               <h3>D&B Wings (9 Pcs)</h3>
                               <p class="price">$11.99</p>
                               <ul class="recipe-list">
@@ -533,7 +533,7 @@
                           </div>
                           <!-- Meal 3 -->
                           <div class="menu-item">
-                              <img src="14w.jpg" alt="14 pieces of fried wings">
+                              <img src="14w.jpg" alt="14 pieces of fried wings" loading="lazy" decoding="async">
                               <h3>D&B Wings (12 Pcs)</h3>
                               <p class="price">$15.99</p>
                               <ul class="recipe-list">
@@ -542,7 +542,7 @@
                           </div>
                           <!-- Meal 4 -->
                           <div class="menu-item">
-                              <img src="sauces.jpeg" alt="D&B Wings Sauces">
+                              <img src="sauces.jpeg" alt="D&B Wings Sauces" loading="lazy" decoding="async">
                               <h3>D&B Wings Sauces</h3>
                               <ul class="recipe-list">
                                   <li>BBQ</li>
@@ -567,7 +567,7 @@
                       <div class="special menu-items">
                           <!-- Meal 1 -->
                           <div class="menu-item">
-                              <img src="beefhd.jpg" alt="beef hotdog">
+                              <img src="beefhd.jpg" alt="beef hotdog" loading="lazy" decoding="async">
                               <h3>D&B Beef Hotdog</h3>
                               <p class="price">$4.49</p>
                               <ul class="recipe-list">
@@ -582,7 +582,7 @@
                           </div>
                           <!-- Meal 2 -->
                           <div class="menu-item">
-                              <img src="baconhd.jpg" alt="bacon hotdog">
+                              <img src="baconhd.jpg" alt="bacon hotdog" loading="lazy" decoding="async">
                               <h3>Bacon Hotdog</h3>
                               <p class="price">$5.50</p>
                               <ul class="recipe-list">
@@ -598,7 +598,7 @@
                           </div>
                           <!-- Meal 3 -->
                           <div class="menu-item">
-                              <img src="loadedhd.jpg" alt="leaded hotdog">
+                              <img src="loadedhd.jpg" alt="leaded hotdog" loading="lazy" decoding="async">
                               <h3>Loaded Hotdog</h3>
                               <p class="price">$5.50</p>
                               <ul class="recipe-list">
@@ -614,7 +614,7 @@
                           </div>
                           <!-- Meal 4 -->
                           <div class="menu-item">
-                              <img src="veganhd.jpeg" alt="veggie hotdog">
+                              <img src="veganhd.jpeg" alt="veggie hotdog" loading="lazy" decoding="async">
                               <h3>veggie Hotdog</h3>
                               <p class="price">$4.49</p>
                               <ul class="recipe-list">
@@ -638,31 +638,31 @@
                     <div class="menu-items">
                         <!-- Meal 1 -->
                         <div class="menu-item">
-                            <img src="gravey.jpeg" alt="D&B Gravy">
+                            <img src="gravey.jpeg" alt="D&B Gravy" loading="lazy" decoding="async">
                             <h3>D&B Gravy</h3>
                             <p class="price">$2.50</p>
                         </div>
                         <!-- Meal 2 -->
                         <div class="menu-item">
-                            <img src="cheescard.jpeg" alt="D&B Cheese Curds">
+                            <img src="cheescard.jpeg" alt="D&B Cheese Curds" loading="lazy" decoding="async">
                             <h3>D&B Cheese Curds</h3>
                             <p class="price">$2.50</p>
                         </div>
                         <!-- Meal 3 -->
                         <div class="menu-item">
-                            <img src="chilli.jpeg" alt="D&B Chili Souces">
+                            <img src="chilli.jpeg" alt="D&B Chili Souces" loading="lazy" decoding="async">
                             <h3>D&B Chili Souces</h3>
                             <p class="price">$1.25</p>
                         </div>
                         <!-- Meal 4 -->
                         <div class="menu-item">
-                            <img src="1spring.jpeg" alt="D&B Spring Roll">
+                            <img src="1spring.jpeg" alt="D&B Spring Roll" loading="lazy" decoding="async">
                             <h3>D&B Spring Roll</h3>
                             <p class="price">$2.00</p>  
                         </div>
                         <!-- Add more meals -->
                         <div class="menu-item">
-                            <img src="IMG_2221.jpeg" alt="D&B Calamari">
+                            <img src="IMG_2221.jpeg" alt="D&B Calamari" loading="lazy" decoding="async">
                             <h3>D&B Calamari</h3>
                             <p class="price">$5.49</p>
                         </div>
@@ -675,49 +675,49 @@
                       <div class="drink-items">
                           <!-- Drink 1 -->
                           <div class="menu-item">
-                              <img src="pepsi.jpeg" alt="Can of pepsi">
+                              <img src="pepsi.jpeg" alt="Can of pepsi" loading="lazy" decoding="async">
                               <h3>Can of Soft-drinks</h3>
                               <p class="price">$1.89</p>
                           </div>
                           <!-- Drink 2 -->
                           <div class="menu-item">
-                              <img src="bottle.jpeg" alt="bottle soft-drinks">
+                              <img src="bottle.jpeg" alt="bottle soft-drinks" loading="lazy" decoding="async">
                               <h3>Bottle of Soft-drinks</h3>
                               <p class="price">$2.89</p>
                           </div>
                           <!-- Drink 3 -->
                           <div class="menu-item">
-                              <img src="Fountedrink.jpeg" alt="Fountain Drink XS">
+                              <img src="Fountedrink.jpeg" alt="Fountain Drink XS" loading="lazy" decoding="async">
                               <h3>Fountain Drink XS</h3>
                               <p class="price">$1.25</p>
                           </div>
                           <!-- Drink 4 -->
                           <div class="menu-item">
-                              <img src="Fountedrink.jpeg" alt="Fountain Drink S">
+                              <img src="Fountedrink.jpeg" alt="Fountain Drink S" loading="lazy" decoding="async">
                               <h3>Fountain Drink S</h3>
                               <p class="price">$1.60</p>
                           </div>
                           <!-- Drink 5 -->
                           <div class="menu-item">
-                              <img src="Fountedrink.jpeg" alt="Fountain Drink Regular">
+                              <img src="Fountedrink.jpeg" alt="Fountain Drink Regular" loading="lazy" decoding="async">
                               <h3>Fountain Drink Regular</h3>
                               <p class="price">$2.00</p>
                           </div>
                           <!-- Drink 6 -->
                           <div class="menu-item">
-                              <img src="Fountedrink.jpeg" alt="Fountain Drink Large">
+                              <img src="Fountedrink.jpeg" alt="Fountain Drink Large" loading="lazy" decoding="async">
                               <h3>Fountain Drink Large</h3>
                               <p class="price">$2.70</p>
                           </div>
                           <!-- Drink 7 -->
                           <div class="menu-item">
-                              <img src="stillw.jpeg" alt="Bottle of Still Water">
+                              <img src="stillw.jpeg" alt="Bottle of Still Water" loading="lazy" decoding="async">
                               <h3>Still Water</h3>
                               <p class="price">$2.99</p>
                           </div>
                           <!-- Drink 8 -->
                           <div class="menu-item">
-                              <img src="sparkw.jpeg" alt="Bottle of Sparkling Water">
+                              <img src="sparkw.jpeg" alt="Bottle of Sparkling Water" loading="lazy" decoding="async">
                               <h3>Sparkling Water</h3>
                               <p class="price">$3.49</p>
                           </div>
@@ -731,37 +731,37 @@
                       <div class="drink-items">
                           <!-- Drink 1 -->
                           <div class="menu-item">
-                              <img src="coffee.jpeg" alt="cup of coffee">
+                              <img src="coffee.jpeg" alt="cup of coffee" loading="lazy" decoding="async">
                               <h3>Coffee</h3>
                               <p class="price">$3</p>
                           </div>
                           <!-- Drink 2 -->
                           <div class="menu-item">
-                            <img src="espresso.jpeg" alt="cup of espresso">
+                            <img src="espresso.jpeg" alt="cup of espresso" loading="lazy" decoding="async">
                             <h3>Espresso</h3>
                             <p class="price">$3</p>
                           </div>
                           <!-- Drink 3 -->
                           <div class="menu-item">
-                            <img src="macchiato.jpeg" alt="cup hot macchiato">
+                            <img src="macchiato.jpeg" alt="cup hot macchiato" loading="lazy" decoding="async">
                             <h3>Macchiato</h3>
                             <p class="price">$3.50</p>
                           </div>
                           <!-- Drink 4 -->
                           <div class="menu-item">
-                            <img src="cappuccino.jpeg" alt="cup of Cappuccino">
+                            <img src="cappuccino.jpeg" alt="cup of Cappuccino" loading="lazy" decoding="async">
                             <h3>Cappuccino</h3>
                             <p class="price">$3.50</p>
                           </div>
                           <!-- Drink 5 -->
                           <div class="menu-item">
-                            <img src="latte.jpg" alt="cup of coffee latte">
+                            <img src="latte.jpg" alt="cup of coffee latte" loading="lazy" decoding="async">
                             <h3>Latte</h3>
                             <p class="price">$3.20</p>
                           </div>
                           <!-- Drink 6 -->
                           <div class="menu-item">
-                            <img src="gtea.jpeg" alt="cup of Ginger tea">
+                            <img src="gtea.jpeg" alt="cup of Ginger tea" loading="lazy" decoding="async">
                             <h3>Ginger Tea</h3>
                             <p class="price">$4</p>
                           </div>
@@ -770,7 +770,7 @@
         </section>
         <div style="margin:2% 2% 8% 2%;">
           <a href="about.html#map">
-            <img src="db-img.jpeg" width="100%" alt="d&b Poutine kitchen">
+            <img src="db-img.jpeg" width="100%" alt="d&b Poutine kitchen" loading="lazy" decoding="async">
           </a>
         </div>
     <!-- end container -->
@@ -800,6 +800,7 @@
             }
         }
     </script>
+<script src="navigation.js" defer></script>
 </body>
 </html>
 
