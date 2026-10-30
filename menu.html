@@ -43,8 +43,8 @@
             <div class="content">
               <p style="font-size:30px;">Discover the delicious menu at</p><h1><strong>D<span style="color:#b9770e; font-size:15px;">&</span>B <span style="color:#b9770e;">Poutine,</span></strong></h1><p>Order online for delivery or collection!</p><br>
               <div class="dropdown">
-                <button class="order-button" type="button" onclick="showLinks()" aria-controls="linksContainer" aria-expanded="false">Order Now</button>
-                <div class="links-container" id="linksContainer">
+                <button class="order-button" type="button" aria-controls="linksContainer" aria-expanded="false">Order Now</button>
+                <div class="links-container" id="linksContainer" hidden>
                   <a class="dropdown-item call-button" href="tel:+16134004898">Call for Collection</a>
                   <a class="dropdown-item call-button" href="https://www.ubereats.com/store/d-&-b-poutine/NI1Sa9a3UIKG5MOgYD-cNA?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Order on Uber Eats</a>
                 </div>
@@ -376,7 +376,7 @@
                           </div>
                           <!-- Meal 4 -->
                           <div class="menu-item">
-                            <img src="poutandhd.webp" alt="D&B Poutine with hotdog<br loading="lazy" decoding="async"> (Image needed)">
+                            <img src="poutandhd.webp" alt="D&amp;B Poutine with hotdog" loading="lazy" decoding="async"> (Image needed)">
                             <h3>D&B Poutine with hotdog</h3>
                             <p class="price">Small: $8.99, Regular:$10.50</p>
                             <ul class="recipe-list">
@@ -389,7 +389,7 @@
                           </div>
                           <!-- Meal 3 -->
                           <div class="menu-item">
-                              <img src="poutandhd.webp" alt="D&B Poutine with hotdog Large <br loading="lazy" decoding="async"> (Image needed)">
+                              <img src="poutandhd.webp" alt="D&amp;B Poutine with hotdog large combo" loading="lazy" decoding="async"> (Image needed)">
                               <h3>D&B Poutine with hotdog Large</h3>
                               <p class="price">$13.99</p>
                               <ul class="recipe-list">
@@ -781,16 +781,23 @@
         &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "https://sisudth-maker.github.io/sisudthofficial/#home" target="_blank" rel="noopener noreferrer">Sisu DTH</a>
     </footer>
     <script>
-        
-
-        function showLinks() {
-            const linksContainer = document.getElementById('linksContainer');
-            const button = document.querySelector('[aria-controls="linksContainer"]');
-            if (!linksContainer || !button) return;
-            const expanded = button.getAttribute('aria-expanded') === 'true';
-            linksContainer.style.display = expanded ? 'none' : 'block';
-            button.setAttribute('aria-expanded', String(!expanded));
-        }
+      document.addEventListener('DOMContentLoaded', () => {
+        const button = document.querySelector('[aria-controls="linksContainer"]');
+        const links = document.getElementById('linksContainer');
+        if (!button || !links) return;
+        button.addEventListener('click', () => {
+          const open = button.getAttribute('aria-expanded') !== 'true';
+          button.setAttribute('aria-expanded', String(open));
+          links.hidden = !open;
+        });
+        document.addEventListener('keydown', event => {
+          if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
+            links.hidden = true;
+            button.setAttribute('aria-expanded', 'false');
+            button.focus();
+          }
+        });
+      });
     </script>
 <script src="navigation.js" defer></script>
 </body>
