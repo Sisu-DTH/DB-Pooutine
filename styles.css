@@ -486,19 +486,19 @@
             @keyframes welcomeImg{
         
               0%{
-                background-image: url("pepsi.jpeg");
+                background-image: url("pepsi.webp");
               }
                     
-             25%{background-image: url("slide2.jpeg");}
+             25%{background-image: url("slide2.webp");}
                     
              50%{
-               background-image: url("slide1.jpeg");
+               background-image: url("slide1.webp");
              }
                      
-             75%{background-image: url("slide3.jpeg");}
+             75%{background-image: url("slide3.webp");}
                     
             100%{
-              background-image: url("cappuccino.jpeg");
+              background-image: url("cappuccino.webp");
             }  
                                
            }
@@ -529,4 +529,31 @@
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* Contact hero — single purposeful photo instead of three overlapping images */
+.contact-hero {
+  position: relative; min-height: clamp(320px, 48vw, 510px);
+  display: grid; place-items: center; text-align: center;
+  padding: 5rem 1.25rem 6rem;
+  color: #fff;
+  background: linear-gradient(90deg, rgba(15,12,9,.84), rgba(15,12,9,.46)), url("slide1.webp") center 55% / cover no-repeat;
+}
+.contact-hero__content { position: relative; max-width: 680px; }
+.contact-hero__eyebrow { font-size: .85rem; letter-spacing: .13em; text-transform: uppercase; font-weight: 700; color: #f3c57e; }
+.contact-hero h1 { font-size: clamp(2rem, 5.2vw, 3.7rem); line-height: 1.12; margin: 1rem 0; color: #fff; }
+.contact-hero p { font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.6; color: #f5f2eb; margin-bottom: 1.7rem; }
+.contact-hero__button { display: inline-block; padding: .8rem 1.7rem; border-radius: 100px; background: #b9770e; color: #fff; font-weight: 700; text-decoration: none; }
+.contact-hero__button:hover, .contact-hero__button:focus-visible { background: #965e00; color: #fff; }
+.contact-page-body { background: #f5f2eb; padding: clamp(1rem, 3vw, 2.5rem) 0 5rem; }
+.contact-page-body > .contact { max-width: 1050px; margin: 0 auto 2rem; border-radius: 22px; background: #fff; box-shadow: 0 14px 42px rgba(0,0,0,.1); overflow: hidden; }
+.contact-page-body .contact h2 { background: #161616; color: #fff; text-align: center; padding: 1.15rem; margin: 0; }
+.contact-page-body .contact-section { gap: 1rem; }
+.contact-page-body .contact-section a { overflow-wrap: anywhere; }
+.contact-page-body input, .contact-page-body textarea { max-width: 100%; }
+.contact-page-body input[type="submit"] { cursor: pointer; }
+@media (max-width: 600px) {
+ .contact-hero { min-height: 360px; padding: 4rem 1.2rem; }
+ .contact-page-body > .contact { margin: 0 .75rem 1.5rem; }
+ .contact-page-body .contact-section { padding: 1rem; }
 }
