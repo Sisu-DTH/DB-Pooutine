@@ -1,3 +1,9 @@
+/**
+ * SHARED NAVIGATION
+ * Parent: .navbar
+ * Children: .hamburger button and #primary-navigation list
+ * Handles mobile open/close state and Escape-key dismissal.
+ */
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.querySelector('.hamburger');
   const nav = document.querySelector('.nav-links');
