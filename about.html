@@ -17,7 +17,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar">
+        <nav class="navbar" aria-label="Main navigation">
             <div class="logo">
               <a href="index.html">
                 <img src="logo.webp" alt="D&amp;B Poutine logo" width="80" height="80" decoding="async">
@@ -26,13 +26,13 @@
             <ul class="nav-links" id="primary-navigation">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="menu.html">Menu</a></li>
-                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="about.html" class="active" aria-current="page">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
             <button class="hamburger" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-navigation">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
             </button>
         </nav>
     </header>
@@ -45,7 +45,7 @@
               <h1><strong>About D<span style="color:#b9770e; font-size:15px;">&</span>B <span style="color:#b9770e;">Poutine</span></strong></h1><br>
               <p>Discover the best Poutine in Ottawa!</p><br>
               <div class="dropdown">
-                <a href="menu.html"><button class="order-button" type="button">Menu</button></a>
+                <a href="menu.html" class="order-button">View menu</a>
               </div>
             </div>
         </div>
@@ -121,7 +121,7 @@
     </div>
     <hr>
     <footer class="footer">
-        &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "https://sisudth-maker.github.io/sisudthofficial/#home" target="_blank">Sisu DTH</a>
+        &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "https://sisudth-maker.github.io/sisudthofficial/#home" target="_blank" rel="noopener noreferrer">Sisu DTH</a>
     </footer>
     <script>
         
