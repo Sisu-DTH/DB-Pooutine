@@ -714,3 +714,29 @@ html body .footer a[href*="sisudthofficial"]:focus-visible {
   .navbar .language-switcher { margin-left: auto; padding: 4px 6px; font-size: .75rem; }
   .navbar .language-switcher select { max-width: 92px; min-height: 42px; font-size: .75rem; }
 }
+
+/* Homepage finishing: restore contrast and spacing in featured dishes. */
+.main .dishs > div:first-child {
+  background: #17120b;
+  color: #fff;
+  padding: 0 12px 18px;
+}
+.main .dishs > div:first-child > h2 {
+  margin: 0;
+  background: #17120b !important;
+  color: #fff !important;
+  padding: 18px 12px 12px;
+  border-bottom: 2px solid #b9770e;
+}
+.main .dishs > div:first-child > p {
+  background: #f5f1e9;
+  color: #17120b;
+  padding: 14px 18px;
+  line-height: 1.7;
+  margin: 0;
+  border-radius: 0 0 10px 10px;
+}
+@media (min-width: 769px) {
+  .navbar .nav-links { margin-left: 16px; }
+  .navbar .language-switcher { margin-left: auto; }
+}
