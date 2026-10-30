@@ -1,3 +1,21 @@
+/*
+ * D&B POUTINE — SHARED STYLESHEET
+ *
+ * Parent → child guide
+ *   body
+ *     ├─ header > .navbar > .logo / .nav-links / .language-switcher / .hamburger
+ *     ├─ main.main
+ *     │    ├─ .welcome-section > .overlay or .content
+ *     │    ├─ .dishs / .photo-gallery (homepage)
+ *     │    ├─ .menu-section > .menu-items > .menu-item (menu)
+ *     │    ├─ .about-section (about)
+ *     │    └─ .contact-hero / .contact-section (contact)
+ *     └─ footer.footer > developer credit
+ *
+ * CSS is kept in its existing cascade order to preserve the current layout.
+ * Later blocks contain accessibility, responsive and page-specific overrides.
+ * When changing a component, inspect later overrides for the same selector.
+ */
 /* Place your CSS styles in this file */
 * {
             margin: 0;
@@ -27,6 +45,7 @@
             font-weight:bold;
         }
 
+        /* HEADER / NAVIGATION: shared parent and child controls */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -92,6 +111,7 @@
             margin: 4px;
         }
 
+        /* MAIN / HERO: shared content container and welcome area */
         .main {
             background-color: silver;
             margin: 1%;
@@ -238,6 +258,7 @@
           border-radius: 8px;
         }
         /* menu page */
+        /* MENU: catalogue sections, cards, image and pricing styles */
         .menu-section {
         padding:5px;
         text-align: center;
@@ -416,6 +437,7 @@
         }
 
 
+        /* FOOTER: business details and developer credit */
         .footer {
             background-color:#b9770e;
             color: white;
@@ -426,6 +448,7 @@
             width: 100%;
         }
 
+        /* RESPONSIVE: mobile navigation and component adjustments */
         /* Responsive Styles */
         @media (max-width: 768px) {
             .nav-links {
@@ -569,6 +592,7 @@
 img { max-width: 100%; height: auto; }
 @media (max-width: 768px) { .nav-links a { min-height: 44px; display: flex; justify-content: center; align-items: center; } }
 
+/* ACCESSIBILITY: contrast, focus visibility and tap targets */
 /* Lighthouse accessibility: homepage contrast and target spacing */
 .welcome-section .overlay h1 span { color: #ffd58c !important; }
 .welcome-section .overlay { background-color: rgba(0,0,0,.58); }
@@ -603,6 +627,7 @@ img { max-width: 100%; height: auto; }
 /* Ensure the ordering options remain hidden until the button is expanded. */
 .links-container[hidden] { display: none; }
 
+/* SUBPAGE HERO: About and Menu desktop/mobile layout */
 /* Subpage hero layout: image and text stay in normal flow, never overlap content. */
 .main .welcome-section.subpage-hero {
   position: relative;
@@ -684,6 +709,7 @@ html body .footer a[href*="sisudthofficial"]:focus-visible {
   text-decoration-thickness: 2px;
 }
 
+/* LANGUAGE PICKER: locale selector in shared navigation */
 /* Accessible three-language selector on desktop and mobile. */
 .navbar .language-switcher {
   display: inline-flex;
