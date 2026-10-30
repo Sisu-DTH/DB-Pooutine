@@ -683,3 +683,34 @@ html body .footer a[href*="sisudthofficial"]:focus-visible {
   color: #092547 !important;
   text-decoration-thickness: 2px;
 }
+
+/* Accessible three-language selector on desktop and mobile. */
+.navbar .language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  padding: 4px 10px;
+  color: #17120b;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.navbar .language-switcher select {
+  max-width: 120px;
+  min-height: 38px;
+  padding: 6px 4px;
+  border: 2px solid #533000;
+  border-radius: 6px;
+  background: #fff;
+  color: #17120b;
+  font: inherit;
+  cursor: pointer;
+}
+.navbar .language-switcher select:focus-visible {
+  outline: 3px solid #123b75;
+  outline-offset: 2px;
+}
+@media (max-width: 768px) {
+  .navbar .language-switcher { margin-left: auto; padding: 4px 6px; font-size: .75rem; }
+  .navbar .language-switcher select { max-width: 92px; min-height: 42px; font-size: .75rem; }
+}
