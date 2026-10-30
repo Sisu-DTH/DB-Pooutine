@@ -602,3 +602,52 @@ img { max-width: 100%; height: auto; }
 
 /* Ensure the ordering options remain hidden until the button is expanded. */
 .links-container[hidden] { display: none; }
+
+/* Subpage hero layout: image and text stay in normal flow, never overlap content. */
+.main .welcome-section.subpage-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  overflow: visible;
+  background-size: auto;
+  transition: none;
+}
+.main .subpage-hero > a {
+  display: block;
+  width: 100%;
+  line-height: 0;
+}
+.main .subpage-hero > a > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  object-fit: contain;
+}
+.main .subpage-hero .content {
+  position: static;
+  inset: auto;
+  transform: none;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 20px 16px 4px;
+  background: #17120b;
+  color: #fff;
+  z-index: auto;
+}
+.main .subpage-hero .dropdown { padding-bottom: 20px; }
+.main .subpage-hero .content h1 { line-height: 1.25; }
+.main .subpage-hero .content p { line-height: 1.5; }
+.main .menu-page-hero { background-color: #17120b; }
+.main .about-page-hero { background-color: #000; }
+@media (max-width: 768px) {
+  .main .subpage-hero .content { padding: 18px 12px 4px; }
+  .main .menu-page-hero .content p { font-size: 1.1rem !important; }
+}
+/* Footer follows the content instead of obscuring it. */
+.footer { position: static; bottom: auto; }
