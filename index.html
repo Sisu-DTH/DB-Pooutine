@@ -15,6 +15,7 @@
     <meta property="og:url" content="https://dbpoutine.com/">
     <meta name="twitter:card" content="summary">
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"D&B Poutine","url":"https://dbpoutine.com/","servesCuisine":["Canadian","Poutine"],"address":{"@type":"PostalAddress","streetAddress":"2121 Carling Avenue","addressLocality":"Ottawa","addressRegion":"ON","addressCountry":"CA"},"telephone":"+1-613-400-4898","hasMenu":"https://dbpoutine.com/menu.html"}</script>
+    <link rel="preload" as="image" href="slide2.jpeg" fetchpriority="high">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -39,13 +40,13 @@
         </nav>
     </header>
     <div class="main">
-        <div class="welcome-section"> 
+        <div class="welcome-section" style="background-image: url('slide2.jpeg');"> 
             <div class="overlay">
               <h1>Welcome to <br><strong>D<span style="color:#b9770e; font-size:15px;">&</span>B <span style="color:#b9770e;">Poutine</span></strong> Fast Food</h1><br>
               <p>Discover the best Poutine in Ottawa!</p><br>
                 
               <div class="dropdown">
-                <a href="menu.html"><button class="order-button" type="button">Menu</button></a>
+                <a href="menu.html" class="order-button">View Menu</a>
               </div>
                 
             </div>
@@ -177,24 +178,19 @@
     <script>
         
         
-const images = [
-  'slide2.jpeg',
-  'slide1.jpeg',
-  'slide3.jpeg',
-  'Hotdog.jpeg',
-  'cappuccino.jpeg'
-];
-
-let currentIndex = 0;
+const images = ['slide2.jpeg', 'slide1.jpeg', 'slide3.jpeg', 'Hotdog.jpeg', 'cappuccino.jpeg'];
 const section = document.querySelector('.welcome-section');
-
-function changeBackground() {
-  section.style.backgroundImage = `url(${images[currentIndex]})`;
-  currentIndex = (currentIndex + 1) % images.length;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let currentIndex = 0;
+if (section && !reduceMotion.matches) {
+  window.addEventListener('load', () => {
+    window.setInterval(() => {
+      if (document.hidden) return;
+      currentIndex = (currentIndex + 1) % images.length;
+      section.style.backgroundImage = 'url("' + images[currentIndex] + '")';
+    }, 5000);
+  }, { once: true });
 }
-
-changeBackground(); // First image
-setInterval(changeBackground, 5000); // Change every 5 seconds
 
         function showLinks() {
             var linksContainer = document.getElementById('linksContainer');
