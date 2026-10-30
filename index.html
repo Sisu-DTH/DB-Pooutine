@@ -14,6 +14,7 @@
     <meta property="og:description" content="Explore poutine, wings, paninis and more at D&B Poutine in Carlingwood Shopping Centre, Ottawa. View our menu, hours and contact details.">
     <meta property="og:url" content="https://dbpoutine.com/">
     <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"D&B Poutine","url":"https://dbpoutine.com/","servesCuisine":["Canadian","Poutine"],"address":{"@type":"PostalAddress","streetAddress":"2121 Carling Avenue","addressLocality":"Ottawa","addressRegion":"ON","addressCountry":"CA"},"telephone":"+1-613-400-4898","hasMenu":"https://dbpoutine.com/menu.html"}</script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -24,17 +25,17 @@
                 <img src="logo.jpeg" alt="D&amp;B Poutine logo">
               </a>  
             </div>
-            <ul class="nav-links">
+            <ul class="nav-links" id="primary-navigation">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="menu.html">Menu</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
-            <div class="hamburger">
+            <button class="hamburger" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="primary-navigation">
                 <div class="line"></div>
                 <div class="line"></div>
                 <div class="line"></div>
-            </div>
+            </button>
         </nav>
     </header>
     <div class="main">
@@ -63,7 +64,7 @@
                 <div>
                   <h2>D&B combo Meals</h2>
                   <a href="menu.html#d&b-combos">
-                    <img src="hdcom.jpeg" style="border-radius:0 0 20px 20px;" alt="D&B combos<br> (Image needed)">
+                    <img src="hdcom.jpeg" style="border-radius:0 0 20px 20px;" alt="D&B combos<br loading="lazy" decoding="async"> (Image needed)">
                   </a>
                 </div>
               </div>
@@ -71,7 +72,7 @@
                 <div>
                   <h2>D&B Solo Menu</h2>
                   <a href="menu.html#D&B poutine-menu">
-                    <img src="chicken-pou.jpeg" style="border-radius:0 0 20px 20px;" alt="D&B Regulars menu picture">
+                    <img src="chicken-pou.jpeg" style="border-radius:0 0 20px 20px;" alt="D&B Regulars menu picture" loading="lazy" decoding="async">
                   </a>
                 </div>
               </div>
@@ -79,7 +80,7 @@
                 <div>
                   <h2>D&B Sides(Extra)</h2>
                   <a href="menu.html#d&b-sides">
-                    <img src="cheescard.jpeg" style="border-radius:0 0 20px 20px;" alt="D&B Sides <br>(Image needed)">
+                    <img src="cheescard.jpeg" style="border-radius:0 0 20px 20px;" alt="D&B Sides <br loading="lazy" decoding="async">(Image needed)">
                   </a>
                 </div>
               </div>
@@ -87,7 +88,7 @@
                 <div>
                   <h2>D&B Sauces</h2>
                   <a href="menu.html#wings">
-                    <img src="sauces.jpeg" style="border-radius:0 0 40px 20px;" alt="D&B Souces">
+                    <img src="sauces.jpeg" style="border-radius:0 0 40px 20px;" alt="D&B sauces" loading="lazy" decoding="async">
                   </a>
                 </div>
               </div>
@@ -105,7 +106,7 @@
                 <div style="background-color: black;">
                   <h2>Hot Drinks</h2>
                   <a href="menu.html#hot-drinks">
-                  <img src="hotd.jpeg" style="border-radius:0 0 20px 20px;" alt="Hot Drinks Image">
+                  <img src="hotd.jpeg" style="border-radius:0 0 20px 20px;" alt="Hot Drinks Image" loading="lazy" decoding="async">
                   </a>
                 </div>
               </div>
@@ -113,7 +114,7 @@
                 <div style="background-color: black; border-radius:0 0 40px 0;">
                   <h2>Soft drinks</h2>
                   <a href="menu.html#soft-drinks">
-                  <img src="soft-d.jpeg" style="border-radius:0 0 40px 20px;" alt="soft drinks Image">
+                  <img src="soft-d.jpeg" style="border-radius:0 0 40px 20px;" alt="soft drinks Image" loading="lazy" decoding="async">
                   </a>
                 </div>
               </div>
@@ -163,7 +164,7 @@
         <br>
         <div style="margin:2% 2% 8% 2%;">
             <a href="menu.html">
-                <img src="dandbrec.jpeg" style="width:100%; border-radius: 85px 0 85px 0; " alt="d&b recipes">
+                <img src="dandbrec.jpeg" style="width:100%; border-radius: 85px 0 85px 0; " alt="d&b recipes" loading="lazy" decoding="async">
             </a>
         </div>
       </div>
@@ -213,6 +214,7 @@ setInterval(changeBackground, 5000); // Change every 5 seconds
             }
         }
     </script>
+<script src="navigation.js" defer></script>
 </body>
 </html>
 
