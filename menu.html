@@ -20,7 +20,7 @@
         <nav class="navbar">
             <div class="logo">
               <a href="index.html">
-                <img src="logo.jpeg" alt="D&amp;B Poutine logo">
+                <img src="logo.jpeg" alt="D&amp;B Poutine logo" width="80" height="80" decoding="async">
               </a>  
             </div>
             <ul class="nav-links" id="primary-navigation">
@@ -44,8 +44,8 @@
               <div class="dropdown">
                 <button class="order-button" onclick="showLinks()">Order Now</button>
                 <div class="links-container" id="linksContainer">
-                  <a class="dropdown-item" href="tel:+1 (613) 400-4898" class="call-button"><button type="button" class="order-button">Call for Collection</button></a>
-                  <a class="dropdown-item" href="https://www.ubereats.com/store/d-&-b-poutine/NI1Sa9a3UIKG5MOgYD-cNA?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer"><button type="button" class="order-button">Order On UberEat</button></a>
+                  <a class="dropdown-item call-button" href="tel:+16134004898">Call for Collection</a>
+                  <a class="dropdown-item call-button" href="https://www.ubereats.com/store/d-&-b-poutine/NI1Sa9a3UIKG5MOgYD-cNA?diningMode=DELIVERY" target="_blank" rel="noopener noreferrer">Order on Uber Eats</a>
                 </div>
               </div>
             </div>
@@ -780,16 +780,7 @@
         &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "https://sisudth-maker.github.io/sisudthofficial/#home" target="_blank">Sisu DTH</a>
     </footer>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const hamburger = document.querySelector('.hamburger');
-            const navLinks = document.querySelector('.nav-links');
-            const logo = document.querySelector('.logo');
-
-            hamburger.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-                logo.style.display = navLinks.classList.contains('active') ? 'none' : 'block';
-            });
-        });
+        
 
         function showLinks() {
             var linksContainer = document.getElementById('linksContainer');
