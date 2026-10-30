@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-CA">
 <head>
+    <!-- PAGE HEAD: metadata, search previews, styles and resource hints -->
     <title>D&B Poutine Menu | Poutine, Wings & Paninis in Ottawa</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +18,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
+    <!-- SHARED HEADER: logo > navigation links > language selector > mobile menu -->
+<header>
         <nav class="navbar" aria-label="Main navigation">
             <div class="logo">
               <a href="index.html">
@@ -38,7 +40,8 @@
             </button>
         </nav>
     </header>
-    <main class="main">
+    <!-- PAGE MAIN: content is grouped into parent sections and child components -->
+<main class="main">
         <div class="welcome-section subpage-hero menu-page-hero" style="background-color:#17120b; margin:0;">
             <a href="menu.html#vep"><img src="slide1.webp" style="width:100%;height:auto;" alt="D&B Poutine speciality dish" fetchpriority="high" decoding="async"></a>
             <div class="content">
@@ -53,7 +56,8 @@
             </div>
         </div>
         <br>
-        <section id="menu" class="menu-section" style="background-image: url('Vpoutinc.webp');">
+        <!-- MENU CATALOGUE: section headings > item cards > images, names, descriptions and prices -->
+<section id="menu" class="menu-section" style="background-image: url('Vpoutinc.webp');">
                 <div id="d&b-combos" class="combos-menu-section" style="margin:1%; padding: 2%; border:5px solid black; border-radius: 20px;">
                     <h2>D&B Combo Meals</h2>
                     <hr style="margin:2%;">
@@ -778,7 +782,8 @@
     <!-- end container -->
     </main>
     <hr>
-    <footer class="footer">
+    <!-- SHARED FOOTER: business details and developer credit; keep © 2024 unchanged -->
+<footer class="footer">
         &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "https://sisudth-maker.github.io/sisudthofficial/#home" target="_blank" rel="noopener noreferrer">Sisu DTH</a>
     </footer>
     <script>
@@ -800,6 +805,7 @@
         });
       });
     </script>
+<!-- SHARED BEHAVIOUR: mobile navigation and locale switching -->
 <script src="navigation.js" defer></script>
 <script src="language.js" defer></script>
 </body>
