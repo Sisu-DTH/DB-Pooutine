@@ -781,3 +781,15 @@ html body .footer a[href*="sisudthofficial"]:focus-visible {
   .menu-section .menu-items { gap: 8px; }
   .menu-section .menu-item { padding: 8px; }
 }
+
+/* Keep every hot and soft drink card in the same two-column mobile grid as food items. */
+@media (max-width: 768px) {
+  .menu-section .drink-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+  .menu-section .drink-items .menu-item { width: 100%; min-width: 0; padding: 12px; }
+  .menu-section .drink-items .menu-item h3 { font-size: clamp(.9rem, 2.8vw, 1.15rem); overflow-wrap: anywhere; }
+  .menu-section .drink-items .menu-item img { width: 100%; height: auto; }
+}
+@media (max-width: 380px) {
+  .menu-section .drink-items { gap: 8px; }
+  .menu-section .drink-items .menu-item { padding: 8px; }
+}
