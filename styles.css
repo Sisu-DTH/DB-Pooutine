@@ -229,7 +229,7 @@
 
         .photo-gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 20px;
             padding: 20px;
         }
@@ -545,7 +545,9 @@
 }
 @media (max-width: 460px) {
   .menu-item { width: min(100%, 340px); }
-  .photo-gallery { grid-template-columns: minmax(0, 1fr); }
+  .photo-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 10px; }
+  .photo-gallery h2 { font-size: clamp(.8rem, 3vw, 1.1rem); padding: 8px 4px; }
+  .photo-gallery img { display: block; width: 100%; height: auto; }
   .welcome-section { min-height: 440px; height: auto; }
   .contact-section { padding: 20px 12px; }
   form { width: 95%; min-width: 0; }
