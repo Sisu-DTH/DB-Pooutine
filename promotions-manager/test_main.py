@@ -171,6 +171,12 @@ def test_one_time_recovery_preserves_offers_and_cannot_repeat():
     response=client.post("/api/auth/login",json={
         "email":"manager@example.test","password":"new-secret-of-adequate-length"})
     assert response.status_code==200,response.text
+    # Restore test bootstrap identity for independent later tests.
+    with manager.engine.begin() as conn:
+        conn.execute(manager.text(
+            "UPDATE managers SET password_hash=:hash WHERE email=:email"),
+            {"hash":manager.password_hash("Test_Password_With_20_Characters!"),
+             "email":"manager@example.test"})
 
 
 def test_recovery_repairs_sole_manager_email_on_fresh_database():
@@ -193,3 +199,62 @@ def test_recovery_repairs_sole_manager_email_on_fresh_database():
             assert manager.password_ok("corrected-password-over-14-chars",row[1])
         finally:
             recovery.RECOVERY_ID=old_id
+            conn.execute(manager.text(
+                "UPDATE managers SET email=:email,password_hash=:hash"),
+                {"email":"manager@example.test",
+                 "hash":manager.password_hash("Test_Password_With_20_Characters!")})
+
+
+def test_full_menu_catalogue_requires_login():
+    """Catalogue is a copy of the real restaurant menu, not invented sample prices."""
+    client.cookies.clear()
+    assert client.get("/api/manage/menu").status_code == 401
+    token = login()
+    response = client.get("/api/manage/menu")
+    assert response.status_code == 200, response.text
+    items = response.json()["items"]
+    assert len(items) == 66
+    assert len({x["id"] for x in items}) == 66
+    assert all(x["names"]["en-CA"] and x["names"]["fr-CA"] and x["names"]["es"]
+               and x["image"] in manager.ALLOWED_IMAGES for x in items)
+    assert sum(item["regularCents"] is not None for item in items) == 64
+    classic = next(item for item in items if item["names"]["en-CA"] == "D&B Poutine")
+    assert classic["regularCents"] == 699
+    assert classic["image"] == "small-pou.webp"
+    assert client.post("/api/auth/logout", headers=headers(token)).status_code == 200
+
+
+def test_selected_menu_price_and_names_are_verified_server_side():
+    csrf = login()
+    items = client.get("/api/manage/menu").json()["items"]
+    classic = next(item for item in items if item["names"]["en-CA"] == "D&B Poutine")
+    offer = sample(name=classic["names"], image=classic["image"],
+                   catalogueId=classic["id"], originalCents=classic["regularCents"],
+                   discountedCents=594, approved=False, enabled=False)
+    wrong_price = client.post("/api/manage/offers", json={**offer, "originalCents": 899},
+                              headers=headers(csrf))
+    assert wrong_price.status_code == 422
+    wrong_name = client.post("/api/manage/offers", json={
+        **offer, "name": {**offer["name"], "fr-CA": "Incorrect translation"}},
+        headers=headers(csrf))
+    assert wrong_name.status_code == 422
+    wrong_image = client.post("/api/manage/offers", json={**offer, "image": "hdcom.webp"},
+                              headers=headers(csrf))
+    assert wrong_image.status_code == 422
+    valid = client.post("/api/manage/offers", json=offer, headers=headers(csrf))
+    assert valid.status_code == 201, valid.text
+    offer_id = valid.json()["id"]
+    assert client.get("/api/promotions").json()["offers"] == []
+    assert client.delete(f"/api/manage/offers/{offer_id}",headers=headers(csrf)).status_code == 200
+    assert client.post("/api/auth/logout",headers=headers(csrf)).status_code == 200
+
+
+def test_all_menu_photos_allowlisted_and_unpriced_items_require_manager_value():
+    items = manager.MENU_CATALOGUE["items"]
+    assert len(items) == 66
+    assert len(manager.ALLOWED_IMAGES) > 11
+    for item in items:
+        assert item["image"] in manager.ALLOWED_IMAGES
+    uncertain = [item for item in items if item["regularCents"] is None]
+    assert len(uncertain) == 2
+    assert all(item["needsPriceConfirmation"] for item in uncertain)

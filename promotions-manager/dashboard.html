@@ -20,7 +20,9 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .notice{background:#3b2b19;border-left:4px solid #d9a046;padding:14px;line-height:1.55}
 .error{color:#ffd3d3}.success{color:#d3ffd4}
 .offer{border:1px solid #766040;border-radius:8px;padding:14px;margin:12px 0}
-.muted{color:#c9c6c0}.checks{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.checks label{flex-direction:row;align-items:center}
+.muted{color:#c9c6c0}
+[hidden]{display:none!important}input[readonly]{background:#e4dfd7;color:#302920}
+.checks{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.checks label{flex-direction:row;align-items:center}
 @media(max-width:650px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -45,6 +47,9 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 <form id="offer-form">
 <input type="hidden" id="edit-id">
 <div class="grid">
+<label for="catalogue-choice">Choose an existing menu item or add a new meal
+<select id="catalogue-choice"><option value="">New/custom meal (enter details below)</option></select></label>
+<p class="muted">Menu prices come from the current restaurant website. Two entries need manager price confirmation. French and Spanish names are drafts for review.</p>
 <label for="name">Meal name (English Canada)<input required maxlength="120" id="name" placeholder="Exact approved menu item"></label>
 <label for="name-fr">French name (optional)<input maxlength="120" id="name-fr"></label>
 <label for="name-es">Spanish name (optional)<input maxlength="120" id="name-es"></label>
@@ -63,7 +68,21 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 <option value="dbsalad.webp">Salad</option>
 </select></label>
 <label for="regular">Approved regular price (CAD)<input required type="number" id="regular" min="0.01" max="1000000" step="0.01" placeholder="0.00"></label>
-<label for="discount">Approved special price (CAD)<input required type="number" id="discount" min="0" max="1000000" step="0.01" placeholder="0.00"></label>
+<label for="discount-mode">How would you like to set the discount?
+<select id="discount-mode">
+<option value="price">Enter the final special price</option>
+<option value="saving">Enter how much the customer saves (CAD)</option>
+<option value="percent">Choose a percentage discount</option>
+</select></label>
+<label for="discount" id="special-price-row">Approved special price (CAD)
+<input required type="number" id="discount" min="0" max="1000000" step="0.01" placeholder="0.00"></label>
+<label for="saving-amount" id="saving-amount-row" hidden>Customer saving (CAD)
+<input type="number" id="saving-amount" min="0.01" step="0.01" placeholder="0.00"></label>
+<label for="discount-percent" id="discount-percent-row" hidden>Percentage off
+<select id="discount-percent"><option value="5">5%</option><option value="10">10%</option>
+<option value="15">15%</option><option value="20">20%</option><option value="25">25%</option>
+<option value="30">30%</option></select></label>
+<p id="discount-preview" class="notice" role="status" aria-live="polite" style="grid-column:1/-1">Enter an approved regular price and choose a discount to preview the result.</p>
 <label for="start">Start date (Ottawa)<input required id="start" type="date"></label>
 <label for="end">End date (Ottawa)<input required id="end" type="date"></label>
 <label for="start-time">Daily start time (Ottawa)<input required id="start-time" type="time" value="00:00"></label>
@@ -90,24 +109,114 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 <script>
 (() => {
 'use strict';
-const $=id=>document.getElementById(id);
-let csrf='',saved=[];
+const $ = id => document.getElementById(id);
+let csrf = '', saved = [], catalogue = [], catalogueById = new Map();
 function status(message,isError=false){$('status').textContent=message;$('status').className=isError?'error':'success'}
-function cents(id){const raw=$(id).value.trim();if(!/^\d+(?:\.\d{1,2})?$/.test(raw))throw new Error('Enter a valid price with at most two decimal places');return Math.round(Number(raw)*100)}
-function price(v){return (v/100).toFixed(2)}
+function cents(id){
+ const raw=$(id).value.trim();
+ if(!/^\d+(?:\.\d{1,2})?$/.test(raw))throw new Error('Enter a valid amount with no more than two decimal places');
+ const value=Math.round(Number(raw)*100);
+ if(!Number.isSafeInteger(value)||value>100000000)throw new Error('Amount exceeds permitted limit');
+ return value;
+}
+function price(value){return (value/100).toFixed(2)}
+function selected(){return catalogueById.get($('catalogue-choice').value)||null}
+function discountCalculation(){
+ const original=cents('regular');
+ if(original<=0)throw new Error('Enter the approved regular price');
+ const mode=$('discount-mode').value;
+ let special;
+ if(mode==='saving'){
+   const saving=cents('saving-amount');
+   if(saving<=0||saving>original)throw new Error('Saving must be greater than zero and no higher than the regular price');
+   special=original-saving;
+ }else if(mode==='percent'){
+   const percentage=Number($('discount-percent').value);
+   if(![5,10,15,20,25,30].includes(percentage))throw new Error('Select a valid percentage');
+   const saving=Math.round(original*percentage/100);
+   if(saving<=0)throw new Error('This percentage rounds to zero; choose a different discount');
+   special=original-saving;
+ }else special=cents('discount');
+ if(special<0||special>=original)throw new Error('Special price must be less than the regular price');
+ return {original,special,saving:original-special};
+}
+function updatePreview(){
+ const mode=$('discount-mode').value;
+ $('special-price-row').hidden=mode!=='price';
+ $('saving-amount-row').hidden=mode!=='saving';
+ $('discount-percent-row').hidden=mode!=='percent';
+ $('discount').required=mode==='price';
+ $('saving-amount').required=mode==='saving';
+ try{
+  const value=discountCalculation();
+  $('discount-preview').textContent='Regular CAD $'+price(value.original)+
+    ' · Customer saves CAD $'+price(value.saving)+
+    ' · Final special price CAD $'+price(value.special)+
+    '. This is a preview only; saving does not publish the offer.';
+ }catch(err){$('discount-preview').textContent=err.message}
+}
+function chooseMenuItem(){
+ const item=selected();
+ if(!item){
+   ['name','name-fr','name-es','regular'].forEach(id=>$(id).readOnly=false);
+   ['name','name-fr','name-es','regular'].forEach(id=>$(id).value='');
+   $('regular').placeholder='Enter approved regular price';
+   $('image').disabled=false;
+ }else{
+   $('name').value=item.names['en-CA'];
+   $('name-fr').value=item.names['fr-CA'];
+   $('name-es').value=item.names.es;
+   ['name','name-fr','name-es'].forEach(id=>$(id).readOnly=true);
+   $('image').value=item.image;
+   $('image').disabled=true;
+   $('regular').value=item.regularCents===null?'':price(item.regularCents);
+   $('regular').readOnly=item.regularCents!==null;
+   $('regular').placeholder=item.regularCents===null?'Confirm correct variant price':'';
+   if(item.needsPriceConfirmation)status('This menu entry has no single confirmed price. Check its size or current price before saving.',true);
+ }
+ updatePreview();
+}
+async function loadMenu(){
+ try{
+  const response=await request('/api/manage/menu');
+  catalogue=response.items||[];
+  catalogueById=new Map(catalogue.map(item=>[item.id,item]));
+  const selector=$('catalogue-choice');selector.replaceChildren();
+  const blank=document.createElement('option');blank.value='';blank.textContent='New/custom meal (enter details below)';selector.appendChild(blank);
+  const photos=$('image');
+  const existingPhotos=new Set([...photos.options].map(option=>option.value));
+  for(const item of catalogue){
+   const option=document.createElement('option');option.value=item.id;
+   option.textContent=item.names['en-CA']+' — '+(item.regularCents===null?'price needs confirmation':'CAD $'+price(item.regularCents));
+   selector.appendChild(option);
+   if(!existingPhotos.has(item.image)){
+     const photo=document.createElement('option');photo.value=item.image;photo.textContent=item.image;
+     photos.appendChild(photo);existingPhotos.add(item.image);
+   }
+  }
+ }catch(err){
+  status('Menu catalogue unavailable: '+err.message,true);
+  throw err;
+ }
+}
 function formData(){
- const name={'en-CA':$('name').value.trim()};
- if($('name-fr').value.trim())name['fr-CA']=$('name-fr').value.trim();
- if($('name-es').value.trim())name.es=$('name-es').value.trim();
- const data={name,image:$('image').value,originalCents:cents('regular'),discountedCents:cents('discount'),
- startDate:$('start').value,endDate:$('end').value,startTime:$('start-time').value,endTime:$('end-time').value,
- weekdays:[...$('weekdays').querySelectorAll('input:checked')].map(e=>Number(e.value)),
- approved:$('approved').checked,enabled:$('enabled').checked,redemption:$('redemption').value.trim()};
- if(!data.weekdays.length)throw new Error('Select at least one weekday');
- if(data.discountedCents>=data.originalCents)throw new Error('Discount must reduce price');
- if(data.enabled&&(!data.approved||!data.redemption))throw new Error('An enabled offer needs approval and redemption instructions');
- if(data.startDate>data.endDate||data.startTime>data.endTime)throw new Error('Check the start/end date and time');
- return data;
+ const item=selected();
+ const name=item?{...item.names}:{'en-CA':$('name').value.trim()};
+ if(!item){
+  if($('name-fr').value.trim())name['fr-CA']=$('name-fr').value.trim();
+  if($('name-es').value.trim())name.es=$('name-es').value.trim();
+ }
+ const calculation=discountCalculation();
+ const result={name,image:item?item.image:$('image').value,catalogueId:item?item.id:null,
+   originalCents:calculation.original,discountedCents:calculation.special,
+   startDate:$('start').value,endDate:$('end').value,startTime:$('start-time').value,endTime:$('end-time').value,
+   weekdays:[...$('weekdays').querySelectorAll('input:checked')].map(el=>Number(el.value)),
+   approved:$('approved').checked,enabled:$('enabled').checked,redemption:$('redemption').value.trim()};
+ if(!result.weekdays.length)throw new Error('Choose at least one eligible weekday');
+ if(result.enabled&&(!result.approved||!result.redemption))throw new Error('An enabled offer needs approval and redemption instructions');
+ if(result.startDate>result.endDate||result.startTime>result.endTime)throw new Error('Check the dates and times');
+ if(item?.needsPriceConfirmation&&result.enabled)throw new Error('This menu item has an ambiguous price. Confirm the price and use custom entry for an approved variant.');
+ return result;
 }
 async function request(path,method='GET',body){
  const options={method,cache:'no-store',credentials:'same-origin',headers:{}};
@@ -122,61 +231,79 @@ function clearForm(){
  $('offer-form').reset();$('edit-id').value='';$('form-heading').textContent='Create a promotion';
  $('start-time').value='00:00';$('end-time').value='23:59';
  $('weekdays').querySelectorAll('input').forEach(el=>el.checked=true);
+ chooseMenuItem();
 }
 function edit(id){
  const offer=saved.find(x=>x.id===id);if(!offer)return;
  $('edit-id').value=String(id);$('form-heading').textContent='Edit promotion #'+id;
- $('name').value=offer.name['en-CA']||'';$('name-fr').value=offer.name['fr-CA']||'';
- $('name-es').value=offer.name.es||'';$('image').value=offer.image;
- $('regular').value=price(offer.originalCents);$('discount').value=price(offer.discountedCents);
+ const item=catalogueById.get(offer.catalogueId);
+ $('catalogue-choice').value=item?item.id:'';
+ chooseMenuItem();
+ if(!item){
+  $('name').value=offer.name['en-CA']||'';$('name-fr').value=offer.name['fr-CA']||'';
+  $('name-es').value=offer.name.es||'';$('image').value=offer.image;
+  $('regular').value=price(offer.originalCents);
+ }
+ $('discount-mode').value='price';
+ $('discount').value=price(offer.discountedCents);
  $('start').value=offer.startDate;$('end').value=offer.endDate;
  $('start-time').value=offer.startTime||'00:00';$('end-time').value=offer.endTime||'23:59';
  $('redemption').value=offer.redemption||'';
  $('weekdays').querySelectorAll('input').forEach(el=>el.checked=offer.weekdays.includes(Number(el.value)));
  $('approved').checked=offer.approved;$('enabled').checked=offer.enabled;
- $('offer-form').scrollIntoView({behavior:'smooth',block:'start'});
+ updatePreview();$('offer-form').scrollIntoView({behavior:'smooth',block:'start'});
 }
 async function refresh(){
  const data=await request('/api/manage/offers');saved=data.offers;
  const box=$('offers');box.replaceChildren();
  if(!saved.length){box.textContent='No saved offers. No promotions are active.';return}
  for(const offer of saved){
- const item=document.createElement('div');item.className='offer';
- const title=document.createElement('strong');title.textContent=offer.name['en-CA']+' · #'+offer.id;item.appendChild(title);
- const description=document.createElement('p');
- description.textContent=offer.startDate+' to '+offer.endDate+'; '+(offer.startTime||'00:00')+'–'+(offer.endTime||'23:59')+
- ' Ottawa | CAD '+price(offer.originalCents)+' → '+price(offer.discountedCents)+' | '+(offer.enabled?'Enabled':'Paused')+
- ' | '+(offer.approved?'Approved':'Not approved');item.appendChild(description);
- const buttons=document.createElement('div');buttons.className='actions';
- for(const [label,kind,action] of [
- ['Edit','secondary',()=>edit(offer.id)],
- ['Pause','secondary',async()=>{await request('/api/manage/offers/'+offer.id+'/pause','POST');await refresh()}],
- ['Delete','danger',async()=>{if(!confirm('Delete this promotion permanently?'))return;await request('/api/manage/offers/'+offer.id,'DELETE');await refresh()}]]){
- const button=document.createElement('button');button.type='button';button.className=kind;button.textContent=label;
- button.addEventListener('click',async()=>{try{await action();status(label+' completed')}catch(e){status(e.message,true)}});buttons.appendChild(button)}
- item.appendChild(buttons);box.appendChild(item);
+  const item=document.createElement('div');item.className='offer';
+  const title=document.createElement('strong');title.textContent=offer.name['en-CA']+' · #'+offer.id;item.appendChild(title);
+  const desc=document.createElement('p');
+  desc.textContent=offer.startDate+' to '+offer.endDate+'; '+(offer.startTime||'00:00')+'–'+(offer.endTime||'23:59')+
+    ' Ottawa | CAD '+price(offer.originalCents)+' → '+price(offer.discountedCents)+
+    ' | Save CAD '+price(offer.originalCents-offer.discountedCents)+
+    ' | '+(offer.enabled?'Enabled':'Paused')+' | '+(offer.approved?'Approved':'Not approved');item.appendChild(desc);
+  const buttons=document.createElement('div');buttons.className='actions';
+  for(const [label,kind,action] of [
+   ['Edit','secondary',()=>edit(offer.id)],
+   ['Pause','secondary',async()=>{await request('/api/manage/offers/'+offer.id+'/pause','POST');await refresh()}],
+   ['Delete','danger',async()=>{if(!confirm('Delete this promotion permanently?'))return;await request('/api/manage/offers/'+offer.id,'DELETE');await refresh()}]]){
+    const button=document.createElement('button');button.type='button';button.className=kind;button.textContent=label;
+    button.addEventListener('click',async()=>{try{await action();status(label+' completed')}catch(e){status(e.message,true)}});
+    buttons.appendChild(button);
+  }
+  item.appendChild(buttons);box.appendChild(item);
  }
 }
 $('login-form').addEventListener('submit',async event=>{
- event.preventDefault();const email=$('email').value.trim(),password=$('password').value;
+ event.preventDefault();
  try{
- const res=await fetch('/api/auth/login',{method:'POST',cache:'no-store',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
- $('password').value='';
- const data=await res.json();if(!res.ok)throw new Error(data.detail||'Sign-in failed');
- csrf=data.csrfToken;await refresh();$('workspace').hidden=false;status('Signed in successfully');
- }catch(e){csrf='';$('workspace').hidden=true;status(e.message,true)}
+  const res=await fetch('/api/auth/login',{method:'POST',cache:'no-store',credentials:'same-origin',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({email:$('email').value.trim(),password:$('password').value})});
+  $('password').value='';
+  const data=await res.json();if(!res.ok)throw new Error(data.detail||'Sign-in failed');
+  csrf=data.csrfToken;await loadMenu();await refresh();$('workspace').hidden=false;status('Signed in successfully');
+ }catch(err){csrf='';$('workspace').hidden=true;status(err.message,true)}
 });
 $('disconnect').addEventListener('click',async()=>{
- try{if(csrf)await request('/api/auth/logout','POST')}catch{}finally{csrf='';saved=[];$('workspace').hidden=true;status('Signed out')};
+ try{if(csrf)await request('/api/auth/logout','POST')}catch{}
+ finally{csrf='';saved=[];catalogue=[];catalogueById=new Map();$('workspace').hidden=true;status('Signed out')}
 });
-$('reload').addEventListener('click',async()=>{try{await refresh();status('Refreshed')}catch(e){status(e.message,true)}});
+$('reload').addEventListener('click',async()=>{try{await refresh();status('Refreshed')}catch(err){status(err.message,true)}});
+$('catalogue-choice').addEventListener('change',chooseMenuItem);
+['discount-mode','discount-percent','saving-amount','regular','discount'].forEach(id=>
+ $(id).addEventListener('input',updatePreview));
 $('clear').addEventListener('click',clearForm);
 $('offer-form').addEventListener('submit',async event=>{
- event.preventDefault();try{
- const offer=formData(),id=$('edit-id').value;
- await request('/api/manage/offers'+(id?'/'+id:''),id?'PUT':'POST',offer);
- clearForm();await refresh();status('Offer saved');
- }catch(e){status(e.message,true)}
+ event.preventDefault();
+ try{
+  const offer=formData(),id=$('edit-id').value;
+  await request('/api/manage/offers'+(id?'/'+id:''),id?'PUT':'POST',offer);
+  clearForm();await refresh();status('Offer saved');
+ }catch(err){status(err.message,true)}
 });
 clearForm();
 })();
