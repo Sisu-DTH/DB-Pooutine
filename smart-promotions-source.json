@@ -1,0 +1,6 @@
+{
+  "_comment": "Safe rollout switch. Keep enabled=false until the restaurant approves activation, the Railway public feed is checked, and browser QA passes. This only affects homepage promotion display.",
+  "enabled": false,
+  "apiUrl": "https://promotions-manager-api-production.up.railway.app/api/promotions",
+  "fallbackToLocal": false
+}
