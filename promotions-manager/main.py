@@ -121,9 +121,36 @@ def password_ok(password, stored):
 def sha(value):
     return hashlib.sha256(value.encode()).hexdigest()
 
+def pause_existing_offers_once():
+    """One-time MVP launch cleanup: preserve, but disable, every existing offer.
+
+    Must only run with explicit PROMOTIONS_PAUSE_EXISTING_ONCE=true. A durable
+    database marker prevents future restarts from modifying new offers.
+    """
+    now = datetime.now(OTTAWA).isoformat(timespec="seconds")
+    with engine.begin() as conn:
+        conn.execute(text("""CREATE TABLE IF NOT EXISTS promotion_migrations (
+            migration_id TEXT PRIMARY KEY, completed_at TEXT NOT NULL
+        )"""))
+        key = "initial_launch_pause_existing_2026_11_13"
+        if conn.execute(text("SELECT 1 FROM promotion_migrations WHERE migration_id=:key"),
+                        {"key": key}).first():
+            return "already_completed", 0
+        offers = conn.execute(text("SELECT id FROM offers WHERE enabled=1")).fetchall()
+        for offer in offers:
+            conn.execute(text("UPDATE offers SET enabled=0, updated_at=:ts WHERE id=:id"),
+                         {"ts": now, "id": offer[0]})
+        conn.execute(text("INSERT INTO promotion_migrations(migration_id,completed_at) VALUES (:key,:ts)"),
+                     {"key": key, "ts": now})
+        return "completed", len(offers)
+
+
 @app.on_event("startup")
 def startup():
     initialize()
+    if os.getenv("PROMOTIONS_PAUSE_EXISTING_ONCE", "").lower() == "true":
+        result, count = pause_existing_offers_once()
+        print("Launch offer safety cleanup:", result, "offers paused:", count)
     if os.getenv("PROMOTIONS_RECOVERY_ONCE", "").strip().lower() == "true":
         # Explicit, one-time recovery; uses only private Railway environment values.
         from reset_admin_once import reset_once
