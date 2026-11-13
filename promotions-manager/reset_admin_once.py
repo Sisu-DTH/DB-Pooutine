@@ -1,6 +1,6 @@
 """One-time, database-preserving administrator credential recovery.
 
-Run in Railway as a one-time pre-deploy command: python reset_admin_once.py
+Run explicitly during startup only when PROMOTIONS_RECOVERY_ONCE=true.
 Uses existing environment secrets; does not print or accept passwords via CLI.
 This operation NEVER creates a manager or deletes offers.
 """
@@ -33,24 +33,26 @@ def reset_once(connection, email, password):
     if prior:
         return "already_completed"
 
-    account = connection.execute(
-        text("SELECT id FROM managers WHERE email=:email"), {"email": email}
-    ).first()
-    if account is None:
-        raise RuntimeError("Recovery refused: configured email does not match an existing manager")
+    # Only the sole existing initial administrator may be recovered.
+    # This also repairs an incorrect email used at initial provisioning.
+    accounts = connection.execute(text("SELECT id,email FROM managers ORDER BY id")).fetchall()
+    if len(accounts) != 1:
+        raise RuntimeError("Recovery refused: exactly one existing manager is required")
 
-    manager_id = account[0]
+    manager_id = accounts[0][0]
     connection.execute(
-        text("UPDATE managers SET password_hash=:password_hash WHERE id=:id"),
-        {"password_hash": password_hash(password), "id": manager_id}
+        text("UPDATE managers SET email=:email, password_hash=:password_hash WHERE id=:id"),
+        {"email": email, "password_hash": password_hash(password), "id": manager_id}
     )
     # Revoke only this manager's sessions; clear lockout records for the selected email.
     # The current proxy IP-based throttle also expires automatically after 15 minutes.
     connection.execute(text("DELETE FROM sessions WHERE manager_id=:id"), {"id": manager_id})
     from main import sha
-    connection.execute(
-        text("DELETE FROM auth_attempts WHERE key=:key"), {"key": "email:" + sha(email)}
-    )
+    for address in {email, accounts[0][1].lower()}:
+        connection.execute(
+            text("DELETE FROM auth_attempts WHERE key=:key"),
+            {"key": "email:" + sha(address)}
+        )
     connection.execute(
         text("""INSERT INTO admin_recovery_runs(recovery_id,manager_id,completed_at)
              VALUES (:recovery_id,:manager_id,:timestamp)"""),
