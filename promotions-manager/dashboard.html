@@ -31,9 +31,12 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 <p class="notice">This management application is a standalone development MVP. Publishing to the live D&amp;B Poutine site requires a separately configured API connection. Do not use an illustrative price as a real offer. Restaurant approval and redemption rules are required.</p>
 <section class="card" id="auth-card">
 <h2>Manager access</h2>
-<p>Enter the secure manager token supplied by the business owner. It is kept in this tab's memory only and is not saved to the browser.</p>
-<label for="token">Manager access token<input id="token" type="password" autocomplete="off" spellcheck="false"></label>
-<div class="actions"><button id="connect">Connect securely</button><button class="secondary" id="disconnect">Disconnect</button></div>
+<p>Sign in with your individual manager account. Sessions expire automatically after eight hours.</p>
+<form id="login-form">
+<label for="email">Manager email<input id="email" type="email" autocomplete="username" required></label>
+<label for="password">Password<input id="password" type="password" autocomplete="current-password" required></label>
+<div class="actions"><button id="connect" type="submit">Sign in</button><button type="button" class="secondary" id="disconnect">Sign out</button></div>
+</form>
 <p id="status" role="status" aria-live="polite"></p>
 </section>
 <div id="workspace" hidden>
@@ -63,7 +66,10 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 <label for="discount">Approved special price (CAD)<input required type="number" id="discount" min="0" max="1000000" step="0.01" placeholder="0.00"></label>
 <label for="start">Start date (Ottawa)<input required id="start" type="date"></label>
 <label for="end">End date (Ottawa)<input required id="end" type="date"></label>
+<label for="start-time">Daily start time (Ottawa)<input required id="start-time" type="time" value="00:00"></label>
+<label for="end-time">Daily end time (Ottawa)<input required id="end-time" type="time" value="23:59"></label>
 </div>
+<label for="redemption">Where can customers redeem this offer?<textarea id="redemption" rows="2" maxlength="300" placeholder="For example: in-store only, subject to manager approval"></textarea></label>
 <fieldset><legend>Eligible days (Ottawa)</legend><div class="checks" id="weekdays">
 <label><input type="checkbox" value="0">Sun</label><label><input type="checkbox" value="1">Mon</label>
 <label><input type="checkbox" value="2">Tue</label><label><input type="checkbox" value="3">Wed</label>
@@ -85,76 +91,94 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 (() => {
 'use strict';
 const $=id=>document.getElementById(id);
-let token='';
-let saved=[];
+let csrf='',saved=[];
 function status(message,isError=false){$('status').textContent=message;$('status').className=isError?'error':'success'}
-function cents(id){const raw=$(id).value.trim();if(!/^\d+(?:\.\d{1,2})?$/.test(raw))throw new Error('Prices must have at most two decimal places');return Math.round(Number(raw)*100)}
-function formatPrice(v){return (v/100).toFixed(2)}
-function data(){
+function cents(id){const raw=$(id).value.trim();if(!/^\d+(?:\.\d{1,2})?$/.test(raw))throw new Error('Enter a valid price with at most two decimal places');return Math.round(Number(raw)*100)}
+function price(v){return (v/100).toFixed(2)}
+function formData(){
  const name={'en-CA':$('name').value.trim()};
  if($('name-fr').value.trim())name['fr-CA']=$('name-fr').value.trim();
  if($('name-es').value.trim())name.es=$('name-es').value.trim();
- const offer={name,image:$('image').value,originalCents:cents('regular'),discountedCents:cents('discount'),
- startDate:$('start').value,endDate:$('end').value,
+ const data={name,image:$('image').value,originalCents:cents('regular'),discountedCents:cents('discount'),
+ startDate:$('start').value,endDate:$('end').value,startTime:$('start-time').value,endTime:$('end-time').value,
  weekdays:[...$('weekdays').querySelectorAll('input:checked')].map(e=>Number(e.value)),
- approved:$('approved').checked,enabled:$('enabled').checked};
- if(!offer.weekdays.length)throw new Error('Choose at least one day');
- if(offer.originalCents<=offer.discountedCents)throw new Error('Special price must be lower than regular price');
- if(offer.enabled&&!offer.approved)throw new Error('Approve the offer before enabling it');
- if(offer.startDate>offer.endDate)throw new Error('End date cannot precede start date');
- return offer;
+ approved:$('approved').checked,enabled:$('enabled').checked,redemption:$('redemption').value.trim()};
+ if(!data.weekdays.length)throw new Error('Select at least one weekday');
+ if(data.discountedCents>=data.originalCents)throw new Error('Discount must reduce price');
+ if(data.enabled&&(!data.approved||!data.redemption))throw new Error('An enabled offer needs approval and redemption instructions');
+ if(data.startDate>data.endDate||data.startTime>data.endTime)throw new Error('Check the start/end date and time');
+ return data;
 }
 async function request(path,method='GET',body){
- const res=await fetch(path,{method,cache:'no-store',headers:{
- Authorization:'Bearer '+token,...(body?{'Content-Type':'application/json'}:{})},
- ...(body?{body:JSON.stringify(body)}:{})});
- let result={};try{result=await res.json()}catch{}
- if(!res.ok)throw new Error(typeof result.detail==='string'?result.detail:'Request failed ('+res.status+')');
- return result;
+ const options={method,cache:'no-store',credentials:'same-origin',headers:{}};
+ if(method!=='GET')options.headers['X-CSRF-Token']=csrf;
+ if(body){options.headers['Content-Type']='application/json';options.body=JSON.stringify(body)}
+ const res=await fetch(path,options);
+ let data={};try{data=await res.json()}catch{}
+ if(!res.ok)throw new Error(typeof data.detail==='string'?data.detail:'Request failed ('+res.status+')');
+ return data;
 }
-function reset(){
+function clearForm(){
  $('offer-form').reset();$('edit-id').value='';$('form-heading').textContent='Create a promotion';
- $('weekdays').querySelectorAll('input').forEach(box=>box.checked=true);
+ $('start-time').value='00:00';$('end-time').value='23:59';
+ $('weekdays').querySelectorAll('input').forEach(el=>el.checked=true);
 }
 function edit(id){
- const offer=saved.find(o=>o.id===id);if(!offer)return;
- $('edit-id').value=String(offer.id);$('form-heading').textContent='Edit promotion #'+id;
+ const offer=saved.find(x=>x.id===id);if(!offer)return;
+ $('edit-id').value=String(id);$('form-heading').textContent='Edit promotion #'+id;
  $('name').value=offer.name['en-CA']||'';$('name-fr').value=offer.name['fr-CA']||'';
  $('name-es').value=offer.name.es||'';$('image').value=offer.image;
- $('regular').value=formatPrice(offer.originalCents);$('discount').value=formatPrice(offer.discountedCents);
+ $('regular').value=price(offer.originalCents);$('discount').value=price(offer.discountedCents);
  $('start').value=offer.startDate;$('end').value=offer.endDate;
- $('weekdays').querySelectorAll('input').forEach(box=>box.checked=offer.weekdays.includes(Number(box.value)));
+ $('start-time').value=offer.startTime||'00:00';$('end-time').value=offer.endTime||'23:59';
+ $('redemption').value=offer.redemption||'';
+ $('weekdays').querySelectorAll('input').forEach(el=>el.checked=offer.weekdays.includes(Number(el.value)));
  $('approved').checked=offer.approved;$('enabled').checked=offer.enabled;
  $('offer-form').scrollIntoView({behavior:'smooth',block:'start'});
 }
-async function reload(){
- const result=await request('/api/manage/offers');saved=result.offers;
+async function refresh(){
+ const data=await request('/api/manage/offers');saved=data.offers;
  const box=$('offers');box.replaceChildren();
- if(!saved.length){box.textContent='No saved promotions. No offers are running.';return}
+ if(!saved.length){box.textContent='No saved offers. No promotions are active.';return}
  for(const offer of saved){
- const card=document.createElement('div');card.className='offer';
- const title=document.createElement('strong');title.textContent=offer.name['en-CA']+' · #'+offer.id;card.appendChild(title);
- const desc=document.createElement('p');
- desc.textContent=offer.startDate+' to '+offer.endDate+' | CAD '+formatPrice(offer.originalCents)+' → '+formatPrice(offer.discountedCents)+' | '+(offer.enabled?'Enabled':'Paused')+' | '+(offer.approved?'Approved':'Not approved');
- card.appendChild(desc);
+ const item=document.createElement('div');item.className='offer';
+ const title=document.createElement('strong');title.textContent=offer.name['en-CA']+' · #'+offer.id;item.appendChild(title);
+ const description=document.createElement('p');
+ description.textContent=offer.startDate+' to '+offer.endDate+'; '+(offer.startTime||'00:00')+'–'+(offer.endTime||'23:59')+
+ ' Ottawa | CAD '+price(offer.originalCents)+' → '+price(offer.discountedCents)+' | '+(offer.enabled?'Enabled':'Paused')+
+ ' | '+(offer.approved?'Approved':'Not approved');item.appendChild(description);
  const buttons=document.createElement('div');buttons.className='actions';
- for(const [label,kind,action] of [['Edit','secondary',()=>edit(offer.id)],
- ['Pause','secondary',async()=>{await request('/api/manage/offers/'+offer.id+'/pause','POST');await reload()}],
- ['Delete','danger',async()=>{if(!confirm('Permanently delete this offer?'))return;await request('/api/manage/offers/'+offer.id,'DELETE');await reload()}]]){
- const btn=document.createElement('button');btn.textContent=label;btn.className=kind;btn.addEventListener('click',async()=>{try{await action();status(label+' completed')}catch(err){status(err.message,true)}});buttons.appendChild(btn)}
- card.appendChild(buttons);box.appendChild(card);
+ for(const [label,kind,action] of [
+ ['Edit','secondary',()=>edit(offer.id)],
+ ['Pause','secondary',async()=>{await request('/api/manage/offers/'+offer.id+'/pause','POST');await refresh()}],
+ ['Delete','danger',async()=>{if(!confirm('Delete this promotion permanently?'))return;await request('/api/manage/offers/'+offer.id,'DELETE');await refresh()}]]){
+ const button=document.createElement('button');button.type='button';button.className=kind;button.textContent=label;
+ button.addEventListener('click',async()=>{try{await action();status(label+' completed')}catch(e){status(e.message,true)}});buttons.appendChild(button)}
+ item.appendChild(buttons);box.appendChild(item);
  }
 }
-$('connect').addEventListener('click',async()=>{token=$('token').value.trim();$('token').value='';try{await reload();$('workspace').hidden=false;status('Connected. Offers loaded.')}catch(err){token='';$('workspace').hidden=true;status(err.message,true)}});
-$('disconnect').addEventListener('click',()=>{token='';saved=[];$('workspace').hidden=true;status('Disconnected')});
-$('reload').addEventListener('click',async()=>{try{await reload();status('Refreshed')}catch(err){status(err.message,true)}});
-$('clear').addEventListener('click',reset);
-$('offer-form').addEventListener('submit',async event=>{event.preventDefault();try{
- const offer=data(),id=$('edit-id').value;
+$('login-form').addEventListener('submit',async event=>{
+ event.preventDefault();const email=$('email').value.trim(),password=$('password').value;
+ try{
+ const res=await fetch('/api/auth/login',{method:'POST',cache:'no-store',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+ $('password').value='';
+ const data=await res.json();if(!res.ok)throw new Error(data.detail||'Sign-in failed');
+ csrf=data.csrfToken;await refresh();$('workspace').hidden=false;status('Signed in successfully');
+ }catch(e){csrf='';$('workspace').hidden=true;status(e.message,true)}
+});
+$('disconnect').addEventListener('click',async()=>{
+ try{if(csrf)await request('/api/auth/logout','POST')}catch{}finally{csrf='';saved=[];$('workspace').hidden=true;status('Signed out')};
+});
+$('reload').addEventListener('click',async()=>{try{await refresh();status('Refreshed')}catch(e){status(e.message,true)}});
+$('clear').addEventListener('click',clearForm);
+$('offer-form').addEventListener('submit',async event=>{
+ event.preventDefault();try{
+ const offer=formData(),id=$('edit-id').value;
  await request('/api/manage/offers'+(id?'/'+id:''),id?'PUT':'POST',offer);
- reset();await reload();status('Offer saved successfully');
-}catch(err){status(err.message,true)}});
-reset();
+ clearForm();await refresh();status('Offer saved');
+ }catch(e){status(e.message,true)}
+});
+clearForm();
 })();
 </script>
 </body></html>
