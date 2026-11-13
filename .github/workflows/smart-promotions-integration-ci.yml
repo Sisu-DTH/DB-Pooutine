@@ -1,0 +1,31 @@
+name: Smart Promotions Website Integration Tests
+
+on:
+  pull_request:
+    paths:
+      - 'smart-promotions.js'
+      - 'smart-promotions-source.json'
+      - 'index.html'
+      - 'tests/smart-promotions.test.cjs'
+      - 'tests/check-promotions-api.cjs'
+      - '.github/workflows/smart-promotions-integration-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: node --check smart-promotions.js
+      - name: Run no-offer, approved-offer, translation and API failure tests
+        run: node --test tests/smart-promotions.test.cjs
+      - name: Check public Railway feed, CORS and default-off feature switch
+        run: node tests/check-promotions-api.cjs
