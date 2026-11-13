@@ -157,6 +157,11 @@ def test_one_time_recovery_preserves_offers_and_cannot_repeat():
         audit=conn.execute(manager.text(
             "SELECT COUNT(*) FROM audit_log WHERE action='admin_password_recovery'")).scalar_one()
         assert audit == 1
+    # The preceding throttle test intentionally locks out the TestClient IP.
+    # Clear only that synthetic IP entry to isolate credential verification.
+    with manager.engine.begin() as conn:
+        conn.execute(manager.text("DELETE FROM auth_attempts WHERE key=:key"),
+                     {"key": "ip:" + manager.sha("testclient")})
     response=client.post("/api/auth/login",json={
         "email":"manager@example.test","password":"new-secret-of-adequate-length"})
     assert response.status_code==200,response.text
