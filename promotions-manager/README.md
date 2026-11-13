@@ -1,70 +1,61 @@
-# SDTH Smart Promotions Manager — MVP
+# SDTH Smart Promotions Manager — deployment handover
 
-An isolated FastAPI + SQLite manager for D&B Poutine. **This is not deployed.** The current public D&B Poutine homepage keeps using its existing empty `smart-promotions.json`, so **no offers are active**.
+## Current state
+This is an isolated development branch and draft PR, not a live manager. **No D&B Poutine website pages, menus, prices or promotions have been changed.** Public `smart-promotions.json` stays empty.
 
-## Features
+### Implemented
+- FastAPI backend with SQLAlchemy and PostgreSQL support (SQLite for local tests).
+- A single initial manager account provisioned from environment values; passwords are salted and PBKDF2-hashed.
+- HTTP-only, Secure, SameSite=Strict 8-hour cookie sessions with CSRF tokens.
+- Login-attempt throttling and protected create/edit/pause/delete endpoints.
+- Audit log of manager changes.
+- Ottawa date/day/start/end time scheduling and public read-only active-offers feed.
+- Approved item image allowlist, cent-based Canadian-dollar prices, restaurant approval, redemption instructions.
+- Responsive standalone dashboard with manager email/password sign-in and no browser-persisted password.
+- Security headers, automated backend tests and container build.
 
-- Password-like bearer-token access to the manager API; no default administrator token.
-- Responsive browser form to create, edit, pause and delete promotions.
-- Restaurant approval required before an offer can be enabled.
-- Item name translations (Canadian English, optional Canadian French and Spanish), approved photographs, regular/special prices in Canadian dollars.
-- Ottawa-local dates and selected weekdays; active offers appear in a public, read-only JSON feed.
-- Approval checks, price validation, date validation, approved image filename allowlist, public cache disabled.
-- SQLite persistence for one restaurant, without any unnecessary external database service.
+### Production prerequisites — not yet completed
+**Railway connection, hosting project, PostgreSQL service, domain, production secrets, live integration and end-to-end browser verification.** These require access to the hosting account and deployment. The repo is not automatically deployed by this PR.
 
-## Run locally (Linux / Windows with Python 3.11+)
+## Hosting on Railway
 
-From the repository root:
+1. Connect the Railway account and select repository `Sisu-DTH/DB-Pooutine`.
+2. Create a PostgreSQL service, and separately create a service from the same GitHub repository with its **root directory set to `/promotions-manager`**, building from `Dockerfile`.
+3. Set private service variables (never commit values):
+   - `DATABASE_URL`: a Railway PostgreSQL connection string (ideally an internal/reference connection string).
+   - `PROMOTIONS_ADMIN_EMAIL`: approved initial restaurant-manager email.
+   - `PROMOTIONS_ADMIN_PASSWORD`: a unique, high-entropy password of at least 14 characters.
+   - `PROMOTIONS_PUBLIC_ORIGIN=https://dbpoutine.com`.
+   - `PROMOTIONS_COOKIE_SECURE=true`.
+4. Require HTTPS, configure the generated application hostname (and optionally a manager-specific subdomain), ensure secrets are stored in Railway, enable database backups and monitor service restart/health.
+5. Check `GET /health`, `GET /api/promotions` (must return no offers), then the manager dashboard. Do not publish any restaurant offer as part of provisioning.
+6. After creating the manager account, remove `PROMOTIONS_ADMIN_PASSWORD` from the running environment if operationally practical (it is only used for first-time provisioning). Do not share it in ChatGPT messages, logs or screenshots.
+7. Only after HTTPS is deployed and verified, change the restaurant's existing frontend to consume `https://<actual-manager-domain>/api/promotions` instead of `smart-promotions.json` with an empty-on-error fallback; run browser/device and language regression checks first.
+
+## Run locally
+From the `promotions-manager` directory with Python 3.12:
 
 ```bash
-cd promotions-manager
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-export PROMOTIONS_ADMIN_TOKEN="$(python -c 'import secrets; print(secrets.token_urlsafe(48))')"
-printf "Manager token (store securely, do not commit): %s\\n" "$PROMOTIONS_ADMIN_TOKEN"
-export PROMOTIONS_DB_PATH="./data/promotions.sqlite3"
+export DATABASE_URL="sqlite:///$(pwd)/local.sqlite3"
+export PROMOTIONS_ADMIN_EMAIL="manager@example.test"
+# Set a unique password in your local environment without committing it.
+export PROMOTIONS_ADMIN_PASSWORD="<local-secret-at-least-14-characters>"
+export PROMOTIONS_COOKIE_SECURE=false
 uvicorn main:app --host 127.0.0.1 --port 8000
+pytest -q test_main.py
 ```
 
-Open `http://127.0.0.1:8000/` and paste the admin token you generated in that same terminal into the manager's access-token field. The token is stored in the tab's JavaScript memory only, and disappears on refresh or disconnect. Save it securely outside the repository.
+To sign into a local instance, visit http://127.0.0.1:8000/. For Railway, use HTTPS only and secure cookies.
 
-### Testing
+## Publish safety
+The manager API is currently **not linked** to the public restaurant site. Nothing is advertised on D&B Poutine until a separately reviewed website integration goes live. A displayed discount is an **advertisement**, not a change to checkout prices or third-party ordering channels. The restaurant must approve the exact offer and redemption location beforehand.
 
-```bash
-pytest -q
-```
-
-Tests use a temporary database and synthetic meal/pricing data. They do not affect actual restaurant offers.
-
-## Step 1 — security hardening status
-
-The manager API now sends restrictive response headers: no-store caching, no framing, no referrer leakage, nosniff, and a Content Security Policy. Automated tests assert these headers. The dashboard remains **an isolated development MVP**; this does not amount to a production-grade authentication system.
-
-Before hosting it for a restaurant manager, replace the shared bearer token with per-manager accounts and securely hashed passwords, limited login attempts, secure HttpOnly session cookies, CSRF protection, session expiry, and audit logs. Keep private endpoints inaccessible to untrusted origins. **Do not expose the existing shared-token dashboard on the public internet as the final solution.**
-
-## Integration and deployment — deliberate safety boundary
-
-The deployed static restaurant site currently loads `smart-promotions.json` locally. It **does not yet request the manager's API**. For the manager to publish offers automatically to the live website:
-
-1. Choose HTTPS hosting for the FastAPI application, with durable storage. SQLite needs a persistent disk; an ephemeral container filesystem loses data on redeploy. Alternatively plan a managed PostgreSQL database.
-2. Configure the HTTPS service URL, `PROMOTIONS_ADMIN_TOKEN` (>=32 random characters) and a persistent `PROMOTIONS_DB_PATH`. Never commit the token or DB. Keep the manager protected behind HTTPS and preferably additional network access controls.
-3. Configure CORS `PROMOTIONS_PUBLIC_ORIGIN=https://dbpoutine.com`.
-4. Separately review and change the existing `smart-promotions.js` frontend to read the deployed manager's `/api/promotions` endpoint rather than the static file, with a safe no-offer fallback. Only do this after the API is hosted, tested and approved.
-5. Test the public page across mobile and desktop, verify language switching, the timing of same-day offers, cache behaviour and redemption arrangements.
-6. Approve the actual offer details and publication. A website advertisement **does not** change external ordering platforms or guarantee the advertised price can be redeemed.
-
-The manager itself has no auto-generated credentials, public administration endpoint, checkout or payments integration. Use a secrets manager for the bearer token. A single shared bearer token is an MVP limitation: for a wider production rollout, add per-manager accounts, permissions, audit history, rate limiting, CSRF-secure login sessions and managed database backups.
-
-## No active offer / fail-safe behaviour
-
-An empty public feed is valid:
-```json
-{"timeZone":"America/Toronto","offers":[]}
-```
-
-An offer is displayed only if it is enabled, approved, within the inclusive date range, and on a selected Ottawa weekday. It is paused by disabling it or clicking **Pause** in the manager.
-
-## Source and business safeguards
-
-This folder is intentionally isolated. It does not overwrite any existing D&B Poutine HTML/CSS/JavaScript, menu prices or images. Existing published site remains unchanged unless a future, separately approved integration is deployed.
+### Known boundaries
+- Only the initial manager is provisioned. A staff-management UI, password reset, account recovery and multiple manager roles are future work.
+- Rate limiting uses the app's observed client network address. On a reverse proxy, configure trusted proxy behaviour carefully and prefer additional edge/WAF rate limiting.
+- The current MVP has database audit entries but no export/retention policy.
+- The production backend requires a managed PostgreSQL database and tested backups.
+- No actual production credentials or hosting services have been created yet.
