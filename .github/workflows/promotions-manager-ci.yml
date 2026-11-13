@@ -29,7 +29,7 @@ jobs:
           from pathlib import Path
           import re
           html = Path("promotions-manager/dashboard.html").read_text(encoding="utf-8")
-          match = re.search(r"<script>([\\s\\S]*?)</script>", html)
+          match = re.search(r"<script>(.*?)</script>", html, re.S)
           if not match:
               raise SystemExit("Dashboard script missing")
           Path("/tmp/sdth_manager_dashboard.js").write_text(match.group(1), encoding="utf-8")
