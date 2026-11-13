@@ -258,3 +258,27 @@ def test_all_menu_photos_allowlisted_and_unpriced_items_require_manager_value():
     uncertain = [item for item in items if item["regularCents"] is None]
     assert len(uncertain) == 2
     assert all(item["needsPriceConfirmation"] for item in uncertain)
+
+
+def test_one_time_launch_safety_pause_preserves_offers():
+    """Pause existing enabled offers once and never touch future offers."""
+    csrf = login()
+    first = client.post("/api/manage/offers", json=sample(), headers=headers(csrf))
+    assert first.status_code == 201, first.text
+    first_id = first.json()["id"]
+    assert len(client.get("/api/promotions").json()["offers"]) == 1
+    completed, count = manager.pause_existing_offers_once()
+    assert completed == "completed"
+    assert count == 1
+    assert client.get("/api/promotions").json()["offers"] == []
+    records = client.get("/api/manage/offers").json()["offers"]
+    assert next(x for x in records if x["id"] == first_id)["enabled"] is False
+    second = client.post("/api/manage/offers", json=sample(), headers=headers(csrf))
+    assert second.status_code == 201, second.text
+    second_id = second.json()["id"]
+    assert manager.pause_existing_offers_once() == ("already_completed", 0)
+    assert next(x for x in client.get("/api/manage/offers").json()["offers"]
+                if x["id"] == second_id)["enabled"] is True
+    assert client.delete(f"/api/manage/offers/{first_id}", headers=headers(csrf)).status_code == 200
+    assert client.delete(f"/api/manage/offers/{second_id}", headers=headers(csrf)).status_code == 200
+    assert client.post("/api/auth/logout", headers=headers(csrf)).status_code == 200
