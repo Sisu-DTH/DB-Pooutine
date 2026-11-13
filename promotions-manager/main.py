@@ -117,6 +117,13 @@ def sha(value):
 @app.on_event("startup")
 def startup():
     initialize()
+    if os.getenv("PROMOTIONS_RECOVERY_ONCE", "").strip().lower() == "true":
+        # Explicit, one-time recovery; uses only private Railway environment values.
+        from reset_admin_once import reset_once
+        with engine.begin() as connection:
+            outcome = reset_once(connection, BOOTSTRAP_EMAIL, BOOTSTRAP_PASSWORD)
+        print("Administrator recovery:", outcome)
+
 
 class Login(BaseModel):
     email: str = Field(min_length=5, max_length=254)
