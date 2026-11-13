@@ -217,7 +217,8 @@ def login(credentials: Login, response: Response, request: Request):
         # Deliberately run a real expensive hash for unknown users to reduce enumeration timing.
         valid = password_ok(credentials.password, row["password_hash"]) if row else password_ok(
             credentials.password, "pbkdf2_sha256$600000$" + "00"*16 + "$" + "00"*32)
-        if not valid:
+        failed = not valid
+        if failed:
             for key in keys:
                 item = conn.execute(text("SELECT count,window_start FROM auth_attempts WHERE key=:key"),
                                     {"key":key}).mappings().first()
@@ -225,15 +226,18 @@ def login(credentials: Login, response: Response, request: Request):
                 conn.execute(text("DELETE FROM auth_attempts WHERE key=:key"), {"key":key})
                 conn.execute(text("""INSERT INTO auth_attempts(key,count,window_start)
                     VALUES (:key,:count,:start)"""), {"key":key,"count":count,"start":now})
-            raise HTTPException(401, "Invalid email or password")
-        for key in keys:
-            conn.execute(text("DELETE FROM auth_attempts WHERE key=:key"), {"key":key})
-        sid, csrf = secrets.token_urlsafe(48), secrets.token_urlsafe(32)
-        conn.execute(text("""INSERT INTO sessions(token_hash,manager_id,csrf_hash,expires_at)
-                         VALUES (:token,:id,:csrf,:expiry)"""),
-                     {"token":sha(sid),"id":row["id"],"csrf":sha(csrf),
-                      "expiry":now+SESSION_SECONDS})
-        record(conn, row["id"], "login")
+            failed = True
+        if not failed:
+            for key in keys:
+                conn.execute(text("DELETE FROM auth_attempts WHERE key=:key"), {"key":key})
+            sid, csrf = secrets.token_urlsafe(48), secrets.token_urlsafe(32)
+            conn.execute(text("""INSERT INTO sessions(token_hash,manager_id,csrf_hash,expires_at)
+                             VALUES (:token,:id,:csrf,:expiry)"""),
+                         {"token":sha(sid),"id":row["id"],"csrf":sha(csrf),
+                          "expiry":now+SESSION_SECONDS})
+            record(conn, row["id"], "login")
+    if failed:
+        raise HTTPException(401, "Invalid email or password")
     response.set_cookie("sdth_session",sid,max_age=SESSION_SECONDS,httponly=True,
                         secure=COOKIE_SECURE,samesite="strict",path="/")
     return {"csrfToken":csrf, "expiresInSeconds":SESSION_SECONDS}
