@@ -94,3 +94,14 @@ def test_unapproved_and_future_offers_hidden():
         offer_id = result.json()["id"]
         assert client.get("/api/promotions").json()["offers"] == []
         assert client.delete(f"/api/manage/offers/{offer_id}", headers=HEADERS).status_code == 200
+
+
+def test_security_response_headers():
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.headers["x-content-type-options"] == "nosniff"
+    assert response.headers["x-frame-options"] == "DENY"
+    assert response.headers["referrer-policy"] == "no-referrer"
+    assert response.headers["cache-control"] == "no-store"
+    assert "frame-ancestors 'none'" in response.headers["content-security-policy"]
+    assert "connect-src 'self'" in response.headers["content-security-policy"]
