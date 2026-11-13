@@ -34,11 +34,18 @@ COOKIE_SECURE = os.getenv("PROMOTIONS_COOKIE_SECURE", "true").lower() == "true"
 BOOTSTRAP_EMAIL = os.getenv("PROMOTIONS_ADMIN_EMAIL", "").strip().lower()
 BOOTSTRAP_PASSWORD = os.getenv("PROMOTIONS_ADMIN_PASSWORD", "")
 PUBLIC_ORIGIN = os.getenv("PROMOTIONS_PUBLIC_ORIGIN", "https://dbpoutine.com").rstrip("/")
-ALLOWED_IMAGES = {
-    "small-pou.webp", "chicken-pou.webp", "hdcom.webp", "Vpoutinc.webp",
-    "8w.webp", "poutinewithhd.webp", "beefp.webp", "chickp.webp",
-    "turkeyp.webp", "tusand.webp", "dbsalad.webp"
-}
+# The catalogue is curated from the existing live restaurant menu (no scraping at runtime).
+CATALOGUE_PATH = APP_DIR / "menu_catalogue.json"
+def load_catalogue():
+    with CATALOGUE_PATH.open(encoding="utf-8") as handle:
+        catalogue = json.load(handle)
+    if not isinstance(catalogue.get("items"), list):
+        raise RuntimeError("Invalid menu catalogue")
+    return catalogue
+
+MENU_CATALOGUE = load_catalogue()
+MENU_BY_ID = {entry["id"]: entry for entry in MENU_CATALOGUE["items"]}
+ALLOWED_IMAGES = {entry["image"] for entry in MENU_CATALOGUE["items"]}
 SESSION_SECONDS = 60 * 60 * 8
 app = FastAPI(title="SDTH Smart Promotions Manager", docs_url=None, redoc_url=None)
 app.add_middleware(CORSMiddleware, allow_origins=[PUBLIC_ORIGIN], allow_credentials=False,
@@ -132,6 +139,7 @@ class Login(BaseModel):
 class OfferInput(BaseModel):
     name: dict[str, str] = Field(min_length=1)
     image: str
+    catalogueId: str | None = None
     originalCents: int = Field(gt=0, le=100000000)
     discountedCents: int = Field(ge=0, le=100000000)
     startDate: str
@@ -175,6 +183,17 @@ class OfferInput(BaseModel):
         if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", self.startDate) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", self.endDate):
             raise ValueError("Dates must be YYYY-MM-DD")
         if start > end: raise ValueError("End date precedes start")
+        if self.catalogueId is not None:
+            item = MENU_BY_ID.get(self.catalogueId)
+            if item is None:
+                raise ValueError("Unknown menu item")
+            if self.image != item["image"]:
+                raise ValueError("Menu photograph must match selected item")
+            if item["regularCents"] is not None and self.originalCents != item["regularCents"]:
+                raise ValueError("Regular price must match listed menu price")
+            if any(self.name.get(code) != item["names"].get(code) for code in
+                   ("en-CA", "fr-CA", "es")):
+                raise ValueError("Selected meal names must match the menu catalogue")
         if self.discountedCents >= self.originalCents: raise ValueError("Discount must reduce price")
         for value in (self.startTime,self.endTime):
             if not re.fullmatch(r"(?:[01]\d|2[0-3]):[0-5]\d", value):
@@ -294,6 +313,11 @@ def public_promotions():
             )})
     return JSONResponse({"timeZone":"America/Toronto","offers":offers},
                         headers={"Cache-Control":"no-store"})
+
+@app.get("/api/manage/menu")
+def manager_menu(row=Depends(session)):
+    """Read-only snapshot of the current public menu for the signed-in manager."""
+    return MENU_CATALOGUE
 
 @app.get("/api/manage/offers")
 def list_offers(row=Depends(session)):
