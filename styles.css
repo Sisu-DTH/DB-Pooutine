@@ -699,14 +699,14 @@ html body .main .welcome-section.menu-page-hero .content {
   margin: 0 !important;
 }
 /* Brand credit: a distinct, accessible link colour on the gold footer. */
-html body .footer a[href*="sisudthofficial"] {
+html body .footer a[href="https://sisudth.com"] {
   color: #123b75 !important;
   text-decoration: underline;
   text-underline-offset: 2px;
   font-weight: 700;
 }
-html body .footer a[href*="sisudthofficial"]:hover,
-html body .footer a[href*="sisudthofficial"]:focus-visible {
+html body .footer a[href="https://sisudth.com"]:hover,
+html body .footer a[href="https://sisudth.com"]:focus-visible {
   color: #092547 !important;
   text-decoration-thickness: 2px;
 }
