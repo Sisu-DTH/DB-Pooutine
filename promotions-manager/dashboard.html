@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>SDTH Smart Promotions — Manager</title>
+<style>
+:root{font-family:system-ui,Arial,sans-serif;background:#161616;color:#f9f4eb}
+*{box-sizing:border-box}body{margin:0}header{background:#070707;border-bottom:3px solid #bd852c;padding:18px}
+main{max-width:1050px;margin:auto;padding:18px}h1{font-size:clamp(1.5rem,4vw,2.2rem)}
+.card{background:#262626;border:1px solid #74603d;border-radius:12px;padding:20px;margin:18px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+label{display:flex;flex-direction:column;gap:7px;font-weight:600;font-size:.93rem}
+input,select,textarea{width:100%;padding:12px;border-radius:6px;border:1px solid #888;background:white;color:#191919;font:inherit}
+.checkbox{display:flex;flex-direction:row;align-items:center;gap:8px}.checkbox input{width:20px;height:20px}
+button{min-height:44px;padding:10px 18px;background:#d39a3b;color:#111;border:0;border-radius:6px;font-weight:750;cursor:pointer;font-size:1rem}
+button.secondary{background:#ddd}button.danger{background:#dd7979}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #f1c668;outline-offset:2px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.notice{background:#3b2b19;border-left:4px solid #d9a046;padding:14px;line-height:1.55}
+.error{color:#ffd3d3}.success{color:#d3ffd4}
+.offer{border:1px solid #766040;border-radius:8px;padding:14px;margin:12px 0}
+.muted{color:#c9c6c0}.checks{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.checks label{flex-direction:row;align-items:center}
+@media(max-width:650px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><strong style="color:#f0b74d">SDTH Smart Promotions</strong> &nbsp; · &nbsp; D&amp;B Poutine Manager</header>
+<main>
+<h1>Manage special offers</h1>
+<p class="notice">This management application is a standalone development MVP. Publishing to the live D&amp;B Poutine site requires a separately configured API connection. Do not use an illustrative price as a real offer. Restaurant approval and redemption rules are required.</p>
+<section class="card" id="auth-card">
+<h2>Manager access</h2>
+<p>Enter the secure manager token supplied by the business owner. It is kept in this tab's memory only and is not saved to the browser.</p>
+<label for="token">Manager access token<input id="token" type="password" autocomplete="off" spellcheck="false"></label>
+<div class="actions"><button id="connect">Connect securely</button><button class="secondary" id="disconnect">Disconnect</button></div>
+<p id="status" role="status" aria-live="polite"></p>
+</section>
+<div id="workspace" hidden>
+<section class="card">
+<h2 id="form-heading">Create a promotion</h2>
+<form id="offer-form">
+<input type="hidden" id="edit-id">
+<div class="grid">
+<label for="name">Meal name (English Canada)<input required maxlength="120" id="name" placeholder="Exact approved menu item"></label>
+<label for="name-fr">French name (optional)<input maxlength="120" id="name-fr"></label>
+<label for="name-es">Spanish name (optional)<input maxlength="120" id="name-es"></label>
+<label for="image">Existing menu photograph
+<select id="image">
+<option value="small-pou.webp">Poutine</option>
+<option value="chicken-pou.webp">Chicken Poutine</option>
+<option value="hdcom.webp">Hot Dog Combo</option>
+<option value="Vpoutinc.webp">Veggie Poutine</option>
+<option value="8w.webp">Wings Combo</option>
+<option value="poutinewithhd.webp">Poutine & Hot Dog</option>
+<option value="beefp.webp">Beef Panini</option>
+<option value="chickp.webp">Chicken Panini</option>
+<option value="turkeyp.webp">Turkey Panini</option>
+<option value="tusand.webp">Tuna Sandwich</option>
+<option value="dbsalad.webp">Salad</option>
+</select></label>
+<label for="regular">Approved regular price (CAD)<input required type="number" id="regular" min="0.01" max="1000000" step="0.01" placeholder="0.00"></label>
+<label for="discount">Approved special price (CAD)<input required type="number" id="discount" min="0" max="1000000" step="0.01" placeholder="0.00"></label>
+<label for="start">Start date (Ottawa)<input required id="start" type="date"></label>
+<label for="end">End date (Ottawa)<input required id="end" type="date"></label>
+</div>
+<fieldset><legend>Eligible days (Ottawa)</legend><div class="checks" id="weekdays">
+<label><input type="checkbox" value="0">Sun</label><label><input type="checkbox" value="1">Mon</label>
+<label><input type="checkbox" value="2">Tue</label><label><input type="checkbox" value="3">Wed</label>
+<label><input type="checkbox" value="4">Thu</label><label><input type="checkbox" value="5">Fri</label>
+<label><input type="checkbox" value="6">Sat</label>
+</div></fieldset>
+<div class="checks">
+<label class="checkbox"><input type="checkbox" id="approved">I confirm the restaurant has approved this exact meal, both prices, dates and redemption method.</label>
+<label class="checkbox"><input type="checkbox" id="enabled">Enable promotion (only if approved)</label>
+</div>
+<p class="muted">An enabled offer is shown only during its approved dates and weekdays. Changes here do not change Uber Eats or any third-party prices.</p>
+<div class="actions"><button type="submit">Save offer</button><button type="button" class="secondary" id="clear">Clear form</button></div>
+</form>
+</section>
+<section class="card"><h2>Saved offers</h2><div class="actions"><button id="reload" class="secondary">Refresh list</button></div><div id="offers" aria-live="polite">No offers loaded.</div></section>
+</div>
+</main>
+<script>
+(() => {
+'use strict';
+const $=id=>document.getElementById(id);
+let token='';
+let saved=[];
+function status(message,isError=false){$('status').textContent=message;$('status').className=isError?'error':'success'}
+function cents(id){const raw=$(id).value.trim();if(!/^\d+(?:\.\d{1,2})?$/.test(raw))throw new Error('Prices must have at most two decimal places');return Math.round(Number(raw)*100)}
+function formatPrice(v){return (v/100).toFixed(2)}
+function data(){
+ const name={'en-CA':$('name').value.trim()};
+ if($('name-fr').value.trim())name['fr-CA']=$('name-fr').value.trim();
+ if($('name-es').value.trim())name.es=$('name-es').value.trim();
+ const offer={name,image:$('image').value,originalCents:cents('regular'),discountedCents:cents('discount'),
+ startDate:$('start').value,endDate:$('end').value,
+ weekdays:[...$('weekdays').querySelectorAll('input:checked')].map(e=>Number(e.value)),
+ approved:$('approved').checked,enabled:$('enabled').checked};
+ if(!offer.weekdays.length)throw new Error('Choose at least one day');
+ if(offer.originalCents<=offer.discountedCents)throw new Error('Special price must be lower than regular price');
+ if(offer.enabled&&!offer.approved)throw new Error('Approve the offer before enabling it');
+ if(offer.startDate>offer.endDate)throw new Error('End date cannot precede start date');
+ return offer;
+}
+async function request(path,method='GET',body){
+ const res=await fetch(path,{method,cache:'no-store',headers:{
+ Authorization:'Bearer '+token,...(body?{'Content-Type':'application/json'}:{})},
+ ...(body?{body:JSON.stringify(body)}:{})});
+ let result={};try{result=await res.json()}catch{}
+ if(!res.ok)throw new Error(typeof result.detail==='string'?result.detail:'Request failed ('+res.status+')');
+ return result;
+}
+function reset(){
+ $('offer-form').reset();$('edit-id').value='';$('form-heading').textContent='Create a promotion';
+ $('weekdays').querySelectorAll('input').forEach(box=>box.checked=true);
+}
+function edit(id){
+ const offer=saved.find(o=>o.id===id);if(!offer)return;
+ $('edit-id').value=String(offer.id);$('form-heading').textContent='Edit promotion #'+id;
+ $('name').value=offer.name['en-CA']||'';$('name-fr').value=offer.name['fr-CA']||'';
+ $('name-es').value=offer.name.es||'';$('image').value=offer.image;
+ $('regular').value=formatPrice(offer.originalCents);$('discount').value=formatPrice(offer.discountedCents);
+ $('start').value=offer.startDate;$('end').value=offer.endDate;
+ $('weekdays').querySelectorAll('input').forEach(box=>box.checked=offer.weekdays.includes(Number(box.value)));
+ $('approved').checked=offer.approved;$('enabled').checked=offer.enabled;
+ $('offer-form').scrollIntoView({behavior:'smooth',block:'start'});
+}
+async function reload(){
+ const result=await request('/api/manage/offers');saved=result.offers;
+ const box=$('offers');box.replaceChildren();
+ if(!saved.length){box.textContent='No saved promotions. No offers are running.';return}
+ for(const offer of saved){
+ const card=document.createElement('div');card.className='offer';
+ const title=document.createElement('strong');title.textContent=offer.name['en-CA']+' · #'+offer.id;card.appendChild(title);
+ const desc=document.createElement('p');
+ desc.textContent=offer.startDate+' to '+offer.endDate+' | CAD '+formatPrice(offer.originalCents)+' → '+formatPrice(offer.discountedCents)+' | '+(offer.enabled?'Enabled':'Paused')+' | '+(offer.approved?'Approved':'Not approved');
+ card.appendChild(desc);
+ const buttons=document.createElement('div');buttons.className='actions';
+ for(const [label,kind,action] of [['Edit','secondary',()=>edit(offer.id)],
+ ['Pause','secondary',async()=>{await request('/api/manage/offers/'+offer.id+'/pause','POST');await reload()}],
+ ['Delete','danger',async()=>{if(!confirm('Permanently delete this offer?'))return;await request('/api/manage/offers/'+offer.id,'DELETE');await reload()}]]){
+ const btn=document.createElement('button');btn.textContent=label;btn.className=kind;btn.addEventListener('click',async()=>{try{await action();status(label+' completed')}catch(err){status(err.message,true)}});buttons.appendChild(btn)}
+ card.appendChild(buttons);box.appendChild(card);
+ }
+}
+$('connect').addEventListener('click',async()=>{token=$('token').value.trim();$('token').value='';try{await reload();$('workspace').hidden=false;status('Connected. Offers loaded.')}catch(err){token='';$('workspace').hidden=true;status(err.message,true)}});
+$('disconnect').addEventListener('click',()=>{token='';saved=[];$('workspace').hidden=true;status('Disconnected')});
+$('reload').addEventListener('click',async()=>{try{await reload();status('Refreshed')}catch(err){status(err.message,true)}});
+$('clear').addEventListener('click',reset);
+$('offer-form').addEventListener('submit',async event=>{event.preventDefault();try{
+ const offer=data(),id=$('edit-id').value;
+ await request('/api/manage/offers'+(id?'/'+id:''),id?'PUT':'POST',offer);
+ reset();await reload();status('Offer saved successfully');
+}catch(err){status(err.message,true)}});
+reset();
+})();
+</script>
+</body></html>
