@@ -59,3 +59,18 @@ The manager API is currently **not linked** to the public restaurant site. Nothi
 - The current MVP has database audit entries but no export/retention policy.
 - The production backend requires a managed PostgreSQL database and tested backups.
 - No actual production credentials or hosting services have been created yet.
+
+
+## Menu catalogue and price calculations
+
+`menu_catalogue.json` contains the 66 menu entries from the public restaurant `menu.html`. A logged-in manager sees them in a Canadian English dropdown. Selecting an item fills the photograph, regular price and English/French/Spanish names. Canadian French and Spanish labels not already present in `language.js` are editorial drafts requiring restaurant review.
+
+The regular price for a selected, unambiguous catalogue item is read-only, and the API rejects any incorrect price, photograph or translated name on submission. The catalogue is a snapshot, **not a live price feed**: update it when the restaurant menu changes.
+
+Two listings have no single price and are labelled for manual confirmation: `D&B Poutine with hotdog` (two variants listed) and `D&B Wings Sauces` (no price). They cannot be enabled directly from the ambiguous selection; the manager must create an explicitly approved custom variant with its correct regular price.
+
+For a new/custom item, the manager may enter an English name, manually supply French/Spanish translations, select an existing menu photograph, and enter a regular price. Automatic translation is available for curated catalogue items only; new names must be verified rather than guessed by an external translation service.
+
+Discount input supports a final price, a fixed CAD saving or a dropdown of 5%, 10%, 15%, 20%, 25%, 30%. The dashboard calculates the final cents value, rounds percent savings to the nearest cent and previews the customer's saving. The backend validates that the discounted price is lower than the regular price. None of these actions alters the site's menu or Uber Eats pricing.
+
+Existing saved offers (including current enabled offers) remain unchanged by this feature. The manager must pause or cancel unauthorised offers explicitly.
