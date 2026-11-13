@@ -22,6 +22,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
 export PROMOTIONS_ADMIN_TOKEN="$(python -c 'import secrets; print(secrets.token_urlsafe(48))')"
+printf "Manager token (store securely, do not commit): %s\\n" "$PROMOTIONS_ADMIN_TOKEN"
 export PROMOTIONS_DB_PATH="./data/promotions.sqlite3"
 uvicorn main:app --host 127.0.0.1 --port 8000
 ```
