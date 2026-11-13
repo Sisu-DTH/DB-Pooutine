@@ -123,3 +123,40 @@ def test_rate_limit_persists_across_failed_requests():
     response=client.post("/api/auth/login",json={
         "email":"unknown@example.test","password":"not-a-valid-password"})
     assert response.status_code==429
+
+
+def test_one_time_recovery_preserves_offers_and_cannot_repeat():
+    """Recovery is restricted to a pre-existing account and is idempotent."""
+    import sys
+    sys.modules["main"] = manager
+    reset_spec=importlib.util.spec_from_file_location(
+        "admin_reset_test",Path(__file__).with_name("reset_admin_once.py"))
+    recovery=importlib.util.module_from_spec(reset_spec)
+    reset_spec.loader.exec_module(recovery)
+    with manager.engine.begin() as conn:
+        before=conn.execute(manager.text("SELECT COUNT(*) FROM offers")).scalar_one()
+        assert before == 0
+        try:
+            recovery.reset_once(conn,"wrong@example.test","new-secret-of-adequate-length")
+        except RuntimeError as exc:
+            assert "does not match" in str(exc)
+        else:
+            raise AssertionError("Must not create or reset unknown manager")
+    with manager.engine.begin() as conn:
+        assert recovery.reset_once(conn,"manager@example.test",
+                                  "new-secret-of-adequate-length") == "completed"
+        after=conn.execute(manager.text("SELECT COUNT(*) FROM offers")).scalar_one()
+        assert after == before
+    with manager.engine.begin() as conn:
+        assert recovery.reset_once(conn,"manager@example.test",
+                                  "new-secret-of-adequate-length") == "already_completed"
+        row=conn.execute(manager.text("SELECT password_hash FROM managers WHERE email=:email"),
+                         {"email":"manager@example.test"}).first()
+        assert manager.password_ok("new-secret-of-adequate-length",row[0])
+        assert not manager.password_ok("Test_Password_With_20_Characters!",row[0])
+        audit=conn.execute(manager.text(
+            "SELECT COUNT(*) FROM audit_log WHERE action='admin_password_recovery'")).scalar_one()
+        assert audit == 1
+    response=client.post("/api/auth/login",json={
+        "email":"manager@example.test","password":"new-secret-of-adequate-length"})
+    assert response.status_code==200,response.text
