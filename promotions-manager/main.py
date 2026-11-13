@@ -36,6 +36,24 @@ app.add_middleware(
     allow_methods=["GET"], allow_headers=[]
 )
 
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    """Protect manager responses from caching, framing and content sniffing."""
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "no-referrer"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Cache-Control"] = "no-store"
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'none'; "
+        "script-src 'unsafe-inline'; "
+        "style-src 'unsafe-inline'; "
+        "connect-src 'self'; "
+        "img-src 'self'; "
+        "base-uri 'none'; frame-ancestors 'none'; form-action 'self'"
+    )
+    return response
+
 @contextmanager
 def db():
     DATABASE.parent.mkdir(parents=True, exist_ok=True)
