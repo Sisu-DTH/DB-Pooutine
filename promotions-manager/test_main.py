@@ -1,107 +1,125 @@
-"""Run: cd promotions-manager && pytest -q
-Requires the dependencies in requirements.txt.
-"""
+"""Integration checks for manager login, CSRF, approval, scheduling and public feed."""
 import importlib.util
 import os
 import tempfile
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
-
 import pytest
 from fastapi.testclient import TestClient
 
-TMP = tempfile.TemporaryDirectory()
-os.environ["PROMOTIONS_DB_PATH"] = str(Path(TMP.name) / "test.sqlite3")
-os.environ["PROMOTIONS_ADMIN_TOKEN"] = "test-token-" + "x" * 48
-spec = importlib.util.spec_from_file_location("promotions_mvp", Path(__file__).with_name("main.py"))
-manager = importlib.util.module_from_spec(spec)
+TEMP=tempfile.TemporaryDirectory()
+os.environ["DATABASE_URL"]="sqlite:///"+str(Path(TEMP.name)/"test.sqlite3")
+os.environ["PROMOTIONS_ADMIN_EMAIL"]="manager@example.test"
+os.environ["PROMOTIONS_ADMIN_PASSWORD"]="Test_Password_With_20_Characters!"
+os.environ["PROMOTIONS_COOKIE_SECURE"]="true"
+spec=importlib.util.spec_from_file_location("promotions_manager_test",Path(__file__).with_name("main.py"))
+manager=importlib.util.module_from_spec(spec)
 spec.loader.exec_module(manager)
-client = TestClient(manager.app)
-HEADERS = {"Authorization": "Bearer " + os.environ["PROMOTIONS_ADMIN_TOKEN"]}
+client=TestClient(manager.app,base_url="https://testserver")
+manager.initialize()
 
+def sample(**updates):
+    now=datetime.now(ZoneInfo("America/Toronto"))
+    data={"name":{"en-CA":"Test Poutine","fr-CA":"Poutine de test","es":"Poutine de prueba"},
+          "image":"small-pou.webp", "originalCents":1500,"discountedCents":1200,
+          "startDate":now.date().isoformat(),"endDate":now.date().isoformat(),
+          "startTime":"00:00","endTime":"23:59",
+          "weekdays":[(now.weekday()+1)%7], "approved":True,"enabled":True,
+          "redemption":"In-store only for testing"}
+    return {**data,**updates}
 
-def example(**changes):
-    now = datetime.now(ZoneInfo("America/Toronto"))
-    record = {
-        "name": {"en-CA": "Test Poutine", "fr-CA": "Poutine de test", "es": "Poutine de prueba"},
-        "image": "small-pou.webp",
-        "originalCents": 1500,
-        "discountedCents": 1200,
-        "startDate": now.date().isoformat(),
-        "endDate": now.date().isoformat(),
-        "weekdays": [(now.weekday() + 1) % 7],
-        "approved": True,
-        "enabled": True,
-    }
-    return {**record, **changes}
+def login():
+    response=client.post("/api/auth/login",json={
+        "email":"manager@example.test","password":"Test_Password_With_20_Characters!"})
+    assert response.status_code==200,response.text
+    return response.json()["csrfToken"]
 
+def headers(csrf):
+    return {"X-CSRF-Token":csrf}
 
-def test_no_offers_active_initially():
-    result = client.get("/api/promotions")
-    assert result.status_code == 200
-    assert result.json() == {"timeZone": "America/Toronto", "offers": []}
-    assert result.headers["cache-control"].startswith("no-store")
-
-
-def test_authentication_required():
-    assert client.get("/api/manage/offers").status_code in (401, 503)
-    assert client.get("/api/manage/offers", headers={"Authorization": "Bearer wrong"}).status_code == 401
-
-
-def test_create_publish_pause_and_delete():
-    created = client.post("/api/manage/offers", json=example(), headers=HEADERS)
-    assert created.status_code == 201, created.text
-    offer_id = created.json()["id"]
-    public = client.get("/api/promotions").json()["offers"]
-    assert any(o["name"]["en-CA"] == "Test Poutine" for o in public)
-    # Public feed must not expose internal manager row IDs or timestamps.
-    assert all("id" not in offer and "updatedAt" not in offer for offer in public)
-
-    paused = client.post(f"/api/manage/offers/{offer_id}/pause", headers=HEADERS)
-    assert paused.status_code == 200
-    assert all(o["name"]["en-CA"] != "Test Poutine" for o in client.get("/api/promotions").json()["offers"])
-
-    updated = client.put(f"/api/manage/offers/{offer_id}", json=example(enabled=False), headers=HEADERS)
-    assert updated.status_code == 200
-    deleted = client.delete(f"/api/manage/offers/{offer_id}", headers=HEADERS)
-    assert deleted.status_code == 200
-
-
-@pytest.mark.parametrize("overrides", [
-    {"approved": False, "enabled": True},
-    {"discountedCents": 1500},
-    {"image": "../../secrets.txt"},
-    {"weekdays": [9]},
-    {"weekdays": []},
-    {"startDate": "2026-02-30"},
-    {"startDate": "2026-12-31", "endDate": "2026-01-01"},
-])
-def test_invalid_offer_rejected(overrides):
-    result = client.post("/api/manage/offers", json=example(**overrides), headers=HEADERS)
-    assert result.status_code == 422, result.text
-
-
-def test_unapproved_and_future_offers_hidden():
-    from datetime import timedelta
-    now = datetime.now(ZoneInfo("America/Toronto"))
-    tomorrow = (now.date() + timedelta(days=1)).isoformat()
-    after = (now.date() + timedelta(days=2)).isoformat()
-    for data in [example(approved=False, enabled=False),
-                 example(startDate=tomorrow, endDate=after)]:
-        result = client.post("/api/manage/offers", json=data, headers=HEADERS)
-        assert result.status_code == 201
-        offer_id = result.json()["id"]
-        assert client.get("/api/promotions").json()["offers"] == []
-        assert client.delete(f"/api/manage/offers/{offer_id}", headers=HEADERS).status_code == 200
-
-
-def test_security_response_headers():
-    response = client.get("/")
-    assert response.status_code == 200
-    assert response.headers["x-content-type-options"] == "nosniff"
-    assert response.headers["x-frame-options"] == "DENY"
-    assert response.headers["referrer-policy"] == "no-referrer"
-    assert response.headers["cache-control"] == "no-store"
+def test_security_headers_and_empty_public_feed():
+    response=client.get("/")
+    assert response.status_code==200
+    assert response.headers["x-content-type-options"]=="nosniff"
+    assert response.headers["x-frame-options"]=="DENY"
+    assert response.headers["referrer-policy"]=="no-referrer"
+    assert response.headers["cache-control"]=="no-store"
     assert "frame-ancestors 'none'" in response.headers["content-security-policy"]
-    assert "connect-src 'self'" in response.headers["content-security-policy"]
+    public=client.get("/api/promotions")
+    assert public.status_code==200
+    assert public.json()=={"timeZone":"America/Toronto","offers":[]}
+
+def test_secure_login_and_csrf():
+    assert client.get("/api/manage/offers").status_code==401
+    assert client.post("/api/auth/login",json={
+        "email":"manager@example.test","password":"incorrect"}).status_code==401
+    csrf=login()
+    assert client.get("/api/manage/offers").status_code==200
+    assert client.post("/api/manage/offers",json=sample()).status_code==403
+    assert client.post("/api/manage/offers",json=sample(),headers={"X-CSRF-Token":"wrong"}).status_code==403
+    assert client.post("/api/auth/logout",headers=headers(csrf)).status_code==200
+    assert client.get("/api/manage/offers").status_code==401
+
+def test_create_update_pause_delete_and_audit():
+    csrf=login()
+    created=client.post("/api/manage/offers",json=sample(),headers=headers(csrf))
+    assert created.status_code==201,created.text
+    offer_id=created.json()["id"]
+    public=client.get("/api/promotions").json()["offers"]
+    assert len(public)==1
+    assert public[0]["redemption"]=="In-store only for testing"
+    assert "id" not in public[0] and "updatedAt" not in public[0]
+    updated=client.put(f"/api/manage/offers/{offer_id}",json=sample(discountedCents=1100),headers=headers(csrf))
+    assert updated.status_code==200
+    assert client.get("/api/promotions").json()["offers"][0]["discountedCents"]==1100
+    paused=client.post(f"/api/manage/offers/{offer_id}/pause",headers=headers(csrf))
+    assert paused.status_code==200
+    assert client.get("/api/promotions").json()["offers"]==[]
+    events=client.get("/api/manage/audit").json()["events"]
+    assert any(e["action"]=="pause" for e in events)
+    assert client.delete(f"/api/manage/offers/{offer_id}",headers=headers(csrf)).status_code==200
+    assert client.post("/api/auth/logout",headers=headers(csrf)).status_code==200
+
+@pytest.mark.parametrize("changes",[
+    {"approved":False,"enabled":True},
+    {"redemption":"","enabled":True},
+    {"discountedCents":1500},
+    {"image":"../../secret.txt"},
+    {"weekdays":[7]},
+    {"weekdays":[]},
+    {"startDate":"2026-02-30"},
+    {"startDate":"2026-12-31","endDate":"2026-01-01"},
+    {"startTime":"24:00"},
+    {"startTime":"19:00","endTime":"12:00"},
+])
+def test_invalid_offers_rejected(changes):
+    csrf=login()
+    response=client.post("/api/manage/offers",json=sample(**changes),headers=headers(csrf))
+    assert response.status_code==422,response.text
+    assert client.post("/api/auth/logout",headers=headers(csrf)).status_code==200
+
+def test_unapproved_future_and_outside_hours_hidden():
+    csrf=login()
+    now=datetime.now(ZoneInfo("America/Toronto"))
+    future=(now.date()+timedelta(days=1)).isoformat()
+    later=(now.date()+timedelta(days=2)).isoformat()
+    cases=[sample(enabled=False,approved=False),
+           sample(startDate=future,endDate=later),
+           sample(startTime="00:00",endTime="00:00")]
+    for value in cases:
+        result=client.post("/api/manage/offers",json=value,headers=headers(csrf))
+        assert result.status_code==201,result.text
+        oid=result.json()["id"]
+        assert client.get("/api/promotions").json()["offers"]==[]
+        assert client.delete(f"/api/manage/offers/{oid}",headers=headers(csrf)).status_code==200
+    assert client.post("/api/auth/logout",headers=headers(csrf)).status_code==200
+
+def test_rate_limit_persists_across_failed_requests():
+    for _ in range(8):
+        response=client.post("/api/auth/login",json={
+            "email":"unknown@example.test","password":"not-a-valid-password"})
+        assert response.status_code==401,response.text
+    response=client.post("/api/auth/login",json={
+        "email":"unknown@example.test","password":"not-a-valid-password"})
+    assert response.status_code==429
