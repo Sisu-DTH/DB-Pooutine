@@ -136,12 +136,18 @@ def test_one_time_recovery_preserves_offers_and_cannot_repeat():
     with manager.engine.begin() as conn:
         before=conn.execute(manager.text("SELECT COUNT(*) FROM offers")).scalar_one()
         assert before == 0
+        # A second manager must prevent recovery, so an unrelated account is never overwritten.
+        conn.execute(manager.text(
+            "INSERT INTO managers(email,password_hash) VALUES (:email,:password_hash)"),
+            {"email":"another@example.test","password_hash":manager.password_hash("dummy-password-long-enough")})
         try:
-            recovery.reset_once(conn,"wrong@example.test","new-secret-of-adequate-length")
+            recovery.reset_once(conn,"manager@example.test","new-secret-of-adequate-length")
         except RuntimeError as exc:
-            assert "does not match" in str(exc)
+            assert "exactly one" in str(exc)
         else:
-            raise AssertionError("Must not create or reset unknown manager")
+            raise AssertionError("Recovery must refuse a multi-manager database")
+        conn.execute(manager.text("DELETE FROM managers WHERE email=:email"),
+                     {"email":"another@example.test"})
     with manager.engine.begin() as conn:
         assert recovery.reset_once(conn,"manager@example.test",
                                   "new-secret-of-adequate-length") == "completed"
@@ -165,3 +171,25 @@ def test_one_time_recovery_preserves_offers_and_cannot_repeat():
     response=client.post("/api/auth/login",json={
         "email":"manager@example.test","password":"new-secret-of-adequate-length"})
     assert response.status_code==200,response.text
+
+
+def test_recovery_repairs_sole_manager_email_on_fresh_database():
+    """The sole manager may have been bootstrapped with a wrong email."""
+    import sys
+    sys.modules["main"]=manager
+    spec=importlib.util.spec_from_file_location(
+        "admin_reset_email_test",Path(__file__).with_name("reset_admin_once.py"))
+    recovery=importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(recovery)
+    with manager.engine.begin() as conn:
+        # Make the test's previous recovery marker irrelevant using an isolated recovery ID.
+        old_id=recovery.RECOVERY_ID
+        recovery.RECOVERY_ID="test-email-correction-once"
+        try:
+            assert recovery.reset_once(conn,"corrected@example.test",
+                "corrected-password-over-14-chars")=="completed"
+            row=conn.execute(manager.text("SELECT email,password_hash FROM managers")).first()
+            assert row[0]=="corrected@example.test"
+            assert manager.password_ok("corrected-password-over-14-chars",row[1])
+        finally:
+            recovery.RECOVERY_ID=old_id
