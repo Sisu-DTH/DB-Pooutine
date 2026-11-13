@@ -7,4 +7,4 @@ COPY main.py dashboard.html /app/
 RUN useradd --create-home --uid 10001 manager
 USER manager
 EXPOSE 8000
-CMD ["sh","-c","exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --proxy-headers --forwarded-allow-ips='*'"]
+CMD ["sh","-c","exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
