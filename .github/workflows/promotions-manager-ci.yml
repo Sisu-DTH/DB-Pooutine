@@ -23,6 +23,18 @@ jobs:
         run: python -m pip install -r promotions-manager/requirements.txt
       - name: Compile backend module
         run: python -m py_compile promotions-manager/main.py
+      - name: Validate dashboard JavaScript syntax
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path("promotions-manager/dashboard.html").read_text(encoding="utf-8")
+          match = re.search(r"<script>([\\s\\S]*?)</script>", html)
+          if not match:
+              raise SystemExit("Dashboard script missing")
+          Path("/tmp/sdth_manager_dashboard.js").write_text(match.group(1), encoding="utf-8")
+          PY
+          node --check /tmp/sdth_manager_dashboard.js
       - name: Run FastAPI integration tests
         working-directory: promotions-manager
         run: pytest -q test_main.py
