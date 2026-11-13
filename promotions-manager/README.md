@@ -37,6 +37,12 @@ pytest -q
 
 Tests use a temporary database and synthetic meal/pricing data. They do not affect actual restaurant offers.
 
+## Step 1 — security hardening status
+
+The manager API now sends restrictive response headers: no-store caching, no framing, no referrer leakage, nosniff, and a Content Security Policy. Automated tests assert these headers. The dashboard remains **an isolated development MVP**; this does not amount to a production-grade authentication system.
+
+Before hosting it for a restaurant manager, replace the shared bearer token with per-manager accounts and securely hashed passwords, limited login attempts, secure HttpOnly session cookies, CSRF protection, session expiry, and audit logs. Keep private endpoints inaccessible to untrusted origins. **Do not expose the existing shared-token dashboard on the public internet as the final solution.**
+
 ## Integration and deployment — deliberate safety boundary
 
 The deployed static restaurant site currently loads `smart-promotions.json` locally. It **does not yet request the manager's API**. For the manager to publish offers automatically to the live website:
