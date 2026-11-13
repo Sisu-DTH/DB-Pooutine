@@ -57,41 +57,24 @@
             </div>
         </div>
 
-        <!-- SDTH Smart Promotions: fictional development preview, no live discounts -->
-        <section class="sdth-promo" id="sdth-promo" aria-labelledby="sdth-promo-heading">
-          <p class="sdth-promo__eyebrow" data-promo="eyebrow">SDTH Smart Promotions · Internal preview</p>
-          <h2 id="sdth-promo-heading" data-promo="heading">Today’s Special — Demonstration</h2>
-          <p class="sdth-promo__disclaimer" data-promo="warning">DEMO ONLY: All prices and offers shown are fictional. No discount is valid for orders.</p>
-          <p class="sdth-promo__subhead" data-promo="intro">See how an approved meal promotion could appear here. Your existing menu prices are unchanged.</p>
-          <div class="sdth-promo__controls">
-            <label for="sdth-promo-day" data-promo="label">Preview an Ottawa day:</label>
-            <select id="sdth-promo-day" data-promo="day" aria-label="Preview day in Ottawa">
-              <option value="auto">Automatic (today in Ottawa)</option>
-              <option value="0">Sunday</option><option value="1">Monday</option>
-              <option value="2">Tuesday</option><option value="3">Wednesday</option>
-              <option value="4">Thursday</option><option value="5">Friday</option>
-              <option value="6">Saturday</option>
-            </select>
-          </div>
-          <p class="sdth-promo__clock" data-promo="clock"></p>
-          <div class="sdth-promo__offer" data-promo="offer" aria-live="polite" hidden>
-            <img class="sdth-promo__photo" data-promo="image" src="small-pou.webp" alt="Sample poutine" width="220" height="220" loading="lazy" decoding="async">
+        <!-- Smart Promotions: hidden until a restaurant-approved offer is active. -->
+        <section class="sdth-promo" id="sdth-promo" aria-labelledby="sdth-promo-heading" hidden>
+          <p class="sdth-promo__eyebrow" data-promo="eyebrow">D&amp;B Poutine Special Offer</p>
+          <h2 id="sdth-promo-heading" data-promo="heading">Today's Special</h2>
+          <div class="sdth-promo__offer">
+            <img class="sdth-promo__photo" data-promo="image" src="small-pou.webp"
+                 alt="" width="220" height="220" loading="lazy" decoding="async">
             <div>
-              <p class="sdth-promo__eyebrow" data-promo="sample">Fictional meal offer</p>
               <h3 class="sdth-promo__name" data-promo="meal"></h3>
               <div class="sdth-promo__prices">
                 <span class="sdth-promo__original" data-promo="original"></span>
                 <strong class="sdth-promo__discounted" data-promo="discounted"></strong>
               </div>
               <p class="sdth-promo__saving" data-promo="saving"></p>
-              <a class="sdth-promo__link" href="menu.html" data-promo="link">View the existing menu</a>
+              <p class="sdth-promo__fineprint" data-promo="validity"></p>
+              <a class="sdth-promo__link" href="menu.html" data-promo="link">View Menu</a>
             </div>
           </div>
-          <div class="sdth-promo__empty" data-promo="empty" aria-live="polite" hidden>
-            <p data-promo="noOffer">No example special scheduled for this day.</p>
-            <a class="sdth-promo__link" href="menu.html" data-promo="emptyLink">View the existing menu</a>
-          </div>
-          <p class="sdth-promo__fineprint" data-promo="note">Prototype only. Actual offers require restaurant approval and must be coordinated with ordering platforms.</p>
         </section>
         <hr>
       <div style="background-image:url('14spicew.webp');">
