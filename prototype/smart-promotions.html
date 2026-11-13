@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>SDTH Smart Promotions — Internal Prototype | D&amp;B Poutine</title>
+<style>
+:root{color-scheme:dark;font-family:Verdana,Arial,sans-serif;background:#191919;color:#faf7ef}
+*{box-sizing:border-box}body{margin:0}main{max-width:900px;margin:auto;padding:clamp(16px,4vw,38px)}
+header{border-bottom:3px solid #b9770e;background:#101010;padding:20px max(16px,calc((100vw - 900px)/2))}
+.brand{font-weight:800;font-size:1.4rem;color:#f5b84e}p{line-height:1.65}
+.warning{border:2px solid #f0bc69;padding:14px 18px;background:#3b2c17;border-radius:10px;font-weight:700}
+.card{background:#242424;border:1px solid #6e552c;border-radius:18px;overflow:hidden;display:grid;grid-template-columns:minmax(0,220px) 1fr;gap:22px;padding:20px;margin-top:24px}
+.card img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px}
+.badge{display:inline-block;background:#b9770e;color:#141414;font-size:.85rem;font-weight:700;padding:7px 12px;border-radius:18px}
+.old{text-decoration:line-through;color:#c9c3b9}.new{font-size:1.9rem;color:#ffc665;font-weight:800}.price{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+a.btn{display:inline-block;background:#d3932d;color:#101010;padding:13px 22px;border-radius:9px;font-weight:700;text-decoration:none}a.btn:hover{background:#f4bb59}a:focus-visible,select:focus-visible{outline:3px solid white;outline-offset:3px}
+.controls{display:flex;gap:18px;flex-wrap:wrap;margin:18px 0;align-items:end}label{display:grid;gap:7px;font-weight:700}
+select{min-height:44px;padding:10px;border-radius:7px;background:#faf7ef;color:#111;font-size:1rem}
+.muted{color:#c7c1b8;font-size:.94rem}.hidden{display:none!important}
+@media(max-width:550px){.card{grid-template-columns:1fr}.card img{max-width:260px}.price{gap:8px}}
+</style>
+</head>
+<body>
+<header><div class="brand">D&amp;B Poutine <span style="font-weight:400;font-size:.8rem">× SDTH Smart Promotions</span></div></header>
+<main>
+<p class="warning" id="notice">INTERNAL DEMO ONLY — All discounts and prices below are fictional. No offers are active or redeemable.</p>
+<h1 id="heading">Daily specials — prototype</h1>
+<p id="intro">Preview how an approved offer could appear on the restaurant website. No current menu prices or ordering services are changed.</p>
+<div class="controls">
+<label for="language"><span id="lang-label">Language</span><select id="language"><option value="en-CA">English (Canada)</option><option value="en-GB">English (UK)</option><option value="fr-CA">Français (Canada)</option><option value="es">Español</option></select></label>
+<label for="day"><span id="day-label">Preview day (Ottawa)</span><select id="day"></select></label>
+</div>
+<p id="clock" class="muted" aria-live="polite"></p>
+<section id="special" class="card" aria-live="polite">
+<img id="meal-image" src="../small-pou.webp" alt="Sample poutine dish" width="220" height="220" decoding="async">
+<div>
+<span class="badge" id="badge">DEMO OFFER</span>
+<h2 id="meal"></h2><p id="description"></p>
+<div class="price"><span class="old" id="regular"></span><span class="new" id="discounted"></span></div>
+<p id="saving"></p>
+<a class="btn" id="menu-link" href="../menu.html">View existing menu</a>
+</div>
+</section>
+<section id="no-offer" class="card hidden" aria-live="polite"><div><h2 id="empty-title"></h2><p id="empty-desc"></p><a class="btn" id="empty-link" href="../menu.html">View existing menu</a></div></section>
+<p class="muted" id="footer-note">Prototype only. Real promotions require restaurant approval, accurate pricing and coordination with ordering channels.</p>
+</main>
+<script>
+"use strict";
+// Demonstration data ONLY. Never treat these values as actual D&B Poutine offers or prices.
+// JS weekday numbers: 0=Sunday ... 6=Saturday. Ottawa local time, including DST.
+const samples={
+  1:{name:"Classic Poutine",image:"../small-pou.webp",original:14.99,kind:"percent",amount:10},
+  3:{name:"Chicken Poutine",image:"../chicken-pou.webp",original:16.99,kind:"fixed",amount:3},
+  5:{name:"Hot Dog Combo",image:"../hdcom.webp",original:18.99,kind:"percent",amount:15}
+};
+const strings={
+ "en-CA":{notice:"INTERNAL DEMO ONLY — All discounts and prices below are fictional. No offers are active or redeemable.",heading:"Daily specials — prototype",intro:"Preview how an approved offer could appear on the restaurant website. No current menu prices or ordering services are changed.",lang:"Language",day:"Preview day (Ottawa)",badge:"DEMO OFFER",regular:"Example regular price",save:"Example saving",link:"View existing menu",empty:"No sample special for this day",emptyDesc:"The restaurant's normal menu remains available.",note:"Prototype only. Real promotions require restaurant approval, accurate pricing and coordination with ordering channels.",days:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],current:"Current Ottawa day",preview:"Previewing sample for",meal:{ "Classic Poutine":"Classic Poutine","Chicken Poutine":"Chicken Poutine","Hot Dog Combo":"Hot Dog Combo" },desc:"Illustrative discount only; not a real restaurant offer."},
+ "en-GB":null,
+ "fr-CA":{notice:"DÉMO INTERNE UNIQUEMENT — Les rabais et les prix affichés sont fictifs. Aucune offre n'est active ni utilisable.",heading:"Offres du jour — prototype",intro:"Aperçu d'une offre approuvée sur le site du restaurant. Aucun prix du menu ni service de commande n'est modifié.",lang:"Langue",day:"Jour de prévisualisation (Ottawa)",badge:"OFFRE FICTIVE",regular:"Prix normal fictif",save:"Économie fictive",link:"Voir le menu actuel",empty:"Aucune offre fictive ce jour-là",emptyDesc:"Le menu habituel du restaurant demeure disponible.",note:"Prototype seulement. Toute offre réelle exige l'approbation du restaurant, des prix exacts et une coordination avec les services de commande.",days:["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"],current:"Jour actuel à Ottawa",preview:"Aperçu fictif du",meal:{"Classic Poutine":"Poutine classique","Chicken Poutine":"Poutine au poulet","Hot Dog Combo":"Combo hot-dog"},desc:"Rabais fictif uniquement; il ne s'agit pas d'une offre réelle."},
+ "es":{notice:"SOLO DEMOSTRACIÓN INTERNA — Todos los descuentos y precios son ficticios. No hay ofertas activas ni canjeables.",heading:"Especiales del día — prototipo",intro:"Vista previa de cómo aparecería una oferta aprobada en la web. No se modifican los precios ni los servicios de pedidos.",lang:"Idioma",day:"Día de vista previa (Ottawa)",badge:"OFERTA FICTICIA",regular:"Precio normal de ejemplo",save:"Ahorro de ejemplo",link:"Ver menú actual",empty:"No hay oferta de ejemplo para este día",emptyDesc:"El menú habitual sigue disponible.",note:"Solo prototipo. Las promociones reales requieren aprobación del restaurante, precios correctos y coordinación con los canales de pedidos.",days:["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"],current:"Día actual en Ottawa",preview:"Vista previa de ejemplo del",meal:{"Classic Poutine":"Poutine clásico","Chicken Poutine":"Poutine de pollo","Hot Dog Combo":"Combo de perrito caliente"},desc:"Descuento ilustrativo; no es una oferta real."}
+};
+strings["en-GB"]=strings["en-CA"];
+const $=id=>document.getElementById(id);
+function ottawaDay(){const dayName=new Intl.DateTimeFormat("en-US",{timeZone:"America/Toronto",weekday:"long"}).format(new Date());return ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"].indexOf(dayName);}
+function discount(c){const cents=Math.round(c.original*100);const off=c.kind==="percent"?Math.round(cents*c.amount/100):Math.round(c.amount*100);return {price:Math.max(0,cents-off)/100,saved:Math.min(cents,off)/100};}
+function render(){const lang=$("language").value;const t=strings[lang];document.documentElement.lang=lang;
+const selected=Number($("day").value);const weekday=ottawaDay();const sample=samples[selected];
+$("notice").textContent=t.notice;$("heading").textContent=t.heading;$("intro").textContent=t.intro;$("lang-label").textContent=t.lang;$("day-label").textContent=t.day;
+$("badge").textContent=t.badge;$("menu-link").textContent=t.link;$("empty-title").textContent=t.empty;$("empty-desc").textContent=t.emptyDesc;$("empty-link").textContent=t.link;$("footer-note").textContent=t.note;
+[...$("day").options].forEach((o,i)=>{o.textContent=t.days[i]});
+$("clock").textContent=t.current+": "+t.days[weekday]+". "+t.preview+" "+t.days[selected]+".";
+$("special").classList.toggle("hidden",!sample);$("no-offer").classList.toggle("hidden",!!sample);
+if(!sample)return;
+const money=new Intl.NumberFormat(lang,{style:"currency",currency:"CAD"}),d=discount(sample);
+$("meal").textContent=t.meal[sample.name];$("description").textContent=t.desc;
+$("meal-image").src=sample.image;$("meal-image").alt=t.meal[sample.name];
+$("regular").textContent=t.regular+": "+money.format(sample.original);
+$("discounted").textContent=money.format(d.price);
+$("saving").textContent=t.save+": "+money.format(d.saved);
+}
+for(let i=0;i<7;i++){const option=document.createElement("option");option.value=String(i);$("day").appendChild(option)}
+$("day").value=String(ottawaDay());
+$("language").addEventListener("change",render);$("day").addEventListener("change",render);render();
+</script>
+</body>
+</html>
