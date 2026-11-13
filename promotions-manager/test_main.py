@@ -171,6 +171,12 @@ def test_one_time_recovery_preserves_offers_and_cannot_repeat():
     response=client.post("/api/auth/login",json={
         "email":"manager@example.test","password":"new-secret-of-adequate-length"})
     assert response.status_code==200,response.text
+    # Restore test bootstrap identity for independent later tests.
+    with manager.engine.begin() as conn:
+        conn.execute(manager.text(
+            "UPDATE managers SET password_hash=:hash WHERE email=:email"),
+            {"hash":manager.password_hash("Test_Password_With_20_Characters!"),
+             "email":"manager@example.test"})
 
 
 def test_recovery_repairs_sole_manager_email_on_fresh_database():
@@ -193,6 +199,10 @@ def test_recovery_repairs_sole_manager_email_on_fresh_database():
             assert manager.password_ok("corrected-password-over-14-chars",row[1])
         finally:
             recovery.RECOVERY_ID=old_id
+            conn.execute(manager.text(
+                "UPDATE managers SET email=:email,password_hash=:hash"),
+                {"email":"manager@example.test",
+                 "hash":manager.password_hash("Test_Password_With_20_Characters!")})
 
 
 def test_full_menu_catalogue_requires_login():
