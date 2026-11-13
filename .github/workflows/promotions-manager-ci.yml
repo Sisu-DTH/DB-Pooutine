@@ -1,0 +1,28 @@
+name: Promotions Manager MVP Tests
+
+on:
+  pull_request:
+    paths:
+      - 'promotions-manager/**'
+      - '.github/workflows/promotions-manager-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fastapi-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install manager and test dependencies
+        run: python -m pip install -r promotions-manager/requirements.txt
+      - name: Compile backend module
+        run: python -m py_compile promotions-manager/main.py
+      - name: Run FastAPI integration tests
+        working-directory: promotions-manager
+        run: pytest -q test_main.py
