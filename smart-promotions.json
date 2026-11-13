@@ -1,0 +1,5 @@
+{
+  "_comment": "SDTH Smart Promotions. Leave offers empty until the restaurant authorises real offers. This file is publicly readable. Never put secrets here. Prices are advertising only and do not affect ordering platforms.",
+  "timeZone": "America/Toronto",
+  "offers": []
+}

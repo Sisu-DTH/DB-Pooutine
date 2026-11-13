@@ -1,0 +1,28 @@
+/* SDTH Smart Promotions — isolated homepage prototype styles.
+   This file does not alter the existing D&B Poutine navigation, menu or layout. */
+.sdth-promo{margin:18px auto 26px;padding:clamp(14px,3vw,28px);max-width:1120px;color:#f9f6ee;background:#151515;border:2px solid #b9770e;border-radius:18px;text-align:left}
+.sdth-promo *{box-sizing:border-box}
+.sdth-promo__eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#f8c771;font-weight:800}
+.sdth-promo h2{background:none!important;color:#fff!important;text-align:left;margin:8px 0 10px;padding:0;font-size:clamp(1.45rem,3vw,2rem)}
+.sdth-promo__disclaimer{background:#433117;border:1px solid #f3b750;border-radius:8px;padding:12px 14px;color:#fff0c9;font-size:.88rem;line-height:1.5;font-weight:700;margin:14px 0}
+.sdth-promo__subhead{font-size:.96rem;color:#e5dfd4;line-height:1.6}
+.sdth-promo__controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.sdth-promo__controls label{font-size:.9rem;font-weight:700;color:#f3e8d3}
+.sdth-promo__controls select{background:#fff;color:#191919;min-width:150px;min-height:44px;border:2px solid #b9770e;border-radius:7px;padding:8px;font-size:1rem}
+.sdth-promo__controls select:focus-visible,.sdth-promo__link:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.sdth-promo__clock{color:#d8cfbf;font-size:.85rem;margin:0 0 14px}
+.sdth-promo__offer{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);align-items:center;gap:20px;border:1px solid #6b542f;background:#232323;padding:16px;border-radius:12px}
+.sdth-promo__photo{width:100%;aspect-ratio:1;object-fit:cover;border-radius:9px;display:block}
+.sdth-promo__name{font-weight:800;font-size:clamp(1.15rem,3vw,1.55rem);line-height:1.25;margin:4px 0 12px}
+.sdth-promo__prices{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.sdth-promo__original{color:#d1c8b8;text-decoration:line-through;font-size:1.05rem}
+.sdth-promo__discounted{color:#ffcb72;font-size:clamp(1.45rem,3vw,1.85rem);font-weight:900}
+.sdth-promo__saving{color:#f5e1b8;margin:8px 0 16px}
+.sdth-promo__link{display:inline-block;background:#ce922f;color:#18110a!important;text-decoration:none!important;font-weight:800;border-radius:7px;padding:12px 18px;min-height:44px}
+.sdth-promo__link:hover{background:#ffce7b}
+.sdth-promo__empty{padding:22px 18px;background:#242424;border-radius:11px;border:1px solid #6b542f;line-height:1.6}
+.sdth-promo__empty p{margin-bottom:12px}
+.sdth-promo__fineprint{font-size:.78rem;color:#d8cfbf;line-height:1.55;margin:16px 0 0}
+.sdth-promo [hidden]{display:none!important}
+@media(max-width:540px){.sdth-promo{margin:14px 8px 24px}.sdth-promo__offer{grid-template-columns:1fr}.sdth-promo__photo{max-width:220px}.sdth-promo__controls{align-items:stretch;flex-direction:column}.sdth-promo__controls select{width:100%}}
+@media(prefers-reduced-motion:reduce){.sdth-promo *, .sdth-promo *::before, .sdth-promo *::after{scroll-behavior:auto!important}}

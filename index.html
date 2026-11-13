@@ -18,6 +18,7 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"D&B Poutine","url":"https://dbpoutine.com/","servesCuisine":["Canadian","Poutine"],"address":{"@type":"PostalAddress","streetAddress":"2121 Carling Avenue","addressLocality":"Ottawa","addressRegion":"ON","addressCountry":"CA"},"telephone":"+1-613-400-4898","hasMenu":"https://dbpoutine.com/menu.html"}</script>
     <link rel="preload" as="image" href="slide2.webp" fetchpriority="high">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="smart-promotions.css">
 </head>
 <body>
     <!-- SHARED HEADER: logo > navigation links > language selector > mobile menu -->
@@ -55,6 +56,26 @@
                 
             </div>
         </div>
+
+        <!-- Smart Promotions: hidden until a restaurant-approved offer is active. -->
+        <section class="sdth-promo" id="sdth-promo" aria-labelledby="sdth-promo-heading" hidden>
+          <p class="sdth-promo__eyebrow" data-promo="eyebrow">D&amp;B Poutine Special Offer</p>
+          <h2 id="sdth-promo-heading" data-promo="heading">Today's Special</h2>
+          <div class="sdth-promo__offer">
+            <img class="sdth-promo__photo" data-promo="image" src="small-pou.webp"
+                 alt="" width="220" height="220" loading="lazy" decoding="async">
+            <div>
+              <h3 class="sdth-promo__name" data-promo="meal"></h3>
+              <div class="sdth-promo__prices">
+                <span class="sdth-promo__original" data-promo="original"></span>
+                <strong class="sdth-promo__discounted" data-promo="discounted"></strong>
+              </div>
+              <p class="sdth-promo__saving" data-promo="saving"></p>
+              <p class="sdth-promo__fineprint" data-promo="validity"></p>
+              <a class="sdth-promo__link" href="menu.html" data-promo="link">View Menu</a>
+            </div>
+          </div>
+        </section>
         <hr>
       <div style="background-image:url('14spicew.webp');">
         <!-- FEATURED MENU: category heading > description > linked image cards -->
@@ -200,6 +221,7 @@ if (section && !reduceMotion.matches) {
 <!-- SHARED BEHAVIOUR: mobile navigation and locale switching -->
 <script src="navigation.js" defer></script>
 <script src="language.js" defer></script>
+<script src="smart-promotions.js" defer></script>
 </body>
 </html>
 
