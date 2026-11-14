@@ -30,3 +30,21 @@
 .sdth-promo [hidden]{display:none!important}
 @media(max-width:540px){.sdth-promo{margin:14px auto 24px;text-align:center}.sdth-promo h2{text-align:center}.sdth-promo__offer{grid-template-columns:minmax(0,1fr);justify-items:center}.sdth-promo__photo{max-width:220px}.sdth-promo__prices{justify-content:center}.sdth-promo__controls{align-items:stretch;flex-direction:column}.sdth-promo__controls select{width:100%}}
 @media(prefers-reduced-motion:reduce){.sdth-promo *, .sdth-promo *::before, .sdth-promo *::after{scroll-behavior:auto!important}}
+
+/* The homepage overlay stays in flow so translated hero copy can grow the hero. */
+.main > .welcome-section:has(> .overlay) {
+  display: grid;
+  height: auto;
+  min-height: 80vh;
+  padding-top: 0;
+}
+.main > .welcome-section > .overlay {
+  position: relative;
+  margin-top: 0;
+  height: auto;
+  box-sizing: border-box;
+  padding: clamp(88px, 12vw, 160px) 12px 32px;
+}
+@media (max-width: 460px) {
+  .main > .welcome-section:has(> .overlay) { min-height: 440px; }
+}
