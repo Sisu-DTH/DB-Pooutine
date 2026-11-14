@@ -1193,3 +1193,13 @@ html body .footer a[href*="sisudthofficial"]:focus-visible {
     gap: 32px;
   }
 }
+
+/* Shared footer typography */
+.footer {
+  box-sizing: border-box;
+  padding: clamp(18px, 2vw, 32px) 16px;
+  color: #17120b;
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}

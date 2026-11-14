@@ -300,3 +300,21 @@
         margin-top: 12px;
     }
 }
+
+/* Readable offer terms and savings at every width. */
+.sdth-promo__saving {
+    font-size: clamp(1rem, 1.3vw, 1.25rem);
+    line-height: 1.45;
+}
+
+.sdth-promo__offer .sdth-promo__fineprint {
+    max-width: 65ch;
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 540px) {
+    .sdth-promo__fineprint {
+        margin-inline: auto;
+    }
+}
