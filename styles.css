@@ -1086,8 +1086,44 @@ html body .footer a[href*="sisudthofficial"]:focus-visible {
 
 /* Desktop proportions for the existing page layouts. */
 @media (min-width: 1024px) {
+  .navbar {
+    box-sizing: border-box;
+    top: 0;
+    justify-content: flex-start;
+    gap: clamp(16px, 2vw, 32px);
+    padding: 8px clamp(16px, 3vw, 48px);
+  }
+
   .navbar .logo {
-    width: clamp(80px, 7vw, 112px);
+    flex: 0 0 auto;
+    width: clamp(64px, 5vw, 80px);
+  }
+
+  .navbar .logo img {
+    display: block;
+  }
+
+  .navbar .nav-links {
+    gap: clamp(16px, 1.7vw, 28px);
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar .nav-links li {
+    margin: 0;
+  }
+
+  .navbar .nav-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+
+  .navbar .language-switcher select {
+    max-width: 200px;
+    min-height: 44px;
   }
 
   .main .welcome-section > .overlay h1 {

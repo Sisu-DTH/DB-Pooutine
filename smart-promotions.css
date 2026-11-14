@@ -279,3 +279,25 @@
     display: grid;
     gap: 16px;
 }
+
+/* Balance the photo and offer details on desktop. */
+@media (min-width: 1024px) {
+    .sdth-promo__offer {
+        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+        gap: clamp(24px, 3vw, 48px);
+        padding: clamp(20px, 2.5vw, 32px);
+    }
+
+    .sdth-promo__photo {
+        max-width: 360px;
+        justify-self: center;
+    }
+
+    .sdth-promo__fineprint {
+        font-size: 0.9375rem;
+    }
+
+    .sdth-promo__link {
+        margin-top: 12px;
+    }
+}
