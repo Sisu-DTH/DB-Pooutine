@@ -3,12 +3,12 @@ name: Smart Promotions Website Integration Tests
 on:
   pull_request:
     paths:
-      - 'smart-promotions.js'
-      - 'smart-promotions-source.json'
-      - 'index.html'
-      - 'tests/smart-promotions.test.cjs'
-      - 'tests/check-promotions-api.cjs'
-      - '.github/workflows/smart-promotions-integration-ci.yml'
+      - "smart-promotions.js"
+      - "smart-promotions-source.json"
+      - "index.html"
+      - "tests/smart-promotions.test.cjs"
+      - "tests/check-promotions-api.cjs"
+      - ".github/workflows/smart-promotions-integration-ci.yml"
   workflow_dispatch:
 
 permissions:
@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
       - name: Check JavaScript syntax
         run: node --check smart-promotions.js
       - name: Run no-offer, approved-offer, translation and API failure tests
