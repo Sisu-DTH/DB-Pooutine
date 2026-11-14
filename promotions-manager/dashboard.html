@@ -297,8 +297,8 @@ function drawStory(offer, photo, expiry) {
  const ctx = storyCanvas.getContext('2d');
  ctx.fillStyle='#171717';ctx.fillRect(0,0,1080,1920);
  ctx.textAlign='center';ctx.textBaseline='middle';
- function line(value,y,size,colour='#f9f4eb') {
-  ctx.font='700 '+size+'px system-ui, sans-serif';ctx.fillStyle=colour;
+ function line(value,y,size,colour='#f9f4eb',weight=700) {
+  ctx.font=weight+' '+size+'px system-ui, sans-serif';ctx.fillStyle=colour;
   ctx.fillText(value,540,y,900);
  }
  function wrap(value,y,size,spacing,colour) {
@@ -315,13 +315,17 @@ function drawStory(offer, photo, expiry) {
   return lines.length;
  }
  line('D&B POUTINE',240,55,'#ffcb72');
- line('SPECIAL OFFER',314,44);
+ const savings=offer.originalCents-offer.discountedCents;
+ const rate=new Intl.NumberFormat('en-CA',{style:'percent',maximumFractionDigits:1}).format(savings/offer.originalCents);
+ line(rate+' OFF',354,148,'#ffcb72',900);
+ const ottawaDate=new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Toronto',dateStyle:'short'}).format(new Date());
+ if(offer.startDate===ottawaDate && offer.endDate===ottawaDate)line('TODAY ONLY',465,44);
  const crop=Math.min(photo.naturalWidth,photo.naturalHeight);
- ctx.drawImage(photo,(photo.naturalWidth-crop)/2,(photo.naturalHeight-crop)/2,crop,crop,245,350,590,590);
- const titleLines=wrap(offer.name['en-CA'],985,53,60);
- const priceY=985+titleLines*60+28;
+ ctx.drawImage(photo,(photo.naturalWidth-crop)/2,(photo.naturalHeight-crop)/2,crop,crop,295,515,490,490);
+ const titleLines=wrap(offer.name['en-CA'],1050,53,60);
+ const priceY=1050+titleLines*60+28;
  line('CAD $'+price(offer.discountedCents),priceY,82,'#ffcb72');
- line('Regular $'+price(offer.originalCents)+'  ·  Save $'+price(offer.originalCents-offer.discountedCents),priceY+74,37);
+ line('Regular $'+price(offer.originalCents)+'  ·  Save $'+price(savings),priceY+74,37);
  line('Ends '+expiry,priceY+132,36,'#ffcb72');
  if(offer.startTime!=='00:00'||offer.endTime!=='23:59'||offer.weekdays.length!==7) {
   line('See dbpoutine.com for eligible days and hours',priceY+177,30);
