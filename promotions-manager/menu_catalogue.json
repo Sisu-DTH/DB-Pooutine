@@ -1,0 +1,867 @@
+{
+  "version": 1,
+  "source": "D&B Poutine menu.html on GitHub main; prices must be confirmed with restaurant before publishing",
+  "sourceMenuCommit": "main:a927e20f932378aad920cc6fd2fd753e724c4eab",
+  "sourceLanguageCommit": "main:6c0ed277936e4f8e6016948d671d07306232dc31",
+  "translationNote": "Names use existing site dictionary where exact matches exist; remaining Canadian French/Spanish product labels drafted for manager review, not third-party machine translation.",
+  "items": [
+    {
+      "id": "menu-001",
+      "names": {
+        "en-CA": "D&B Hot Dog Combo",
+        "en-GB": "D&B Hot Dog Combo",
+        "fr-CA": "Combo hot-dog D&B",
+        "es": "Combo de perrito caliente D&B"
+      },
+      "regularCents": 1099,
+      "image": "hdcom.webp",
+      "sourcePrice": "$10.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-002",
+      "names": {
+        "en-CA": "D&B Poutine with Hot Dog Combo",
+        "en-GB": "D&B Poutine with Hot Dog Combo",
+        "fr-CA": "Combo poutine et hot-dog D&B",
+        "es": "Combo de poutine y perrito caliente D&B"
+      },
+      "regularCents": 1299,
+      "image": "poutinewithhd.webp",
+      "sourcePrice": "$12.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-003",
+      "names": {
+        "en-CA": "D&B Tuna Sandwich Combo",
+        "en-GB": "D&B Tuna Sandwich Combo",
+        "fr-CA": "Combo sandwich au thon D&B",
+        "es": "Combo de sándwich de atún D&B"
+      },
+      "regularCents": 1449,
+      "image": "tusand.webp",
+      "sourcePrice": "$14.49",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-004",
+      "names": {
+        "en-CA": "D&B Salad Combo",
+        "en-GB": "D&B Salad Combo",
+        "fr-CA": "Combo salade D&B",
+        "es": "Combo de ensalada D&B"
+      },
+      "regularCents": 1299,
+      "image": "dbsalad.webp",
+      "sourcePrice": "$12.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-005",
+      "names": {
+        "en-CA": "D&B Calamari Combo",
+        "en-GB": "D&B Calamari Combo",
+        "fr-CA": "Combo calmars D&B",
+        "es": "Combo de calamares D&B"
+      },
+      "regularCents": 1899,
+      "image": "cara.webp",
+      "sourcePrice": "$18.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-006",
+      "names": {
+        "en-CA": "D&B Beef Panini Combo",
+        "en-GB": "D&B Beef Panini Combo",
+        "fr-CA": "Combo panini au bœuf D&B",
+        "es": "Combo de panini de ternera D&B"
+      },
+      "regularCents": 1449,
+      "image": "beefp.webp",
+      "sourcePrice": "$14.49",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-007",
+      "names": {
+        "en-CA": "D&B Chicken Panini Combo",
+        "en-GB": "D&B Chicken Panini Combo",
+        "fr-CA": "Combo panini au poulet D&B",
+        "es": "Combo de panini de pollo D&B"
+      },
+      "regularCents": 1449,
+      "image": "chickp.webp",
+      "sourcePrice": "$14.49",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-008",
+      "names": {
+        "en-CA": "D&B Turkey Panini Combo",
+        "en-GB": "D&B Turkey Panini Combo",
+        "fr-CA": "Combo panini à la dinde D&B",
+        "es": "Combo de panini de pavo D&B"
+      },
+      "regularCents": 1549,
+      "image": "turkeyp.webp",
+      "sourcePrice": "$15.49",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-009",
+      "names": {
+        "en-CA": "D&B 6pcs of Wings Combo",
+        "en-GB": "D&B 6pcs of Wings Combo",
+        "fr-CA": "Combo de 6 ailes de poulet D&B",
+        "es": "Combo de 6 alitas de pollo D&B"
+      },
+      "regularCents": 1249,
+      "image": "8w.webp",
+      "sourcePrice": "$12.49",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-010",
+      "names": {
+        "en-CA": "D&B Poutine & wings Combo",
+        "en-GB": "D&B Poutine & wings Combo",
+        "fr-CA": "Combo poutine et ailes de poulet D&B",
+        "es": "Combo de poutine y alitas de pollo D&B"
+      },
+      "regularCents": 1399,
+      "image": "poutinewingcombo.webp",
+      "sourcePrice": "$13.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-011",
+      "names": {
+        "en-CA": "Veggie Poutine",
+        "en-GB": "Veggie Poutine",
+        "fr-CA": "Poutine végétarienne",
+        "es": "Poutine vegetariana"
+      },
+      "regularCents": 699,
+      "image": "Vpoutinc.webp",
+      "sourcePrice": "$6.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-012",
+      "names": {
+        "en-CA": "Tuna",
+        "en-GB": "Tuna",
+        "fr-CA": "Thon",
+        "es": "Atún"
+      },
+      "regularCents": 1099,
+      "image": "tusand.webp",
+      "sourcePrice": "$10.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-013",
+      "names": {
+        "en-CA": "D&B Calamari",
+        "en-GB": "D&B Calamari",
+        "fr-CA": "Calmars D&B",
+        "es": "Calamares D&B"
+      },
+      "regularCents": 1399,
+      "image": "cara.webp",
+      "sourcePrice": "$13.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-014",
+      "names": {
+        "en-CA": "D&B Salad",
+        "en-GB": "D&B Salad",
+        "fr-CA": "Salade D&B",
+        "es": "Ensalada D&B"
+      },
+      "regularCents": 1099,
+      "image": "dbsalad.webp",
+      "sourcePrice": "$10.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-015",
+      "names": {
+        "en-CA": "D&B Chicken Spring Roll (Halal)",
+        "en-GB": "D&B Chicken Spring Roll (Halal)",
+        "fr-CA": "Rouleaux de printemps au poulet D&B (halal)",
+        "es": "Rollitos de primavera de pollo D&B (halal)"
+      },
+      "regularCents": 699,
+      "image": "sproll.webp",
+      "sourcePrice": "$6.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-016",
+      "names": {
+        "en-CA": "D&B Veggie Spring Roll with D&B sauce",
+        "en-GB": "D&B Veggie Spring Roll with D&B sauce",
+        "fr-CA": "Rouleaux de printemps végétariens D&B avec sauce D&B",
+        "es": "Rollitos de primavera vegetarianos D&B con salsa D&B"
+      },
+      "regularCents": 699,
+      "image": "vsproll.webp",
+      "sourcePrice": "$6.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-017",
+      "names": {
+        "en-CA": "D&B Cauliflower",
+        "en-GB": "D&B Cauliflower",
+        "fr-CA": "Chou-fleur D&B",
+        "es": "Coliflor D&B"
+      },
+      "regularCents": 999,
+      "image": "cauliflower.webp",
+      "sourcePrice": "$9.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-018",
+      "names": {
+        "en-CA": "D&B Fish & Chips",
+        "en-GB": "D&B Fish & Chips",
+        "fr-CA": "Poisson-frites D&B",
+        "es": "Pescado con patatas fritas D&B"
+      },
+      "regularCents": 1349,
+      "image": "fishandChips.webp",
+      "sourcePrice": "$13.49",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-019",
+      "names": {
+        "en-CA": "D&B Beef Sambusa",
+        "en-GB": "D&B Beef Sambusa",
+        "fr-CA": "Samboussa au bœuf D&B",
+        "es": "Sambusa de ternera D&B"
+      },
+      "regularCents": 199,
+      "image": "sanbusa.webp",
+      "sourcePrice": "$1.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-020",
+      "names": {
+        "en-CA": "D&B Chicken Nuggets with Fries",
+        "en-GB": "D&B Chicken Nuggets with Fries",
+        "fr-CA": "Croquettes de poulet avec frites D&B",
+        "es": "Nuggets de pollo con patatas fritas D&B"
+      },
+      "regularCents": 699,
+      "image": "nuggets.webp",
+      "sourcePrice": "$6.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-021",
+      "names": {
+        "en-CA": "Sweet Potato",
+        "en-GB": "Sweet Potato",
+        "fr-CA": "Patate douce",
+        "es": "Batata"
+      },
+      "regularCents": 510,
+      "image": "sweetp.webp",
+      "sourcePrice": "$5.10",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-022",
+      "names": {
+        "en-CA": "Small Fries",
+        "en-GB": "Small Fries",
+        "fr-CA": "Petites frites",
+        "es": "Papas fritas pequeñas"
+      },
+      "regularCents": 449,
+      "image": "fries.webp",
+      "sourcePrice": "$4.49",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-023",
+      "names": {
+        "en-CA": "Regular Fries",
+        "en-GB": "Regular Fries",
+        "fr-CA": "Frites régulières",
+        "es": "Papas fritas medianas"
+      },
+      "regularCents": 599,
+      "image": "fries.webp",
+      "sourcePrice": "$5.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-024",
+      "names": {
+        "en-CA": "Large Fries",
+        "en-GB": "Large Fries",
+        "fr-CA": "Grandes frites",
+        "es": "Papas fritas grandes"
+      },
+      "regularCents": 750,
+      "image": "fries.webp",
+      "sourcePrice": "$7.50",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-025",
+      "names": {
+        "en-CA": "Onion Ring",
+        "en-GB": "Onion Ring",
+        "fr-CA": "Rondelles d'oignon",
+        "es": "Aros de cebolla"
+      },
+      "regularCents": 549,
+      "image": "onionr.webp",
+      "sourcePrice": "$5.49",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-026",
+      "names": {
+        "en-CA": "D&B Poutine",
+        "en-GB": "D&B Poutine",
+        "fr-CA": "Poutine D&B",
+        "es": "Poutine D&B"
+      },
+      "regularCents": 699,
+      "image": "small-pou.webp",
+      "sourcePrice": "$6.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-027",
+      "names": {
+        "en-CA": "D&B Chicken Poutine",
+        "en-GB": "D&B Chicken Poutine",
+        "fr-CA": "Poutine au poulet D&B",
+        "es": "Poutine de pollo D&B"
+      },
+      "regularCents": 840,
+      "image": "chicken-pou.webp",
+      "sourcePrice": "$8.40",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-028",
+      "names": {
+        "en-CA": "D&B Poutine Regular",
+        "en-GB": "D&B Poutine Regular",
+        "fr-CA": "Poutine régulière D&B",
+        "es": "Poutine mediana D&B"
+      },
+      "regularCents": 850,
+      "image": "small-pou.webp",
+      "sourcePrice": "$8.50",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-029",
+      "names": {
+        "en-CA": "D&B Chicken Poutine Regular",
+        "en-GB": "D&B Chicken Poutine Regular",
+        "fr-CA": "Poutine au poulet régulière D&B",
+        "es": "Poutine de pollo mediana D&B"
+      },
+      "regularCents": 999,
+      "image": "chicken-pou.webp",
+      "sourcePrice": "$9.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-030",
+      "names": {
+        "en-CA": "D&B Poutine Large",
+        "en-GB": "D&B Poutine Large",
+        "fr-CA": "Grande poutine D&B",
+        "es": "Poutine grande D&B"
+      },
+      "regularCents": 1199,
+      "image": "small-pou.webp",
+      "sourcePrice": "$11.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-031",
+      "names": {
+        "en-CA": "D&B Chicken Poutine Large",
+        "en-GB": "D&B Chicken Poutine Large",
+        "fr-CA": "Grande poutine au poulet D&B",
+        "es": "Poutine de pollo grande D&B"
+      },
+      "regularCents": 1350,
+      "image": "chicken-pou.webp",
+      "sourcePrice": "$13.50",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-032",
+      "names": {
+        "en-CA": "D&B Poutine with hotdog",
+        "en-GB": "D&B Poutine with hotdog",
+        "fr-CA": "Poutine avec hot-dog D&B",
+        "es": "Poutine con perrito caliente D&B"
+      },
+      "regularCents": null,
+      "image": "poutandhd.webp",
+      "sourcePrice": "Small: $8.99, Regular:$10.50",
+      "needsPriceConfirmation": true
+    },
+    {
+      "id": "menu-033",
+      "names": {
+        "en-CA": "D&B Poutine with hotdog Large",
+        "en-GB": "D&B Poutine with hotdog Large",
+        "fr-CA": "Grande poutine avec hot-dog D&B",
+        "es": "Poutine grande con perrito caliente D&B"
+      },
+      "regularCents": 1399,
+      "image": "poutandhd.webp",
+      "sourcePrice": "$13.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-034",
+      "names": {
+        "en-CA": "Chicken Panini",
+        "en-GB": "Chicken Panini",
+        "fr-CA": "Panini au poulet",
+        "es": "Panini de pollo"
+      },
+      "regularCents": 1099,
+      "image": "chickp.webp",
+      "sourcePrice": "$10.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-035",
+      "names": {
+        "en-CA": "Turkey Panini",
+        "en-GB": "Turkey Panini",
+        "fr-CA": "Panini à la dinde",
+        "es": "Panini de pavo"
+      },
+      "regularCents": 1199,
+      "image": "turkeyp.webp",
+      "sourcePrice": "$11.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-036",
+      "names": {
+        "en-CA": "Beef Panini",
+        "en-GB": "Beef Panini",
+        "fr-CA": "Panini au bœuf",
+        "es": "Panini de ternera"
+      },
+      "regularCents": 1099,
+      "image": "beefp.webp",
+      "sourcePrice": "$10.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-037",
+      "names": {
+        "en-CA": "Veggie Panini",
+        "en-GB": "Veggie Panini",
+        "fr-CA": "Panini végétarien",
+        "es": "Panini vegetariano"
+      },
+      "regularCents": 699,
+      "image": "Veggiep.webp",
+      "sourcePrice": "$6.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-038",
+      "names": {
+        "en-CA": "D&B Tuna Sandwich",
+        "en-GB": "D&B Tuna Sandwich",
+        "fr-CA": "Sandwich au thon D&B",
+        "es": "Sándwich de atún D&B"
+      },
+      "regularCents": 1099,
+      "image": "tusand.webp",
+      "sourcePrice": "$10.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-039",
+      "names": {
+        "en-CA": "D&B Chicken Sandwich",
+        "en-GB": "D&B Chicken Sandwich",
+        "fr-CA": "Sandwich au poulet D&B",
+        "es": "Sándwich de pollo D&B"
+      },
+      "regularCents": 1099,
+      "image": "chicksand.webp",
+      "sourcePrice": "$10.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-040",
+      "names": {
+        "en-CA": "D&B Wings (6 Pcs)",
+        "en-GB": "D&B Wings (6 Pcs)",
+        "fr-CA": "Ailes de poulet D&B (6 morceaux)",
+        "es": "Alitas de pollo D&B (6 unidades)"
+      },
+      "regularCents": 900,
+      "image": "8w.webp",
+      "sourcePrice": "$9.00",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-041",
+      "names": {
+        "en-CA": "D&B Wings (9 Pcs)",
+        "en-GB": "D&B Wings (9 Pcs)",
+        "fr-CA": "Ailes de poulet D&B (9 morceaux)",
+        "es": "Alitas de pollo D&B (9 unidades)"
+      },
+      "regularCents": 1199,
+      "image": "8spicew.webp",
+      "sourcePrice": "$11.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-042",
+      "names": {
+        "en-CA": "D&B Wings (12 Pcs)",
+        "en-GB": "D&B Wings (12 Pcs)",
+        "fr-CA": "Ailes de poulet D&B (12 morceaux)",
+        "es": "Alitas de pollo D&B (12 unidades)"
+      },
+      "regularCents": 1599,
+      "image": "14w.webp",
+      "sourcePrice": "$15.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-043",
+      "names": {
+        "en-CA": "D&B Wings Sauces",
+        "en-GB": "D&B Wings Sauces",
+        "fr-CA": "Sauces pour ailes de poulet D&B",
+        "es": "Salsas para alitas D&B"
+      },
+      "regularCents": null,
+      "image": "sauces.webp",
+      "sourcePrice": null,
+      "needsPriceConfirmation": true
+    },
+    {
+      "id": "menu-044",
+      "names": {
+        "en-CA": "D&B Beef Hotdog",
+        "en-GB": "D&B Beef Hotdog",
+        "fr-CA": "Hot-dog au bœuf D&B",
+        "es": "Perrito caliente de ternera D&B"
+      },
+      "regularCents": 449,
+      "image": "beefhd.webp",
+      "sourcePrice": "$4.49",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-045",
+      "names": {
+        "en-CA": "Bacon Hotdog",
+        "en-GB": "Bacon Hotdog",
+        "fr-CA": "Hot-dog au bacon",
+        "es": "Perrito caliente con beicon"
+      },
+      "regularCents": 550,
+      "image": "baconhd.webp",
+      "sourcePrice": "$5.50",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-046",
+      "names": {
+        "en-CA": "Loaded Hotdog",
+        "en-GB": "Loaded Hotdog",
+        "fr-CA": "Hot-dog garni",
+        "es": "Perrito caliente con acompañamientos"
+      },
+      "regularCents": 550,
+      "image": "loadedhd.webp",
+      "sourcePrice": "$5.50",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-047",
+      "names": {
+        "en-CA": "veggie Hotdog",
+        "en-GB": "veggie Hotdog",
+        "fr-CA": "Hot-dog végétarien",
+        "es": "Perrito caliente vegetariano"
+      },
+      "regularCents": 449,
+      "image": "veganhd.webp",
+      "sourcePrice": "$4.49",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-048",
+      "names": {
+        "en-CA": "D&B Gravy",
+        "en-GB": "D&B Gravy",
+        "fr-CA": "Sauce brune D&B",
+        "es": "Salsa gravy D&B"
+      },
+      "regularCents": 250,
+      "image": "gravey.webp",
+      "sourcePrice": "$2.50",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-049",
+      "names": {
+        "en-CA": "D&B Cheese Curds",
+        "en-GB": "D&B Cheese Curds",
+        "fr-CA": "Fromage en grains D&B",
+        "es": "Cuajada de queso D&B"
+      },
+      "regularCents": 250,
+      "image": "cheescard.webp",
+      "sourcePrice": "$2.50",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-050",
+      "names": {
+        "en-CA": "D&B Chili Souces",
+        "en-GB": "D&B Chili Souces",
+        "fr-CA": "Sauces pimentées D&B",
+        "es": "Salsas picantes D&B"
+      },
+      "regularCents": 125,
+      "image": "chilli.webp",
+      "sourcePrice": "$1.25",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-051",
+      "names": {
+        "en-CA": "D&B Spring Roll",
+        "en-GB": "D&B Spring Roll",
+        "fr-CA": "Rouleau de printemps D&B",
+        "es": "Rollito de primavera D&B"
+      },
+      "regularCents": 200,
+      "image": "1spring.webp",
+      "sourcePrice": "$2.00",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-052",
+      "names": {
+        "en-CA": "D&B Calamari",
+        "en-GB": "D&B Calamari",
+        "fr-CA": "Calmars D&B",
+        "es": "Calamares D&B"
+      },
+      "regularCents": 549,
+      "image": "IMG_2221.webp",
+      "sourcePrice": "$5.49",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-053",
+      "names": {
+        "en-CA": "Can of Soft-drinks",
+        "en-GB": "Can of Soft-drinks",
+        "fr-CA": "Boisson gazeuse en canette",
+        "es": "Refresco en lata"
+      },
+      "regularCents": 189,
+      "image": "pepsi.webp",
+      "sourcePrice": "$1.89",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-054",
+      "names": {
+        "en-CA": "Bottle of Soft-drinks",
+        "en-GB": "Bottle of Soft-drinks",
+        "fr-CA": "Boisson gazeuse en bouteille",
+        "es": "Refresco en botella"
+      },
+      "regularCents": 289,
+      "image": "bottle.webp",
+      "sourcePrice": "$2.89",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-055",
+      "names": {
+        "en-CA": "Fountain Drink XS",
+        "en-GB": "Fountain Drink XS",
+        "fr-CA": "Boisson fontaine très petite",
+        "es": "Refresco de máquina extrapequeño"
+      },
+      "regularCents": 125,
+      "image": "Fountedrink.webp",
+      "sourcePrice": "$1.25",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-056",
+      "names": {
+        "en-CA": "Fountain Drink S",
+        "en-GB": "Fountain Drink S",
+        "fr-CA": "Petite boisson fontaine",
+        "es": "Refresco de máquina pequeño"
+      },
+      "regularCents": 160,
+      "image": "Fountedrink.webp",
+      "sourcePrice": "$1.60",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-057",
+      "names": {
+        "en-CA": "Fountain Drink Regular",
+        "en-GB": "Fountain Drink Regular",
+        "fr-CA": "Boisson fontaine régulière",
+        "es": "Refresco de máquina mediano"
+      },
+      "regularCents": 200,
+      "image": "Fountedrink.webp",
+      "sourcePrice": "$2.00",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-058",
+      "names": {
+        "en-CA": "Fountain Drink Large",
+        "en-GB": "Fountain Drink Large",
+        "fr-CA": "Grande boisson fontaine",
+        "es": "Refresco de máquina grande"
+      },
+      "regularCents": 270,
+      "image": "Fountedrink.webp",
+      "sourcePrice": "$2.70",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-059",
+      "names": {
+        "en-CA": "Still Water",
+        "en-GB": "Still Water",
+        "fr-CA": "Eau plate",
+        "es": "Agua sin gas"
+      },
+      "regularCents": 299,
+      "image": "stillw.webp",
+      "sourcePrice": "$2.99",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-060",
+      "names": {
+        "en-CA": "Sparkling Water",
+        "en-GB": "Sparkling Water",
+        "fr-CA": "Eau pétillante",
+        "es": "Agua con gas"
+      },
+      "regularCents": 349,
+      "image": "sparkw.webp",
+      "sourcePrice": "$3.49",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-061",
+      "names": {
+        "en-CA": "Coffee",
+        "en-GB": "Coffee",
+        "fr-CA": "Café",
+        "es": "Café"
+      },
+      "regularCents": 300,
+      "image": "coffee.webp",
+      "sourcePrice": "$3",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-062",
+      "names": {
+        "en-CA": "Espresso",
+        "en-GB": "Espresso",
+        "fr-CA": "Espresso",
+        "es": "Espresso"
+      },
+      "regularCents": 300,
+      "image": "espresso.webp",
+      "sourcePrice": "$3",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-063",
+      "names": {
+        "en-CA": "Macchiato",
+        "en-GB": "Macchiato",
+        "fr-CA": "Macchiato",
+        "es": "Macchiato"
+      },
+      "regularCents": 350,
+      "image": "macchiato.webp",
+      "sourcePrice": "$3.50",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-064",
+      "names": {
+        "en-CA": "Cappuccino",
+        "en-GB": "Cappuccino",
+        "fr-CA": "Cappuccino",
+        "es": "Capuchino"
+      },
+      "regularCents": 350,
+      "image": "cappuccino.webp",
+      "sourcePrice": "$3.50",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-065",
+      "names": {
+        "en-CA": "Latte",
+        "en-GB": "Latte",
+        "fr-CA": "Latté",
+        "es": "Café con leche"
+      },
+      "regularCents": 320,
+      "image": "latte.webp",
+      "sourcePrice": "$3.20",
+      "needsPriceConfirmation": false
+    },
+    {
+      "id": "menu-066",
+      "names": {
+        "en-CA": "Ginger Tea",
+        "en-GB": "Ginger Tea",
+        "fr-CA": "Thé au gingembre",
+        "es": "Té de jengibre"
+      },
+      "regularCents": 400,
+      "image": "gtea.webp",
+      "sourcePrice": "$4",
+      "needsPriceConfirmation": false
+    }
+  ]
+}
