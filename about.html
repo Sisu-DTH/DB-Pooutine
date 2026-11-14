@@ -31,42 +31,37 @@
     />
     <link rel="stylesheet" href="styles.css" />
       <style>
-      .main .about-page-hero { margin: 1%; }
+      .main .about-page-hero {
+        margin: 1%;
+      }
 
       @media (min-width: 1024px) {
-        html body .main .welcome-section.about-page-hero {
-          flex-direction: row !important;
-          align-items: center;
+        .main .about-page-hero {
           max-width: 1200px;
-          margin: 1% auto;
+          margin-inline: auto;
           background: #17120b;
         }
 
-        .main .about-page-hero > a {
-          flex: 0 1 46%;
-          min-width: 0;
-        }
-
         .main .about-page-hero > a > img {
-          width: 100%;
-          max-height: 560px;
+          width: auto;
+          max-width: 100%;
+          max-height: min(560px, 55vh);
+          margin-inline: auto;
           object-fit: contain;
         }
 
         .main .about-page-hero .content {
-          flex: 1 1 0;
-          min-width: 0;
-          padding: clamp(24px, 4vw, 64px);
+          padding: 24px 24px 12px;
         }
 
         .main .about-page-hero .content h1 {
-          font-size: clamp(2rem, 3.2vw, 3rem);
+          font-size: clamp(2rem, 3vw, 3rem);
         }
 
         .main .about-page-hero .content p {
-          max-width: 38ch;
+          max-width: 60ch;
           margin-inline: auto;
-          font-size: clamp(1.125rem, 1.5vw, 1.35rem);
+          font-size: clamp(1.125rem, 1.4vw, 1.35rem);
         }
       }
     </style>
