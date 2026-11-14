@@ -387,6 +387,13 @@ async function refresh(){
     button.addEventListener('click',async()=>{try{await action();status(label+' completed')}catch(e){status(e.message,true)}});
     buttons.appendChild(button);
   }
+  if(offer.approved && offer.enabled && offer.redemption?.trim()){
+   const storyButton=document.createElement('button');
+   storyButton.type='button';
+   storyButton.textContent='Prepare Instagram Story';
+   storyButton.addEventListener('click',()=>prepareStory(offer));
+   buttons.prepend(storyButton);
+  }
   item.appendChild(buttons);box.appendChild(item);
  }
 }
