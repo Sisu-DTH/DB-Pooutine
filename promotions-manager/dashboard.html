@@ -91,13 +91,13 @@ dialog::backdrop{background:#000a}
 <select id="discount-mode">
 <option value="price">Enter the final special price</option>
 <option value="saving">Enter how much the customer saves (CAD)</option>
-<option value="percent">Choose a percentage discount</option>
+<option value="percent" selected>Choose a percentage discount</option>
 </select></label>
-<label for="discount" id="special-price-row">Approved special price (CAD)
-<input required type="number" id="discount" min="0" max="1000000" step="0.01" placeholder="0.00"></label>
+<label for="discount" id="special-price-row" hidden>Approved special price (CAD)
+<input type="number" id="discount" min="0" max="1000000" step="0.01" placeholder="0.00"></label>
 <label for="saving-amount" id="saving-amount-row" hidden>Customer saving (CAD)
 <input type="number" id="saving-amount" min="0.01" step="0.01" placeholder="0.00"></label>
-<label for="discount-percent" id="discount-percent-row" hidden>Percentage off
+<label for="discount-percent" id="discount-percent-row">Percentage off
 <select id="discount-percent"><option value="5">5%</option><option value="10">10%</option>
 <option value="15">15%</option><option value="20">20%</option><option value="25">25%</option>
 <option value="30">30%</option></select></label>
