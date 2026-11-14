@@ -48,3 +48,5 @@
 @media (max-width: 460px) {
   .main > .welcome-section:has(> .overlay) { min-height: 440px; }
 }
+
+.sdth-promo__offers{display:grid;gap:16px}
