@@ -18,7 +18,7 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Restaurant","name":"D&B Poutine","url":"https://dbpoutine.com/","servesCuisine":["Canadian","Poutine"],"address":{"@type":"PostalAddress","streetAddress":"2121 Carling Avenue","addressLocality":"Ottawa","addressRegion":"ON","addressCountry":"CA"},"telephone":"+1-613-400-4898","hasMenu":"https://dbpoutine.com/menu.html"}</script>
     <link rel="preload" as="image" href="slide2.webp" fetchpriority="high">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="smart-promotions.css?v=4">
+    <link rel="stylesheet" href="smart-promotions.css?v=5">
 </head>
 <body>
     <!-- SHARED HEADER: logo > navigation links > language selector > mobile menu -->
@@ -61,6 +61,8 @@
         <section class="sdth-promo" id="sdth-promo" aria-labelledby="sdth-promo-heading" hidden>
           <p class="sdth-promo__eyebrow" data-promo="eyebrow">D&amp;B Poutine Special Offer</p>
           <h2 id="sdth-promo-heading" data-promo="heading">Today's Special</h2>
+          <div class="sdth-promo__offers" data-promo="offers"></div>
+          <template data-promo="card">
           <div class="sdth-promo__offer">
             <img class="sdth-promo__photo" data-promo="image" src="small-pou.webp"
                  alt="" width="220" height="220" loading="lazy" decoding="async">
@@ -80,6 +82,7 @@
               <a class="sdth-promo__link" href="menu.html" data-promo="link">View Menu</a>
             </div>
           </div>
+          </template>
         </section>
         <hr>
       <div style="background-image:url('14spicew.webp');">
@@ -226,7 +229,7 @@ if (section && !reduceMotion.matches) {
 <!-- SHARED BEHAVIOUR: mobile navigation and locale switching -->
 <script src="navigation.js" defer></script>
 <script src="language.js" defer></script>
-<script src="smart-promotions.js?v=5" defer></script>
+<script src="smart-promotions.js?v=6" defer></script>
 </body>
 </html>
 

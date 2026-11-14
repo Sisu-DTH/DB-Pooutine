@@ -10,6 +10,9 @@
   if (!section) return;
   section.hidden = true;
   const get = name => section.querySelector('[data-promo="' + name + '"]');
+  const list = get('offers');
+  const template = get('card');
+  if (!list || !template) return;
   const picker = document.querySelector('[data-language-picker]');
   const API_ORIGIN = 'https://promotions-manager-api-production.up.railway.app';
   const API_PATH = '/api/promotions';
@@ -28,7 +31,7 @@
       save:'Ahorras', discount:rate=>rate+' de descuento', todayOnly:'solo hoy', through:'La oferta termina', terms:'Cómo canjear',
       link:'Ver menú', time:'Hora de Ottawa' }
   };
-  let selected = null;
+  let selected = [];
   let checking = false;
 
   function ottawaDay() {
@@ -65,39 +68,47 @@
   }
 
   function paint() {
-    if (!selected) { section.hidden = true; return; }
+    if (!selected.length) { section.hidden = true; return; }
     const language = picker && wording[picker.value] ? picker.value : 'en-CA';
     const words = wording[language];
-    const itemName = selected.name[language] || selected.name['en-CA'];
     const cad = cents => new Intl.NumberFormat(language, {
       style:'currency',currency:'CAD'
     }).format(cents/100);
 
     get('eyebrow').textContent = words.eyebrow;
     get('heading').textContent = words.heading;
+    const cards = selected.map(offer => renderCard(offer, language, words, cad));
+    list.replaceChildren(...cards);
+    section.hidden = false;
+  }
+
+  function renderCard(offer, language, words, cad) {
+    const card = template.content.cloneNode(true);
+    const get = name => card.querySelector('[data-promo="' + name + '"]');
+    const itemName = offer.name[language] || offer.name['en-CA'];
     get('meal').textContent = itemName;
-    get('image').src = Number.isSafeInteger(selected.photoId) && selected.photoId > 0
-      ? API_ORIGIN + '/api/promotions/photo/' + selected.photoId
-      : selected.image;
+    get('image').src = Number.isSafeInteger(offer.photoId) && offer.photoId > 0
+      ? API_ORIGIN + '/api/promotions/photo/' + offer.photoId
+      : offer.image;
     get('image').alt = itemName;
-    get('original').textContent = cad(selected.originalCents);
-    get('discounted').textContent = cad(selected.discountedCents);
-    const savings = selected.originalCents - selected.discountedCents;
+    get('original').textContent = cad(offer.originalCents);
+    get('discounted').textContent = cad(offer.discountedCents);
+    const savings = offer.originalCents - offer.discountedCents;
     const rate = new Intl.NumberFormat(language, {
       style:'percent',maximumFractionDigits:1
-    }).format(savings / selected.originalCents);
+    }).format(savings / offer.originalCents);
     const today = ottawaDay().date;
-    const todayOnly = selected.startDate === today && selected.endDate === today;
+    const todayOnly = offer.startDate === today && offer.endDate === today;
     get('discount').textContent = words.discount(rate);
     const todayLabel = get('today');
     todayLabel.textContent = todayOnly ? words.todayOnly : '';
     todayLabel.hidden = !todayOnly;
     get('saving').textContent = words.save + ' ' + cad(savings);
     get('validity').textContent = words.through + ': ' +
-      selected.endDate + ' (' + words.time + ')';
-    get('redemption').textContent = words.terms + ': ' + selected.redemption;
+      offer.endDate + ' (' + words.time + ')';
+    get('redemption').textContent = words.terms + ': ' + offer.redemption;
     get('link').textContent = words.link;
-    section.hidden = false;
+    return card;
   }
 
   async function jsonFrom(url, signal) {
@@ -113,7 +124,7 @@
     checking = true;
     // Fail closed even for formerly displayed offers: pause, expiry or
     // network errors must not leave a stale advertisement visible.
-    selected = null;
+    selected = [];
     section.hidden = true;
     const controller = new AbortController();
     const timer = window.setTimeout(() => controller.abort(), 7000);
@@ -125,10 +136,10 @@
       if (!response || response.timeZone !== 'America/Toronto' ||
           !Array.isArray(response.offers)) return;
       const today = ottawaDay();
-      selected = response.offers.find(offer => valid(offer,today)) || null;
+      selected = response.offers.filter(offer => valid(offer,today));
       paint();
     } catch (_error) {
-      selected = null;
+      selected = [];
       section.hidden = true;
     } finally {
       window.clearTimeout(timer);

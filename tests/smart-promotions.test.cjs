@@ -29,6 +29,12 @@ async function render(sourceConfig, responseData, onFetch) {
   const fields=new Map();
   for(const key of ['eyebrow','heading','meal','image','original','discounted',
    'discount','today','saving','validity','redemption','link']) fields.set(key,{textContent:'',src:'',alt:''});
+  const list={children:[],replaceChildren(...cards){this.children=cards}};
+  fields.set('offers',list);
+  fields.set('card',{content:{cloneNode(){
+    const cardFields=new Map([...fields].map(([key,value])=>[key,{...value}]));
+    return {querySelector(selector){return cardFields.get(selector.split('"')[1])}};
+  }}});
   const section={
     hidden:false,
     querySelector(selector){
@@ -56,7 +62,9 @@ async function render(sourceConfig, responseData, onFetch) {
   vm.runInNewContext(source,{document,window,fetch,AbortController,Intl,Date},
     {timeout:3000});
   for(let i=0;i<8;i++) await tick();
-  return {section,fields,picker,calls,interval,document,
+  const fieldView={get(key){return list.children[0]?.querySelector('[data-promo="'+key+'"]') && !['heading','eyebrow'].includes(key)
+    ? list.children[0].querySelector('[data-promo="'+key+'"]') : fields.get(key)}};
+  return {section,fields:fieldView,list,picker,calls,interval,document,
     async flush(){for(let i=0;i<8;i++)await tick()}};
 }
 
@@ -132,4 +140,17 @@ test('paused offer disappears after periodic refresh',async()=>{
   state.interval();
   await state.flush();
   assert.equal(state.section.hidden,true);
+});
+
+test('renders each eligible offer and skips paused offers',async()=>{
+  const state=await render({enabled:true,apiUrl:URL},{
+    timeZone:'America/Toronto',offers:[offer(),offer({enabled:false}),offer({name:{'en-CA':'Tuna Combo','fr-CA':'Combo thon'},photoId:42})]
+  });
+  assert.equal(state.list.children.length,2);
+  const tuna = () => state.list.children[1];
+  assert.equal(tuna().querySelector('[data-promo="meal"]').textContent,'Tuna Combo');
+  assert.match(tuna().querySelector('[data-promo="image"]').src,/\/photo\/42$/);
+  state.picker.value='fr-CA';
+  state.picker.listeners.change();
+  assert.equal(tuna().querySelector('[data-promo="meal"]').textContent,'Combo thon');
 });
