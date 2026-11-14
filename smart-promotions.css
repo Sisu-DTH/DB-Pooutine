@@ -17,7 +17,11 @@
 .sdth-promo__prices{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
 .sdth-promo__original{color:#d1c8b8;text-decoration:line-through;font-size:1.05rem}
 .sdth-promo__discounted{color:#ffcb72;font-size:clamp(1.45rem,3vw,1.85rem);font-weight:900}
-.sdth-promo__saving{color:#f5e1b8;margin:8px 0 16px}
+.sdth-promo__saving{color:#f5e1b8;margin:12px 0 16px}
+.sdth-promo__discount,.sdth-promo__today,.sdth-promo__cash-savings{display:block}
+.sdth-promo__discount{color:#ffcb72;font-size:clamp(2.25rem,6vw,4rem);font-weight:900;line-height:1.05;text-transform:uppercase;overflow-wrap:anywhere}
+.sdth-promo__today{margin-top:6px;font-weight:750}
+.sdth-promo__cash-savings{margin-top:4px}
 .sdth-promo__link{display:inline-block;background:#ce922f;color:#18110a!important;text-decoration:none!important;font-weight:800;border-radius:7px;padding:12px 18px;min-height:44px}
 .sdth-promo__link:hover{background:#ffce7b}
 .sdth-promo__empty{padding:22px 18px;background:#242424;border-radius:11px;border:1px solid #6b542f;line-height:1.6}
