@@ -243,9 +243,18 @@ def session(request: Request):
         raise HTTPException(401, "Session expired")
     return row
 
+def session_csrf(token):
+    # Derive a separate token without exposing the session cookie or rotating it on reload.
+    return sha("sdth-csrf:" + token)
+
+
 def require_write(request: Request, x_csrf_token: str = Header(default="")):
     row = session(request)
-    if not x_csrf_token or not hmac.compare_digest(sha(x_csrf_token), row["csrf_hash"]):
+    restored = session_csrf(request.cookies.get("sdth_session", ""))
+    if not x_csrf_token or not (
+        hmac.compare_digest(x_csrf_token, restored)
+        or hmac.compare_digest(sha(x_csrf_token), row["csrf_hash"])
+    ):
         raise HTTPException(403, "Invalid CSRF token")
     return row["manager_id"]
 
@@ -308,8 +317,9 @@ def logout(request: Request, response: Response, manager_id=Depends(require_writ
     return {"status":"signed out"}
 
 @app.get("/api/auth/me")
-def me(row=Depends(session)):
-    return {"signedIn":True, "managerId":row["manager_id"]}
+def me(request: Request, row=Depends(session)):
+    return {"signedIn": True, "managerId": row["manager_id"],
+            "csrfToken": session_csrf(request.cookies["sdth_session"])}
 
 def current_offer(record, now):
     day=(now.weekday()+1)%7

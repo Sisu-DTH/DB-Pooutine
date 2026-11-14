@@ -42,11 +42,12 @@ dialog::backdrop{background:#000a}
 <section class="card" id="auth-card">
 <h2>Manager access</h2>
 <p>Sign in with your individual manager account. Sessions expire automatically after eight hours.</p>
-<form id="login-form">
+<form id="login-form" hidden>
 <label for="email">Manager email<input id="email" type="email" autocomplete="username" required></label>
 <label for="password">Password<input id="password" type="password" autocomplete="current-password" required></label>
-<div class="actions"><button id="connect" type="submit">Sign in</button><button type="button" class="secondary" id="disconnect">Sign out</button></div>
+<div class="actions"><button id="connect" type="submit">Sign in</button></div>
 </form>
+<button type="button" class="secondary" id="disconnect" hidden>Sign out</button>
 <p id="status" role="status" aria-live="polite"></p>
 </section>
 <div id="workspace" hidden>
@@ -240,7 +241,12 @@ async function request(path,method='GET',body){
  if(body){options.headers['Content-Type']='application/json';options.body=JSON.stringify(body)}
  const res=await fetch(path,options);
  let data={};try{data=await res.json()}catch{}
- if(!res.ok)throw new Error(typeof data.detail==='string'?data.detail:'Request failed ('+res.status+')');
+ if(!res.ok){
+  const error=new Error(typeof data.detail==='string'?data.detail:'Request failed ('+res.status+')');
+  error.status=res.status;
+  if(res.status===401) showSignIn();
+  throw error;
+ }
  return data;
 }
 function clearForm(){
@@ -380,6 +386,28 @@ async function refresh(){
   item.appendChild(buttons);box.appendChild(item);
  }
 }
+function showSignIn(){
+ csrf='';saved=[];catalogue=[];catalogueById=new Map();
+ $('workspace').hidden=true;$('disconnect').hidden=true;$('login-form').hidden=false;
+ if(storyDialog.open)storyDialog.close();
+}
+async function openWorkspace(token){
+ csrf=token;
+ await loadMenu();
+ await refresh();
+ $('workspace').hidden=false;$('login-form').hidden=true;$('disconnect').hidden=false;
+ status('Signed in successfully');
+}
+async function restoreSession(){
+ status('Checking your session…');
+ try{
+  const data=await request('/api/auth/me');
+  await openWorkspace(data.csrfToken);
+ }catch(error){
+  showSignIn();
+  status(error.status===401?'':error.message,error.status!==401);
+ }
+}
 $('login-form').addEventListener('submit',async event=>{
  event.preventDefault();
  try{
@@ -388,12 +416,12 @@ $('login-form').addEventListener('submit',async event=>{
    body:JSON.stringify({email:$('email').value.trim(),password:$('password').value})});
   $('password').value='';
   const data=await res.json();if(!res.ok)throw new Error(data.detail||'Sign-in failed');
-  csrf=data.csrfToken;await loadMenu();await refresh();$('workspace').hidden=false;status('Signed in successfully');
- }catch(err){csrf='';$('workspace').hidden=true;status(err.message,true)}
+  await openWorkspace(data.csrfToken);
+ }catch(err){showSignIn();status(err.message,true)}
 });
 $('disconnect').addEventListener('click',async()=>{
- try{if(csrf)await request('/api/auth/logout','POST')}catch{}
- finally{csrf='';saved=[];catalogue=[];catalogueById=new Map();$('workspace').hidden=true;status('Signed out')}
+ try{await request('/api/auth/logout','POST');showSignIn();status('Signed out')}
+ catch(error){status(error.message,true)}
 });
 $('reload').addEventListener('click',async()=>{try{await refresh();status('Refreshed')}catch(err){status(err.message,true)}});
 $('catalogue-choice').addEventListener('change',chooseMenuItem);
@@ -409,6 +437,7 @@ $('offer-form').addEventListener('submit',async event=>{
  }catch(err){status(err.message,true)}
 });
 clearForm();
+restoreSession();
 })();
 </script>
 </body></html>
