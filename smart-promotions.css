@@ -2,11 +2,9 @@
 
 /* Offer section and headings */
 .sdth-promo {
-    margin: 18px auto 26px;
+    margin: 18px 1% 26px;
     padding: clamp(14px, 3vw, 28px);
     box-sizing: border-box;
-    width: calc(100% - 16px);
-    max-width: 1120px;
     color: #f9f6ee;
     background: #151515;
     border: 2px solid #b9770e;
@@ -213,7 +211,7 @@
 /* Mobile layout */
 @media (max-width: 540px) {
     .sdth-promo {
-        margin: 14px auto 24px;
+        margin: 14px 1% 24px;
         text-align: center;
     }
 
