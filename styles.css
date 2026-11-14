@@ -1083,3 +1083,77 @@ html body .footer a[href*="sisudthofficial"]:focus-visible {
     padding: 8px;
   }
 }
+
+/* Desktop proportions for the existing page layouts. */
+@media (min-width: 1024px) {
+  .navbar .logo {
+    width: clamp(80px, 7vw, 112px);
+  }
+
+  .main .welcome-section > .overlay h1 {
+    font-size: clamp(2.5rem, 4vw, 4.5rem);
+  }
+
+  .main .welcome-section > .overlay p {
+    max-width: 62ch;
+    margin-inline: auto;
+    font-size: clamp(1.125rem, 1.45vw, 1.5rem);
+    line-height: 1.55;
+  }
+
+  .main .photo-gallery,
+  .main .grid-images {
+    max-width: 1320px;
+    margin-inline: auto !important;
+    gap: clamp(20px, 2vw, 36px);
+  }
+
+  .main .menu-page-hero > a {
+    height: clamp(440px, 66vh, 720px);
+  }
+
+  .main .menu-page-hero > a > img {
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .main .menu-page-hero .content {
+    padding: clamp(28px, 3vw, 48px) 24px;
+  }
+
+  .main .menu-page-hero .content h1 {
+    margin: 8px 0 16px;
+    font-size: clamp(2.5rem, 3.4vw, 3.75rem);
+  }
+
+  .main .menu-page-hero .content p {
+    max-width: 62ch;
+    margin-inline: auto;
+    font-size: clamp(1.125rem, 1.4vw, 1.375rem);
+  }
+
+  .menu-section .menu-items {
+    max-width: 1320px;
+    margin-inline: auto;
+    gap: 20px;
+  }
+
+  .main .about-content {
+    max-width: 1180px;
+    margin-inline: auto !important;
+    padding-inline: 24px;
+    font-size: 1.125rem;
+    line-height: 1.65;
+  }
+
+  .main .contact-hero__content {
+    max-width: 760px;
+  }
+
+  .main .contact-section {
+    max-width: 1240px;
+    margin-inline: auto !important;
+    gap: 32px;
+  }
+}
