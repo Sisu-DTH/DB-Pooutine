@@ -33,6 +33,7 @@ dialog{width:min(92vw,480px);max-height:90dvh;background:#262626;color:#f9f4eb;b
 dialog::backdrop{background:#000a}
 #story-preview{display:block;width:min(100%,270px);height:auto;margin:14px auto;border-radius:8px}
 #story-file{color:#ffcb72;align-self:center}
+#photo-preview{display:block;width:min(100%,240px);height:auto;border-radius:8px}
 </style>
 </head>
 <body>
@@ -77,6 +78,14 @@ dialog::backdrop{background:#000a}
 <option value="tusand.webp">Tuna Sandwich</option>
 <option value="dbsalad.webp">Salad</option>
 </select></label>
+<div>
+ <label for="photo-upload">Upload a promotion photo (optional)
+ <input id="photo-upload" type="file" accept="image/jpeg,image/png,image/webp"></label>
+ <p class="muted">JPEG, PNG or WebP, up to 2 MB.</p>
+ <button type="button" class="secondary" id="photo-reset" hidden>Use menu photo</button>
+ <p id="photo-status" role="status"></p>
+ <img id="photo-preview" alt="Selected promotion photo" hidden>
+</div>
 <label for="regular">Approved regular price (CAD)<input required type="number" id="regular" min="0.01" max="1000000" step="0.01" placeholder="0.00"></label>
 <label for="discount-mode">How would you like to set the discount?
 <select id="discount-mode">
@@ -173,6 +182,38 @@ function updatePreview(){
     '. This is a preview only; saving does not publish the offer.';
  }catch(err){$('discount-preview').textContent=err.message}
 }
+let savedPhotoId=null;
+let useMenuPhoto=false;
+let photoPreviewUrl;
+function updatePhotoPreview(){
+ const file=$('photo-upload').files[0];
+ const preview=$('photo-preview');
+ if(photoPreviewUrl)URL.revokeObjectURL(photoPreviewUrl);
+ photoPreviewUrl=file?URL.createObjectURL(file):null;
+ const custom=Boolean(file||savedPhotoId);
+ $('photo-reset').hidden=!custom;
+ $('photo-status').textContent='';
+ preview.hidden=true;
+ preview.src=photoPreviewUrl || (savedPhotoId
+  ? '/api/manage/offer-photo/'+savedPhotoId
+  : '/api/manage/story-photo/'+encodeURIComponent($('image').value));
+}
+$('photo-preview').addEventListener('load',()=>{$('photo-preview').hidden=false});
+$('photo-preview').addEventListener('error',()=>{$('photo-preview').hidden=true;$('photo-status').textContent='Photo preview unavailable.'});
+$('image').addEventListener('change',updatePhotoPreview);
+$('photo-upload').addEventListener('change',()=>{
+ const file=$('photo-upload').files[0];
+ if(file && (file.size>2_000_000 || !['image/jpeg','image/png','image/webp'].includes(file.type))){
+  $('photo-upload').value='';
+  updatePhotoPreview();
+  $('photo-status').textContent='Choose a JPEG, PNG or WebP photo up to 2 MB.';
+  return;
+ }
+ updatePhotoPreview();
+});
+$('photo-reset').addEventListener('click',()=>{
+ $('photo-upload').value='';savedPhotoId=null;useMenuPhoto=true;updatePhotoPreview();
+});
 function chooseMenuItem(){
  const item=selected();
  if(!item){
@@ -193,6 +234,7 @@ function chooseMenuItem(){
    if(item.needsPriceConfirmation)status('This menu entry has no single confirmed price. Check its size or current price before saving.',true);
  }
  updatePreview();
+ if(csrf)updatePhotoPreview();
 }
 async function loadMenu(){
  try{
@@ -251,6 +293,7 @@ async function request(path,method='GET',body){
  return data;
 }
 function clearForm(){
+ savedPhotoId=null;useMenuPhoto=false;
  $('offer-form').reset();$('edit-id').value='';$('form-heading').textContent='Create a promotion';
  $('start-time').value='00:00';$('end-time').value='23:59';
  $('weekdays').querySelectorAll('input').forEach(el=>el.checked=true);
@@ -260,6 +303,7 @@ function edit(id){
  const offer=saved.find(x=>x.id===id);if(!offer)return;
  $('edit-id').value=String(id);$('form-heading').textContent='Edit promotion #'+(saved.indexOf(offer)+1);
  const item=catalogueById.get(offer.catalogueId);
+ $('photo-upload').value='';savedPhotoId=offer.hasCustomPhoto?offer.id:null;useMenuPhoto=false;
  $('catalogue-choice').value=item?item.id:'';
  chooseMenuItem();
  if(!item){
@@ -274,7 +318,7 @@ function edit(id){
  $('redemption').value=offer.redemption||'';
  $('weekdays').querySelectorAll('input').forEach(el=>el.checked=offer.weekdays.includes(Number(el.value)));
  $('approved').checked=offer.approved;$('enabled').checked=offer.enabled;
- updatePreview();$('offer-form').scrollIntoView({behavior:'smooth',block:'start'});
+ updatePreview();updatePhotoPreview();$('offer-form').scrollIntoView({behavior:'smooth',block:'start'});
 }
 const storyDialog = $('story-dialog');
 const storyCanvas = $('story-preview');
@@ -357,7 +401,8 @@ async function prepareStory(offer) {
   const expiry=storyExpiry(offer);
   $('story-countdown').textContent='Countdown ends: '+expiry;
   const photo=new Image();
-  photo.src='/api/manage/story-photo/'+encodeURIComponent(offer.image);
+  photo.src=offer.hasCustomPhoto?'/api/manage/offer-photo/'+offer.id:
+   '/api/manage/story-photo/'+encodeURIComponent(offer.image);
   await photo.decode();
   if(requestId!==storyRequest || !storyDialog.open)return;
   drawStory(offer,photo,expiry);
@@ -437,6 +482,7 @@ async function openWorkspace(token){
  csrf=token;
  await loadMenu();
  await refresh();
+ updatePhotoPreview();
  $('workspace').hidden=false;$('login-form').hidden=true;$('disconnect').hidden=false;
  status('Signed in successfully');
 }
@@ -474,6 +520,15 @@ $('offer-form').addEventListener('submit',async event=>{
  event.preventDefault();
  try{
   const offer=formData(),id=$('edit-id').value;
+  const photo=$('photo-upload').files[0];
+  if(photo){
+   offer.customPhoto=await new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result.split(',')[1]);
+    reader.onerror=()=>reject(new Error('Could not read the selected photo.'));
+    reader.readAsDataURL(photo);
+   });
+  }else if(useMenuPhoto)offer.customPhoto=null;
   await request('/api/manage/offers'+(id?'/'+id:''),id?'PUT':'POST',offer);
   clearForm();await refresh();status('Offer saved');
  }catch(err){status(err.message,true)}
