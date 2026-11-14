@@ -61,6 +61,19 @@ def test_secure_login_and_csrf():
     assert client.post("/api/auth/logout",headers=headers(csrf)).status_code==200
     assert client.get("/api/manage/offers").status_code==401
 
+def test_existing_session_restores_after_refresh():
+    assert client.get("/api/auth/me").status_code == 401
+    login()
+    restored = client.get("/api/auth/me")
+    assert restored.status_code == 200
+    csrf = restored.json()["csrfToken"]
+    assert csrf != client.cookies.get("sdth_session")
+    assert client.get("/api/auth/me").json()["csrfToken"] == csrf
+    assert client.get("/api/manage/offers").status_code == 200
+    assert client.post("/api/auth/logout", headers=headers(csrf)).status_code == 200
+    assert client.get("/api/auth/me").status_code == 401
+
+
 def test_create_update_pause_delete_and_audit():
     csrf=login()
     created=client.post("/api/manage/offers",json=sample(),headers=headers(csrf))
