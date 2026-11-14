@@ -247,7 +247,7 @@ class OfferInput(BaseModel):
                    ("en-CA", "fr-CA", "es")):
                 raise ValueError("Selected meal names must match the menu catalogue")
         if self.discountedCents >= self.originalCents: raise ValueError("Discount must reduce price")
-        for value in (self.startTime,self.endTime):
+        for value in (self.startTime, self.endTime):
             if not re.fullmatch(r"(?:[01]\d|2[0-3]):[0-5]\d", value):
                 raise ValueError("Times must be HH:MM in Ottawa local time")
         if self.startTime > self.endTime: raise ValueError("Overnight offers require separate daily schedules")
@@ -260,7 +260,7 @@ def session(request: Request):
     if not token: raise HTTPException(401, "Please sign in")
     with engine.begin() as conn:
         row = conn.execute(text("""SELECT manager_id,csrf_hash,expires_at FROM sessions
-                               WHERE token_hash=:token"""), {"token":sha(token)}).mappings().first()
+                               WHERE token_hash=:token"""), {"token": sha(token)}).mappings().first()
     if not row or row["expires_at"] <= int(time.time()):
         raise HTTPException(401, "Session expired")
     return row
@@ -283,8 +283,8 @@ def require_write(request: Request, x_csrf_token: str = Header(default="")):
 def record(conn, manager_id, action, offer_id=None):
     conn.execute(text("""INSERT INTO audit_log(manager_id,action,offer_id,timestamp)
                          VALUES (:manager,:action,:offer,:ts)"""),
-                 {"manager":manager_id,"action":action,"offer":offer_id,
-                  "ts":datetime.now(OTTAWA).isoformat(timespec="seconds")})
+                 {"manager": manager_id, "action": action, "offer": offer_id,
+                  "ts": datetime.now(OTTAWA).isoformat(timespec="seconds")})
 
 @app.post("/api/auth/login")
 def login(credentials: Login, response: Response, request: Request):
@@ -296,11 +296,11 @@ def login(credentials: Login, response: Response, request: Request):
     with engine.begin() as conn:
         for key in keys:
             item = conn.execute(text("SELECT count,window_start FROM auth_attempts WHERE key=:key"),
-                                {"key":key}).mappings().first()
+                                {"key": key}).mappings().first()
             if item and now - item["window_start"] < 900 and item["count"] >= 8:
                 raise HTTPException(429, "Too many sign-in attempts; try again later")
         row = conn.execute(text("SELECT id,password_hash FROM managers WHERE email=:email"),
-                           {"email":email}).mappings().first()
+                           {"email": email}).mappings().first()
         # Deliberately run a real expensive hash for unknown users to reduce enumeration timing.
         valid = password_ok(credentials.password, row["password_hash"]) if row else password_ok(
             credentials.password, "pbkdf2_sha256$600000$" + "00"*16 + "$" + "00"*32)
@@ -308,35 +308,35 @@ def login(credentials: Login, response: Response, request: Request):
         if failed:
             for key in keys:
                 item = conn.execute(text("SELECT count,window_start FROM auth_attempts WHERE key=:key"),
-                                    {"key":key}).mappings().first()
+                                    {"key": key}).mappings().first()
                 count = item["count"]+1 if item and now-item["window_start"] < 900 else 1
-                conn.execute(text("DELETE FROM auth_attempts WHERE key=:key"), {"key":key})
+                conn.execute(text("DELETE FROM auth_attempts WHERE key=:key"), {"key": key})
                 conn.execute(text("""INSERT INTO auth_attempts(key,count,window_start)
-                    VALUES (:key,:count,:start)"""), {"key":key,"count":count,"start":now})
+                    VALUES (:key,:count,:start)"""), {"key": key, "count": count, "start": now})
             failed = True
         if not failed:
             for key in keys:
-                conn.execute(text("DELETE FROM auth_attempts WHERE key=:key"), {"key":key})
+                conn.execute(text("DELETE FROM auth_attempts WHERE key=:key"), {"key": key})
             sid, csrf = secrets.token_urlsafe(48), secrets.token_urlsafe(32)
             conn.execute(text("""INSERT INTO sessions(token_hash,manager_id,csrf_hash,expires_at)
                              VALUES (:token,:id,:csrf,:expiry)"""),
-                         {"token":sha(sid),"id":row["id"],"csrf":sha(csrf),
-                          "expiry":now+SESSION_SECONDS})
+                         {"token": sha(sid), "id": row["id"], "csrf": sha(csrf),
+                          "expiry": now+SESSION_SECONDS})
             record(conn, row["id"], "login")
     if failed:
         raise HTTPException(401, "Invalid email or password")
-    response.set_cookie("sdth_session",sid,max_age=SESSION_SECONDS,httponly=True,
-                        secure=COOKIE_SECURE,samesite="strict",path="/")
-    return {"csrfToken":csrf, "expiresInSeconds":SESSION_SECONDS}
+    response.set_cookie("sdth_session", sid, max_age=SESSION_SECONDS, httponly=True,
+                        secure=COOKIE_SECURE, samesite="strict", path="/")
+    return {"csrfToken": csrf, "expiresInSeconds": SESSION_SECONDS}
 
 @app.post("/api/auth/logout")
 def logout(request: Request, response: Response, manager_id=Depends(require_write)):
     token = request.cookies.get("sdth_session", "")
     with engine.begin() as conn:
-        conn.execute(text("DELETE FROM sessions WHERE token_hash=:token"), {"token":sha(token)})
-        record(conn,manager_id,"logout")
-    response.delete_cookie("sdth_session",path="/")
-    return {"status":"signed out"}
+        conn.execute(text("DELETE FROM sessions WHERE token_hash=:token"), {"token": sha(token)})
+        record(conn, manager_id, "logout")
+    response.delete_cookie("sdth_session", path="/")
+    return {"status": "signed out"}
 
 @app.get("/api/auth/me")
 def me(request: Request, row=Depends(session)):
@@ -348,16 +348,16 @@ def current_offer(record, now):
     today=now.strftime("%Y-%m-%d")
     clock=now.strftime("%H:%M")
     return (record["enabled"] and record["approved"] and
-            record["startDate"]<=today<=record["endDate"] and
+            record["startDate"] <= today <= record["endDate"] and
             day in record["weekdays"] and
-            record.get("startTime","00:00")<=clock<=record.get("endTime","23:59"))
+            record.get("startTime", "00:00") <= clock <= record.get("endTime", "23:59"))
 
 def as_offer(row):
     payload = json.loads(row["payload"])
     has_photo = bool(payload.pop("customPhoto", None))
-    return {"id":row["id"], **payload, "hasCustomPhoto": has_photo,
-            "enabled":bool(row["enabled"]),"approved":bool(row["approved"]),
-            "updatedAt":row["updated_at"]}
+    return {"id": row["id"], **payload, "hasCustomPhoto": has_photo,
+            "enabled": bool(row["enabled"]), "approved": bool(row["approved"]),
+            "updatedAt": row["updated_at"]}
 
 @app.get("/api/manage/story-photo/{filename}")
 def story_photo(filename: str, manager=Depends(session)):
@@ -405,7 +405,7 @@ def public_offer_photo(offer_id: int):
 
 
 @app.get("/health")
-def health(): return {"status":"ok"}
+def health(): return {"status": "ok"}
 
 @app.get("/api/promotions")
 def public_promotions():
@@ -415,15 +415,15 @@ def public_promotions():
     offers=[]
     for row in rows:
         offer=as_offer(row)
-        if current_offer(offer,now):
-            offers.append({key:offer[key] for key in (
-                "enabled","approved","startDate","endDate","weekdays","name",
-                "image","originalCents","discountedCents","redemption"
+        if current_offer(offer, now):
+            offers.append({key: offer[key] for key in (
+                "enabled", "approved", "startDate", "endDate", "weekdays", "name",
+                "image", "originalCents", "discountedCents", "redemption"
             )})
             if offer["hasCustomPhoto"]:
                 offers[-1]["photoId"] = offer["id"]
-    return JSONResponse({"timeZone":"America/Toronto","offers":offers},
-                        headers={"Cache-Control":"no-store"})
+    return JSONResponse({"timeZone": "America/Toronto", "offers": offers},
+                        headers={"Cache-Control": "no-store"})
 
 @app.get("/api/manage/menu")
 def manager_menu(row=Depends(session)):
@@ -436,21 +436,21 @@ def list_offers(row=Depends(session)):
         rows=conn.execute(text("SELECT * FROM offers ORDER BY id DESC")).mappings().all()
     return {"offers":[as_offer(x) for x in rows]}
 
-@app.post("/api/manage/offers",status_code=201)
-def create_offer(offer:OfferInput,manager_id=Depends(require_write)):
+@app.post("/api/manage/offers", status_code=201)
+def create_offer(offer: OfferInput, manager_id=Depends(require_write)):
     data=offer.model_dump()
     with engine.begin() as conn:
-        args={"payload":json.dumps({k:v for k,v in data.items() if k not in ("enabled","approved")}),
-              "enabled":int(offer.enabled),"approved":int(offer.approved),
-              "updated_at":datetime.now(OTTAWA).isoformat(timespec="seconds")}
+        args={"payload": json.dumps({k: v for k, v in data.items() if k not in ("enabled", "approved")}),
+              "enabled": int(offer.enabled), "approved": int(offer.approved),
+              "updated_at": datetime.now(OTTAWA).isoformat(timespec="seconds")}
         row=conn.execute(text("""INSERT INTO offers(payload,enabled,approved,updated_at)
-                   VALUES (:payload,:enabled,:approved,:updated_at) RETURNING id"""),args).first()
+                   VALUES (:payload,:enabled,:approved,:updated_at) RETURNING id"""), args).first()
         offer_id=row[0]
-        record(conn,manager_id,"create",offer_id)
-    return {"id":offer_id,"status":"created"}
+        record(conn, manager_id, "create", offer_id)
+    return {"id": offer_id, "status": "created"}
 
 @app.put("/api/manage/offers/{offer_id}")
-def update_offer(offer_id:int,offer:OfferInput,manager_id=Depends(require_write)):
+def update_offer(offer_id: int, offer: OfferInput, manager_id=Depends(require_write)):
     data=offer.model_dump()
     with engine.begin() as conn:
         if "customPhoto" not in offer.model_fields_set:
@@ -461,28 +461,28 @@ def update_offer(offer_id:int,offer:OfferInput,manager_id=Depends(require_write)
                 data["customPhoto"] = json.loads(old).get("customPhoto")
         changed=conn.execute(text("""UPDATE offers SET payload=:payload,enabled=:enabled,
             approved=:approved,updated_at=:updated_at WHERE id=:id"""),
-            {"payload":json.dumps({k:v for k,v in data.items() if k not in ("enabled","approved")}),
-             "enabled":int(offer.enabled),"approved":int(offer.approved),
-             "updated_at":datetime.now(OTTAWA).isoformat(timespec="seconds"),"id":offer_id})
-        if not changed.rowcount: raise HTTPException(404,"Offer not found")
-        record(conn,manager_id,"update",offer_id)
-    return {"id":offer_id,"status":"updated"}
+            {"payload": json.dumps({k: v for k, v in data.items() if k not in ("enabled", "approved")}),
+             "enabled": int(offer.enabled), "approved": int(offer.approved),
+             "updated_at": datetime.now(OTTAWA).isoformat(timespec="seconds"), "id": offer_id})
+        if not changed.rowcount: raise HTTPException(404, "Offer not found")
+        record(conn, manager_id, "update", offer_id)
+    return {"id": offer_id, "status": "updated"}
 
 @app.post("/api/manage/offers/{offer_id}/pause")
-def pause_offer(offer_id:int,manager_id=Depends(require_write)):
+def pause_offer(offer_id: int, manager_id=Depends(require_write)):
     with engine.begin() as conn:
-        changed=conn.execute(text("UPDATE offers SET enabled=0 WHERE id=:id"),{"id":offer_id})
-        if not changed.rowcount: raise HTTPException(404,"Offer not found")
-        record(conn,manager_id,"pause",offer_id)
-    return {"id":offer_id,"status":"paused"}
+        changed=conn.execute(text("UPDATE offers SET enabled=0 WHERE id=:id"),{"id": offer_id})
+        if not changed.rowcount: raise HTTPException(404, "Offer not found")
+        record(conn, manager_id, "pause", offer_id)
+    return {"id": offer_id, "status": "paused"}
 
 @app.delete("/api/manage/offers/{offer_id}")
-def delete_offer(offer_id:int,manager_id=Depends(require_write)):
+def delete_offer(offer_id: int, manager_id=Depends(require_write)):
     with engine.begin() as conn:
-        changed=conn.execute(text("DELETE FROM offers WHERE id=:id"),{"id":offer_id})
-        if not changed.rowcount: raise HTTPException(404,"Offer not found")
-        record(conn,manager_id,"delete",offer_id)
-    return {"id":offer_id,"status":"deleted"}
+        changed=conn.execute(text("DELETE FROM offers WHERE id=:id"),{"id": offer_id})
+        if not changed.rowcount: raise HTTPException(404, "Offer not found")
+        record(conn, manager_id, "delete", offer_id)
+    return {"id": offer_id, "status": "deleted"}
 
 @app.get("/api/manage/audit")
 def audit(row=Depends(session)):
@@ -490,6 +490,6 @@ def audit(row=Depends(session)):
         items=conn.execute(text("SELECT * FROM audit_log ORDER BY id DESC LIMIT 100")).mappings().all()
     return {"events":[dict(item) for item in items]}
 
-@app.get("/",response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 def dashboard():
     return (APP_DIR/"dashboard.html").read_text(encoding="utf-8")
