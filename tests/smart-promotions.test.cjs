@@ -83,7 +83,7 @@ test('valid Ottawa offer renders translated meal, CAD amount and redemption term
   assert.equal(state.section.hidden,false);
   assert.equal(state.fields.get('meal').textContent,'D&B Poutine');
   assert.match(state.fields.get('saving').textContent,/1\.05/);
-  assert.match(state.fields.get('saving').textContent,/15\s*%/);
+  assert.match(state.fields.get('saving').textContent,/^15\s*% off today only.*1\.05/);
   assert.match(state.fields.get('redemption').textContent,/In-store only/);
   state.picker.value='fr-CA';
   state.picker.listeners.change();
