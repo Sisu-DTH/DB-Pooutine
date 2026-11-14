@@ -32,6 +32,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 dialog{width:min(92vw,480px);max-height:90dvh;background:#262626;color:#f9f4eb;border:1px solid #74603d;border-radius:12px;padding:18px}
 dialog::backdrop{background:#000a}
 #story-preview{display:block;width:min(100%,270px);height:auto;margin:14px auto;border-radius:8px}
+#story-file{color:#ffcb72;align-self:center}
 </style>
 </head>
 <body>
@@ -112,7 +113,7 @@ dialog::backdrop{background:#000a}
 <div class="actions"><button type="submit">Save offer</button><button type="button" class="secondary" id="clear">Clear form</button></div>
 </form>
 </section>
-<section class="card"><h2>Saved offers</h2><div class="actions"><button id="reload" class="secondary">Refresh list</button></div><div id="offers" aria-live="polite">No offers loaded.</div></section>
+<section class="card"><h2 id="saved-offers-heading">Saved offers</h2><div class="actions"><button id="reload" class="secondary">Refresh list</button></div><div id="offers" aria-live="polite">No offers loaded.</div></section>
 </div>
 <dialog id="story-dialog" aria-labelledby="story-heading">
 <h2 id="story-heading">Instagram Story preview</h2>
@@ -120,7 +121,7 @@ dialog::backdrop{background:#000a}
 <canvas id="story-preview" width="1080" height="1920" aria-label="Branded Instagram Story preview" hidden></canvas>
 <p id="story-status" role="status"></p>
 <p class="muted">Add the Countdown sticker in Instagram using the Ottawa date and time above. If the offer ends early, remove the Story in Instagram.</p>
-<div class="actions"><button type="button" id="story-download" disabled>Download Story image</button><form method="dialog"><button class="secondary">Close</button></form></div>
+<div class="actions"><button type="button" id="story-download" disabled>Save Story image</button><a id="story-file" target="_blank" rel="noopener" hidden>Open image to save manually</a><form method="dialog"><button class="secondary">Close</button></form></div>
 </dialog>
 </main>
 <script>
@@ -257,7 +258,7 @@ function clearForm(){
 }
 function edit(id){
  const offer=saved.find(x=>x.id===id);if(!offer)return;
- $('edit-id').value=String(id);$('form-heading').textContent='Edit promotion #'+id;
+ $('edit-id').value=String(id);$('form-heading').textContent='Edit promotion #'+(saved.indexOf(offer)+1);
  const item=catalogueById.get(offer.catalogueId);
  $('catalogue-choice').value=item?item.id:'';
  chooseMenuItem();
@@ -278,6 +279,16 @@ function edit(id){
 const storyDialog = $('story-dialog');
 const storyCanvas = $('story-preview');
 let storyRequest = 0;
+let storyFile;
+let storyUrl;
+storyDialog.addEventListener('close',()=>{
+ ++storyRequest;
+ if(storyUrl)URL.revokeObjectURL(storyUrl);
+ storyUrl=undefined;
+ storyFile=undefined;
+ const link=$('story-file');
+ link.removeAttribute('href');link.hidden=true;
+});
 
 function storyExpiry(offer) {
  const ending = new Date(offer.endDate + 'T12:00:00Z');
@@ -351,6 +362,13 @@ async function prepareStory(offer) {
   if(requestId!==storyRequest || !storyDialog.open)return;
   drawStory(offer,photo,expiry);
   storyCanvas.hidden=false;
+  const blob=await new Promise(resolve=>storyCanvas.toBlob(resolve,'image/jpeg',0.92));
+  if(requestId!==storyRequest || !storyDialog.open)return;
+  if(!blob)throw new Error('Could not create the Story image. Close and try again.');
+  storyFile=new File([blob],'db-poutine-instagram-story.jpg',{type:'image/jpeg'});
+  storyUrl=URL.createObjectURL(storyFile);
+  const link=$('story-file');
+  link.href=storyUrl;link.hidden=false;
   $('story-download').disabled=false;
   $('story-status').textContent='';
  } catch(error) {
@@ -359,20 +377,33 @@ async function prepareStory(offer) {
  }
 }
 
-$('story-download').addEventListener('click',()=>{
+$('story-download').addEventListener('click',async()=>{
+ if(!storyFile)return;
+ const shareData={files:[storyFile]};
+ if(navigator.canShare?.(shareData)){
+  try{
+   await navigator.share(shareData);
+  }catch(error){
+   if(error.name!=='AbortError')
+    $('story-status').textContent='Sharing was unavailable. Open the image and touch and hold it to save.';
+  }
+  return;
+ }
  const link=document.createElement('a');
- link.href=storyCanvas.toDataURL('image/jpeg',0.92);
- link.download='db-poutine-instagram-story.jpg';
- link.click();
+ link.href=storyUrl;link.download=storyFile.name;
+ document.body.appendChild(link);
+ link.click();link.remove();
+ $('story-status').textContent='If the download does not appear, open the image and touch and hold it to save.';
 });
 
 async function refresh(){
  const data=await request('/api/manage/offers');saved=data.offers;
+ $('saved-offers-heading').textContent='Saved offers ('+saved.length+')';
  const box=$('offers');box.replaceChildren();
  if(!saved.length){box.textContent='No saved offers. No promotions are active.';return}
- for(const offer of saved){
+ for(const [index,offer] of saved.entries()){
   const item=document.createElement('div');item.className='offer';
-  const title=document.createElement('strong');title.textContent=offer.name['en-CA']+' · #'+offer.id;item.appendChild(title);
+  const title=document.createElement('strong');title.textContent=offer.name['en-CA']+' · #'+(index+1);item.appendChild(title);
   const desc=document.createElement('p');
   desc.textContent=offer.startDate+' to '+offer.endDate+'; '+(offer.startTime||'00:00')+'–'+(offer.endTime||'23:59')+
     ' Ottawa | CAD '+price(offer.originalCents)+' → '+price(offer.discountedCents)+
