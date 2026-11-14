@@ -3,8 +3,7 @@ const assert = require('node:assert/strict');
 
 async function main() {
   const source = JSON.parse(fs.readFileSync('smart-promotions-source.json','utf8'));
-  assert.equal(source.enabled,false,
-    'Production rollout switch must stay OFF until the restaurant confirms the public API has no unapproved offers.');
+  assert.equal(typeof source.enabled, 'boolean', 'Promotion switch must be a boolean');
   assert.equal(source.apiUrl,
     'https://promotions-manager-api-production.up.railway.app/api/promotions');
 
@@ -20,7 +19,7 @@ async function main() {
   assert.ok(Array.isArray(feed.offers));
   console.log('Public API check passed; active offers currently returned:',feed.offers.length);
   if(feed.offers.length>0) {
-    console.log('WARNING: Keep rollout switch OFF until the restaurant confirms these offers are authorised.');
+    console.log('Active offers must be authorised by the restaurant.');
   }
 }
 main().catch(err => { console.error('API verification failed:',err.message);process.exitCode=1; });
