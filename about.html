@@ -30,6 +30,28 @@
       fetchpriority="high"
     />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      @media (min-width: 1024px) {
+        .main .about-page-hero > a {
+          height: clamp(320px, 48vh, 520px);
+        }
+
+        .main .about-page-hero > a > img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center 38%;
+        }
+
+        .main .about-page-hero .content h1 {
+          font-size: clamp(2rem, 2.8vw, 3rem);
+        }
+
+        .main .about-page-hero .content p {
+          font-size: clamp(1.125rem, 1.35vw, 1.375rem);
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- SHARED HEADER: logo > navigation links > language selector > mobile menu -->
@@ -89,7 +111,6 @@
             src="assets/images/Aboutdb.webp"
             width="855"
             height="1100"
-            style="width: 100%; height: auto"
             alt="Exterior of D&B Poutine restaurant at Carlingwood Shopping Centre"
             fetchpriority="high"
             loading="eager"
