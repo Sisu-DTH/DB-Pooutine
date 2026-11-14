@@ -28,7 +28,7 @@ const tick = () => new Promise(resolve => setImmediate(resolve));
 async function render(sourceConfig, responseData, onFetch) {
   const fields=new Map();
   for(const key of ['eyebrow','heading','meal','image','original','discounted',
-   'saving','validity','redemption','link']) fields.set(key,{textContent:'',src:'',alt:''});
+   'discount','today','saving','validity','redemption','link']) fields.set(key,{textContent:'',src:'',alt:''});
   const section={
     hidden:false,
     querySelector(selector){
@@ -83,7 +83,9 @@ test('valid Ottawa offer renders translated meal, CAD amount and redemption term
   assert.equal(state.section.hidden,false);
   assert.equal(state.fields.get('meal').textContent,'D&B Poutine');
   assert.match(state.fields.get('saving').textContent,/1\.05/);
-  assert.match(state.fields.get('saving').textContent,/^15\s*% off today only.*1\.05/);
+  assert.equal(state.fields.get('discount').textContent,'15% off');
+  assert.equal(state.fields.get('today').textContent,'today only');
+  assert.equal(state.fields.get('today').hidden,false);
   assert.match(state.fields.get('redemption').textContent,/In-store only/);
   state.picker.value='fr-CA';
   state.picker.listeners.change();

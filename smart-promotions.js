@@ -86,8 +86,11 @@
     }).format(savings / selected.originalCents);
     const today = ottawaDay().date;
     const todayOnly = selected.startDate === today && selected.endDate === today;
-    const headline = words.discount(rate) + (todayOnly ? ' ' + words.todayOnly : '');
-    get('saving').textContent = headline + ' (' + words.save + ' ' + cad(savings) + ')';
+    get('discount').textContent = words.discount(rate);
+    const todayLabel = get('today');
+    todayLabel.textContent = todayOnly ? words.todayOnly : '';
+    todayLabel.hidden = !todayOnly;
+    get('saving').textContent = words.save + ' ' + cad(savings);
     get('validity').textContent = words.through + ': ' +
       selected.endDate + ' (' + words.time + ')';
     get('redemption').textContent = words.terms + ': ' + selected.redemption;
