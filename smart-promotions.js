@@ -16,16 +16,16 @@
   const PHOTO_ALLOWLIST = new Set(["14w.webp","1spring.webp","8spicew.webp","8w.webp","Fountedrink.webp","IMG_2221.webp","Veggiep.webp","Vpoutinc.webp","baconhd.webp","beefhd.webp","beefp.webp","bottle.webp","cappuccino.webp","cara.webp","cauliflower.webp","cheescard.webp","chicken-pou.webp","chickp.webp","chicksand.webp","chilli.webp","coffee.webp","dbsalad.webp","espresso.webp","fishandChips.webp","fries.webp","gravey.webp","gtea.webp","hdcom.webp","latte.webp","loadedhd.webp","macchiato.webp","nuggets.webp","onionr.webp","pepsi.webp","poutandhd.webp","poutinewingcombo.webp","poutinewithhd.webp","sanbusa.webp","sauces.webp","small-pou.webp","sparkw.webp","sproll.webp","stillw.webp","sweetp.webp","turkeyp.webp","tusand.webp","veganhd.webp","vsproll.webp"]);
   const wording = {
     'en-CA': { eyebrow:'D&B Poutine Special Offer', heading:"Today's Special",
-      save:'You save', through:'Offer ends', terms:'How to redeem', link:'View Menu',
+      save:'You save', discount:rate=>rate+' off', through:'Offer ends', terms:'How to redeem', link:'View Menu',
       time:'Ottawa time' },
     'en-GB': { eyebrow:'D&B Poutine Special Offer', heading:"Today's Special",
-      save:'You save', through:'Offer ends', terms:'How to redeem', link:'View Menu',
+      save:'You save', discount:rate=>rate+' off', through:'Offer ends', terms:'How to redeem', link:'View Menu',
       time:'Ottawa time' },
     'fr-CA': { eyebrow:'Offre spéciale D&B Poutine', heading:'Offre du jour',
-      save:'Vous économisez', through:"Fin de l’offre", terms:'Modalités',
+      save:'Vous économisez', discount:rate=>rate+' de réduction', through:"Fin de l’offre", terms:'Modalités',
       link:'Voir le menu', time:"Heure d’Ottawa" },
     es: { eyebrow:'Oferta especial de D&B Poutine', heading:'Oferta del día',
-      save:'Ahorras', through:'La oferta termina', terms:'Cómo canjear',
+      save:'Ahorras', discount:rate=>rate+' de descuento', through:'La oferta termina', terms:'Cómo canjear',
       link:'Ver menú', time:'Hora de Ottawa' }
   };
   let selected = null;
@@ -80,8 +80,11 @@
     get('image').alt = itemName;
     get('original').textContent = cad(selected.originalCents);
     get('discounted').textContent = cad(selected.discountedCents);
-    get('saving').textContent = words.save + ': ' +
-      cad(selected.originalCents-selected.discountedCents);
+    const savings = selected.originalCents - selected.discountedCents;
+    const rate = new Intl.NumberFormat(language, {
+      style:'percent',maximumFractionDigits:1
+    }).format(savings / selected.originalCents);
+    get('saving').textContent = words.save + ': ' + cad(savings) + ' (' + words.discount(rate) + ')';
     get('validity').textContent = words.through + ': ' +
       selected.endDate + ' (' + words.time + ')';
     get('redemption').textContent = words.terms + ': ' + selected.redemption;
