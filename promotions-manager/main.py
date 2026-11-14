@@ -2,6 +2,8 @@
 Run behind HTTPS with DATABASE_URL, PROMOTIONS_ADMIN_EMAIL and PROMOTIONS_ADMIN_PASSWORD.
 PostgreSQL in production; SQLite only for local tests. No public admin token.
 """
+import base64
+import binascii
 import hashlib
 import hmac
 import json
@@ -11,6 +13,7 @@ import secrets
 import time
 from contextlib import contextmanager
 from datetime import date, datetime, timedelta
+from io import BytesIO
 from pathlib import Path
 from urllib.error import URLError
 from urllib.parse import quote
@@ -20,6 +23,7 @@ from zoneinfo import ZoneInfo
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
+from PIL import Image, ImageOps, UnidentifiedImageError
 from pydantic import BaseModel, Field, field_validator, model_validator
 from sqlalchemy import create_engine, text
 from sqlalchemy.pool import StaticPool
@@ -63,7 +67,7 @@ async def security_headers(request: Request, call_next):
     response.headers["Cache-Control"] = "no-store"
     response.headers["Content-Security-Policy"] = (
         "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; "
-        "connect-src 'self'; img-src 'self'; base-uri 'none'; "
+        "connect-src 'self'; img-src 'self' blob:; base-uri 'none'; "
         "frame-ancestors 'none'; form-action 'self'"
     )
     return response
@@ -169,6 +173,7 @@ class Login(BaseModel):
 class OfferInput(BaseModel):
     name: dict[str, str] = Field(min_length=1)
     image: str
+    customPhoto: str | None = Field(default=None, max_length=2_800_000)
     catalogueId: str | None = None
     originalCents: int = Field(gt=0, le=100000000)
     discountedCents: int = Field(ge=0, le=100000000)
@@ -180,6 +185,23 @@ class OfferInput(BaseModel):
     approved: bool = False
     enabled: bool = False
     redemption: str = Field(default="", max_length=300)
+
+    @field_validator("customPhoto")
+    @classmethod
+    def normalize_photo(cls, value):
+        if value is None:
+            return None
+        try:
+            raw = base64.b64decode(value, validate=True)
+            with Image.open(BytesIO(raw), formats=["JPEG", "PNG", "WEBP"]) as image:
+                if image.width * image.height > 24_000_000:
+                    raise ValueError("Photo dimensions are too large")
+                image.thumbnail((1600, 1600))
+                output = BytesIO()
+                ImageOps.exif_transpose(image).convert("RGB").save(output, "JPEG", quality=85)
+            return base64.b64encode(output.getvalue()).decode("ascii")
+        except (binascii.Error, UnidentifiedImageError, Image.DecompressionBombError, OSError) as exc:
+            raise ValueError("Choose a valid JPEG, PNG or WebP photo") from exc
 
     @field_validator("image")
     @classmethod
@@ -331,7 +353,9 @@ def current_offer(record, now):
             record.get("startTime","00:00")<=clock<=record.get("endTime","23:59"))
 
 def as_offer(row):
-    return {"id":row["id"],**json.loads(row["payload"]),
+    payload = json.loads(row["payload"])
+    has_photo = bool(payload.pop("customPhoto", None))
+    return {"id":row["id"], **payload, "hasCustomPhoto": has_photo,
             "enabled":bool(row["enabled"]),"approved":bool(row["approved"]),
             "updatedAt":row["updated_at"]}
 
@@ -350,6 +374,28 @@ def story_photo(filename: str, manager=Depends(session)):
     return Response(contents, media_type=content_type)
 
 
+def offer_photo(offer_id: int, public: bool):
+    with engine.begin() as conn:
+        row = conn.execute(text("SELECT * FROM offers WHERE id=:id"),
+                           {"id": offer_id}).mappings().first()
+    if not row or (public and not current_offer(as_offer(row), datetime.now(OTTAWA))):
+        raise HTTPException(404, "Offer photo not found")
+    photo = json.loads(row["payload"]).get("customPhoto")
+    if not photo:
+        raise HTTPException(404, "Offer photo not found")
+    return Response(base64.b64decode(photo), media_type="image/jpeg")
+
+
+@app.get("/api/manage/offer-photo/{offer_id}")
+def manager_offer_photo(offer_id: int, manager=Depends(session)):
+    return offer_photo(offer_id, public=False)
+
+
+@app.get("/api/promotions/photo/{offer_id}")
+def public_offer_photo(offer_id: int):
+    return offer_photo(offer_id, public=True)
+
+
 @app.get("/health")
 def health(): return {"status":"ok"}
 
@@ -366,6 +412,8 @@ def public_promotions():
                 "enabled","approved","startDate","endDate","weekdays","name",
                 "image","originalCents","discountedCents","redemption"
             )})
+            if offer["hasCustomPhoto"]:
+                offers[-1]["photoId"] = offer["id"]
     return JSONResponse({"timeZone":"America/Toronto","offers":offers},
                         headers={"Cache-Control":"no-store"})
 
@@ -397,6 +445,12 @@ def create_offer(offer:OfferInput,manager_id=Depends(require_write)):
 def update_offer(offer_id:int,offer:OfferInput,manager_id=Depends(require_write)):
     data=offer.model_dump()
     with engine.begin() as conn:
+        if "customPhoto" not in offer.model_fields_set:
+            lock = " FOR UPDATE" if conn.dialect.name == "postgresql" else ""
+            old = conn.execute(text("SELECT payload FROM offers WHERE id=:id" + lock),
+                               {"id": offer_id}).scalar_one_or_none()
+            if old is not None:
+                data["customPhoto"] = json.loads(old).get("customPhoto")
         changed=conn.execute(text("""UPDATE offers SET payload=:payload,enabled=:enabled,
             approved=:approved,updated_at=:updated_at WHERE id=:id"""),
             {"payload":json.dumps({k:v for k,v in data.items() if k not in ("enabled","approved")}),
