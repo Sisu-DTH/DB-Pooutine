@@ -509,19 +509,19 @@
             @keyframes welcomeImg{
         
               0%{
-                background-image: url("pepsi.webp");
+                background-image: url("assets/images/pepsi.webp");
               }
                     
-             25%{background-image: url("slide2.webp");}
+             25%{background-image: url("assets/images/slide2.webp");}
                     
              50%{
-               background-image: url("slide1.webp");
+               background-image: url("assets/images/slide1.webp");
              }
                      
-             75%{background-image: url("slide3.webp");}
+             75%{background-image: url("assets/images/slide3.webp");}
                     
             100%{
-              background-image: url("cappuccino.webp");
+              background-image: url("assets/images/cappuccino.webp");
             }  
                                
            }
@@ -562,7 +562,7 @@
   display: grid; place-items: center; text-align: center;
   padding: 5rem 1.25rem 6rem;
   color: #fff;
-  background: linear-gradient(90deg, rgba(15,12,9,.84), rgba(15,12,9,.46)), url("slide1.webp") center 55% / cover no-repeat;
+  background: linear-gradient(90deg, rgba(15,12,9,.84), rgba(15,12,9,.46)), url("assets/images/slide1.webp") center 55% / cover no-repeat;
 }
 .contact-hero__content { position: relative; max-width: 680px; }
 .contact-hero__eyebrow { font-size: .85rem; letter-spacing: .13em; text-transform: uppercase; font-weight: 700; color: #f3c57e; }
