@@ -76,7 +76,9 @@
     get('eyebrow').textContent = words.eyebrow;
     get('heading').textContent = words.heading;
     get('meal').textContent = itemName;
-    get('image').src = selected.image;
+    get('image').src = Number.isSafeInteger(selected.photoId) && selected.photoId > 0
+      ? API_ORIGIN + '/api/promotions/photo/' + selected.photoId
+      : selected.image;
     get('image').alt = itemName;
     get('original').textContent = cad(selected.originalCents);
     get('discounted').textContent = cad(selected.discountedCents);
