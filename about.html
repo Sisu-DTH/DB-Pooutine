@@ -30,6 +30,46 @@
       fetchpriority="high"
     />
     <link rel="stylesheet" href="styles.css" />
+      <style>
+      .main .about-page-hero { margin: 1%; }
+
+      @media (min-width: 1024px) {
+        html body .main .welcome-section.about-page-hero {
+          flex-direction: row !important;
+          align-items: center;
+          max-width: 1200px;
+          margin: 1% auto;
+          background: #17120b;
+        }
+
+        .main .about-page-hero > a {
+          flex: 0 1 46%;
+          min-width: 0;
+        }
+
+        .main .about-page-hero > a > img {
+          width: 100%;
+          max-height: 560px;
+          object-fit: contain;
+        }
+
+        .main .about-page-hero .content {
+          flex: 1 1 0;
+          min-width: 0;
+          padding: clamp(24px, 4vw, 64px);
+        }
+
+        .main .about-page-hero .content h1 {
+          font-size: clamp(2rem, 3.2vw, 3rem);
+        }
+
+        .main .about-page-hero .content p {
+          max-width: 38ch;
+          margin-inline: auto;
+          font-size: clamp(1.125rem, 1.5vw, 1.35rem);
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- SHARED HEADER: logo > navigation links > language selector > mobile menu -->
@@ -82,14 +122,12 @@
     <main class="main">
       <div
         class="welcome-section subpage-hero about-page-hero"
-        style="background-color: black; margin: 1%"
       >
         <a href="about.html#map">
           <img
             src="assets/images/Aboutdb.webp"
             width="855"
             height="1100"
-            style="width: 100%; height: auto"
             alt="Exterior of D&B Poutine restaurant at Carlingwood Shopping Centre"
             fetchpriority="high"
             loading="eager"
