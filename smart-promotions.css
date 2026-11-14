@@ -19,6 +19,7 @@
 }
 
 .sdth-promo__eyebrow {
+    text-align: center;
     font-size: .78rem;
     letter-spacing: .08em;
     text-transform: uppercase;
@@ -30,7 +31,7 @@
     background: none !important;
     color: #fff !important;
     border: 0;
-    text-align: left;
+    text-align: center;
     margin: 8px 0 10px;
     padding: 0;
     font-size: clamp(1.45rem, 3vw, 2rem);
