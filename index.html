@@ -162,7 +162,6 @@
             </div>
             <hr style="margin:3%;">
             <div class="review" style="padding: 6%;">
-              <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
               <div class="elfsight-app-b14d7565-d97c-4c86-bfab-b5d774c6fb3b" data-elfsight-app-lazy></div> 
             </div>
         </div>
@@ -211,21 +210,47 @@
         &copy; 2024 D&B Poutine Fast Food <br> 2121 Carling Avenue, Ottawa, Canada<br> Powered by <a href = "https://sisudth.com" target="_blank" rel="noopener noreferrer">Sisu DTH</a>
     </footer>
     <script>
-        
-        
-const images = ['slide2.webp', 'slide1.webp', 'slide3.webp', 'Hotdog.webp', 'cappuccino.webp'];
-const section = document.querySelector('.welcome-section');
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-let currentIndex = 0;
-if (section && !reduceMotion.matches) {
-  window.addEventListener('load', () => {
-    window.setInterval(() => {
-      if (document.hidden) return;
-      currentIndex = (currentIndex + 1) % images.length;
-      section.style.backgroundImage = 'url("' + images[currentIndex] + '")';
-    }, 5000);
-  }, { once: true });
-}    </script>
+    (() => {
+      const reviews = document.getElementById('reviews');
+      const hero = document.querySelector('.welcome-section');
+      const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+      const images = ['slide2.webp', 'slide1.webp', 'slide3.webp', 'Hotdog.webp', 'cappuccino.webp'];
+      let currentIndex = 0;
+      let heroVisible = false;
+
+      function loadReviews() {
+        const script = document.createElement('script');
+        script.src = 'https://static.elfsight.com/platform/platform.js';
+        script.setAttribute('data-use-service-core', '');
+        document.head.append(script);
+      }
+
+      if ('IntersectionObserver' in window) {
+        const reviewObserver = new IntersectionObserver(([entry]) => {
+          if (!entry.isIntersecting) return;
+          reviewObserver.disconnect();
+          loadReviews();
+        }, {rootMargin: '300px'});
+        reviewObserver.observe(reviews);
+
+        const heroObserver = new IntersectionObserver(([entry]) => {
+          heroVisible = entry.isIntersecting;
+        });
+        heroObserver.observe(hero);
+      } else {
+        window.addEventListener('load', loadReviews, {once: true});
+        heroVisible = true;
+      }
+
+      window.addEventListener('load', () => {
+        setInterval(() => {
+          if (!heroVisible || document.hidden || reduceMotion.matches) return;
+          currentIndex = (currentIndex + 1) % images.length;
+          hero.style.backgroundImage = 'url("' + images[currentIndex] + '")';
+        }, 5000);
+      }, {once: true});
+    })();
+    </script>
 <!-- SHARED BEHAVIOUR: mobile navigation and locale switching -->
 <script src="navigation.js" defer></script>
 <script src="language.js" defer></script>
