@@ -89,7 +89,7 @@
     get('meal').textContent = itemName;
     get('image').src = Number.isSafeInteger(offer.photoId) && offer.photoId > 0
       ? API_ORIGIN + '/api/promotions/photo/' + offer.photoId
-      : offer.image;
+      : 'assets/images/' + offer.image;
     get('image').alt = itemName;
     get('original').textContent = cad(offer.originalCents);
     get('discounted').textContent = cad(offer.discountedCents);
