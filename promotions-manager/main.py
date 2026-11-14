@@ -12,6 +12,9 @@ import time
 from contextlib import contextmanager
 from datetime import date, datetime, timedelta
 from pathlib import Path
+from urllib.error import URLError
+from urllib.parse import quote
+from urllib.request import urlopen
 from zoneinfo import ZoneInfo
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response
@@ -321,6 +324,21 @@ def as_offer(row):
     return {"id":row["id"],**json.loads(row["payload"]),
             "enabled":bool(row["enabled"]),"approved":bool(row["approved"]),
             "updatedAt":row["updated_at"]}
+
+@app.get("/api/manage/story-photo/{filename}")
+def story_photo(filename: str, manager=Depends(session)):
+    if filename not in ALLOWED_IMAGES:
+        raise HTTPException(404, "Meal photo not found")
+    try:
+        with urlopen("https://dbpoutine.com/" + quote(filename, safe=""), timeout=6) as photo:
+            content_type = photo.headers.get_content_type()
+            contents = photo.read(4_000_001)
+    except (URLError, TimeoutError, OSError) as exc:
+        raise HTTPException(502, "Meal photo is unavailable") from exc
+    if content_type not in {"image/webp", "image/jpeg", "image/png"} or len(contents) > 4_000_000:
+        raise HTTPException(502, "Meal photo format or size is unsupported")
+    return Response(contents, media_type=content_type)
+
 
 @app.get("/health")
 def health(): return {"status":"ok"}
