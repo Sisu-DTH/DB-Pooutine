@@ -15,7 +15,7 @@ from contextlib import contextmanager
 from datetime import date, datetime, timedelta
 from io import BytesIO
 from pathlib import Path
-from urllib.error import URLError
+from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import urlopen
 from zoneinfo import ZoneInfo
@@ -364,7 +364,15 @@ def story_photo(filename: str, manager=Depends(session)):
     if filename not in ALLOWED_IMAGES:
         raise HTTPException(404, "Meal photo not found")
     try:
-        with urlopen("https://dbpoutine.com/" + quote(filename, safe=""), timeout=6) as photo:
+        name = quote(filename, safe="")
+        try:
+            source = urlopen("https://dbpoutine.com/assets/images/" + name, timeout=6)
+        except HTTPError as exc:
+            if exc.code != 404:
+                raise
+            exc.close()
+            source = urlopen("https://dbpoutine.com/" + name, timeout=6)
+        with source as photo:
             content_type = photo.headers.get_content_type()
             contents = photo.read(4_000_001)
     except (URLError, TimeoutError, OSError) as exc:
