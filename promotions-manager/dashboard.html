@@ -292,10 +292,19 @@ async function request(path,method='GET',body){
  }
  return data;
 }
+function defaultOfferStart(now=new Date()){
+ const parts=new Intl.DateTimeFormat('en-CA',{
+  timeZone:'America/Toronto',year:'numeric',month:'2-digit',day:'2-digit',
+  hour:'2-digit',minute:'2-digit',hourCycle:'h23'
+ }).formatToParts(now);
+ const {year,month,day,hour,minute}=Object.fromEntries(parts.map(({type,value})=>[type,value]));
+ return {date:year+'-'+month+'-'+day,time:hour+':'+minute};
+}
 function clearForm(){
  savedPhotoId=null;useMenuPhoto=false;
  $('offer-form').reset();$('edit-id').value='';$('form-heading').textContent='Create a promotion';
- $('start-time').value='00:00';$('end-time').value='23:59';
+ const start=defaultOfferStart();
+ $('start').value=start.date;$('start-time').value=start.time;$('end-time').value='23:59';
  chooseMenuItem();
 }
 function edit(id){
@@ -481,7 +490,7 @@ async function openWorkspace(token){
  csrf=token;
  await loadMenu();
  await refresh();
- updatePhotoPreview();
+ clearForm();
  $('workspace').hidden=false;$('login-form').hidden=true;$('disconnect').hidden=false;
  status('Signed in successfully');
 }
