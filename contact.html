@@ -24,6 +24,31 @@
     <meta property="og:url" content="https://dbpoutine.com/contact.html" />
     <meta name="twitter:card" content="summary" />
     <link rel="stylesheet" href="styles.css?v=5" />
+    <style>
+      @media (max-width: 768px) {
+        .contact-form {
+          box-sizing: border-box;
+          width: 100%;
+          min-width: 0;
+          max-width: 100%;
+        }
+
+        .contact-form fieldset {
+          min-width: 0;
+        }
+
+        .contact-form :is(input, textarea) {
+          box-sizing: border-box;
+          min-width: 0;
+          max-width: 100%;
+          font-size: max(16px, 1rem);
+        }
+
+        .contact-form input[type="submit"] {
+          width: 100%;
+        }
+      }
+    </style>
   </head>
   <body>
     <!-- SHARED HEADER: logo > navigation links > language selector > mobile menu -->
@@ -133,6 +158,7 @@
             <!-- CONTACT DETAILS AND FORM: labels > fields > submit control -->
             <section class="contact-section">
               <form
+                class="contact-form"
                 aria-label="Contact D&B Poutine"
                 action="https://formsubmit.co/contact@dbpoutine.com"
                 method="post"
