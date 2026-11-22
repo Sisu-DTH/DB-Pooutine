@@ -440,6 +440,15 @@ In-store only</textarea>
             ><button id="reload" class="secondary">Refresh list</button></div
           ><div id="offers" aria-live="polite">No offers loaded.</div></section
         >
+<section class="card" id="release"><h2>QA workspace and release review</h2>
+<label>Workspace view<select id="review-kind"></select></label>
+<label>Platform<select id="review-platform"><option>Desktop</option><option>Mobile</option><option>General</option></select></label>
+<div id="review-count"></div><div id="review-cases"></div>
+<form id="review-form"><label>Case or title<input id="review-subject" maxlength="160" required></label>
+<label>Result<select id="review-outcome"></select></label>
+<label>Observed result, device or evidence<textarea id="review-note" maxlength="4000" required></textarea></label>
+<button>Save record</button></form><button type="button" id="review-export">Export release evidence</button>
+<h3>Record history</h3><div id="review-history"></div><p id="review-message" role="status"></p></section>
       </div>
       <dialog id="story-dialog" aria-labelledby="story-heading">
         <h2 id="story-heading">Instagram Story preview</h2>
@@ -1120,6 +1129,70 @@ In-store only</textarea>
             box.appendChild(item);
           }
         }
+        const cases = {
+          "Input overflow":"Check long meal names, translated fields and prices at the target viewport.",
+          "Animation overlap":"Open the Story preview and watch the countdown with the image loaded.",
+          "Layout alignment":"Check the form, saved offers and Story controls at the target width.",
+          "Language display":"Select a menu meal and compare its English, French and Spanish names.",
+          "Offer publishing":"Check a manager-approved offer on the public restaurant homepage.",
+          "Persistence after refresh":"Save a disabled offer, refresh and compare the count, ID and details.",
+          "Sign-out and session":"Refresh, sign out, revisit and sign back in to compare records.",
+          "Downloads and export failures":"Download an image and verify recovery after export failure.",
+          "Photo retrieval and upload":"Select a menu photo, upload a replacement and reopen the saved offer.",
+          "Instagram Story countdown":"Prepare a Story and verify the timer moves towards the Ottawa deadline."
+        };
+        let releaseRecords = [];
+        function setOptions(select, values) {
+          select.replaceChildren(...values.map(value => new Option(value, value)));
+        }
+        setOptions($("review-kind"), ["Test","Defect","Fix","Retest","Deployment evidence","Decision","Assumption","Readiness"]);
+        function renderReview() {
+          const kind = $("review-kind").value, platform = $("review-platform").value;
+          const testing = kind === "Test" || kind === "Retest";
+          setOptions($("review-outcome"), testing ? ["Pass","Fail","Partial"] : ["Open","Recorded","Resolved"]);
+          const list = $("review-cases");
+          list.replaceChildren();
+          let passed = 0;
+          if (testing) for (const [name, steps] of Object.entries(cases)) {
+            const run = releaseRecords.find(r => ["Test","Retest"].includes(r.kind) && r.platform === platform && r.subject === name);
+            if (run?.outcome === "Pass") passed++;
+            const button = document.createElement("button");
+            button.type = "button"; button.className = "secondary";
+            button.textContent = name + " · " + (run?.outcome || "Untested");
+            button.onclick = () => { $("review-subject").value = name; $("review-note").placeholder = steps; $("review-note").focus(); };
+            list.append(button);
+          }
+          $("review-count").textContent = testing ? passed + " of " + Object.keys(cases).length + " cases passed on " + platform : "";
+          const history = $("review-history");
+          history.replaceChildren();
+          for (const row of releaseRecords.filter(r => r.platform === platform && r.kind === kind)) {
+            const item = document.createElement("p");
+            item.textContent = [row.recorded_at,row.subject,row.outcome,row.observation].join(" · ");
+            history.append(item);
+          }
+        }
+        async function loadReview() {
+          releaseRecords = (await request("/api/manage/release-records")).records;
+          renderReview();
+        }
+        $("review-kind").onchange = $("review-platform").onchange = renderReview;
+        $("review-form").onsubmit = async event => {
+          event.preventDefault();
+          const submit = event.submitter;
+          submit.disabled = true;
+          try {
+            await request("/api/manage/release-records","POST",{kind:$("review-kind").value,platform:$("review-platform").value,subject:$("review-subject").value.trim(),outcome:$("review-outcome").value,observation:$("review-note").value.trim()});
+            $("review-note").value = ""; await loadReview(); $("review-message").textContent = "Record saved.";
+          } catch(error) { $("review-message").textContent = error.message; }
+          finally { submit.disabled = false; }
+        };
+        $("review-export").onclick = async () => {
+          try {
+            await loadReview();
+            const url = URL.createObjectURL(new Blob([JSON.stringify(releaseRecords,null,2)],{type:"application/json"}));
+            const link = document.createElement("a"); link.href = url; link.download = "sdth-release-evidence.json"; link.click(); setTimeout(()=>URL.revokeObjectURL(url),60000);
+          } catch(error) { $("review-message").textContent = error.message; }
+        };
         function showSignIn() {
           csrf = "";
           saved = [];
@@ -1132,6 +1205,7 @@ In-store only</textarea>
         }
         async function openWorkspace(token) {
           csrf = token;
+          loadReview().catch(error => { $("review-message").textContent = error.message; });
           await loadMenu();
           await refresh();
           clearForm();
