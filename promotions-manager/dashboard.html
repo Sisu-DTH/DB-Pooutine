@@ -443,6 +443,7 @@ In-store only</textarea>
 <section class="card" id="release"><h2>QA workspace and release review</h2>
 <label>Workspace view<select id="review-kind"></select></label>
 <label>Platform<select id="review-platform"><option>Desktop</option><option>Mobile</option><option>General</option></select></label>
+<details id="automatic-review"><summary>Automatic checks</summary><p id="automatic-count" aria-live="polite"></p><ul id="automatic-results"></ul><button type="button" id="automatic-run">Run automatic checks</button></details>
 <div id="review-count"></div><div id="review-cases"></div>
 <form id="review-form"><label>Case or title<input id="review-subject" maxlength="160" required></label>
 <label>Result<select id="review-outcome"></select></label>
@@ -507,20 +508,20 @@ In-store only</textarea>
           return catalogueById.get($("catalogue-choice").value) || null;
         }
         function discountCalculation() {
-          const original = cents("regular");
+          return calculateDiscount(cents("regular"), $("discount-mode").value, id => cents(id), Number($("discount-percent").value));
+        }
+        function calculateDiscount(original, mode, amount, percentage) {
           if (original <= 0)
             throw new Error("Enter the approved regular price");
-          const mode = $("discount-mode").value;
           let special;
           if (mode === "saving") {
-            const saving = cents("saving-amount");
+            const saving = amount("saving-amount");
             if (saving <= 0 || saving > original)
               throw new Error(
                 "Saving must be greater than zero and no higher than the regular price",
               );
             special = original - saving;
           } else if (mode === "percent") {
-            const percentage = Number($("discount-percent").value);
             if (![5, 10, 15, 20, 25, 30].includes(percentage))
               throw new Error("Select a valid percentage");
             const saving = Math.round((original * percentage) / 100);
@@ -529,7 +530,7 @@ In-store only</textarea>
                 "This percentage rounds to zero; choose a different discount",
               );
             special = original - saving;
-          } else special = cents("discount");
+          } else special = amount("discount");
           if (special < 0 || special >= original)
             throw new Error(
               "Special price must be less than the regular price",
@@ -546,7 +547,7 @@ In-store only</textarea>
           try {
             const value = discountCalculation();
             $("discount-preview").textContent =
-              "Regular CAD $" +
+              (mode === "percent" && $("start").value === defaultOfferStart().date && $("end").value === $("start").value ? sameDayCopy(Number($("discount-percent").value), value) + " · " : "") + "Regular CAD $" +
               price(value.original) +
               " · Customer saves CAD $" +
               price(value.saving) +
@@ -1146,6 +1147,41 @@ In-store only</textarea>
           select.replaceChildren(...values.map(value => new Option(value, value)));
         }
         setOptions($("review-kind"), ["Test","Defect","Fix","Retest","Deployment evidence","Decision","Assumption","Readiness"]);
+        function sameDayCopy(percent, calculation) {
+          return percent + "% off today only (You save $" + price(calculation.saving) + ")";
+        }
+        function automaticResults() {
+          const percent = n => calculateDiscount(1099, "percent", () => 0, n);
+          const fixed = n => calculateDiscount(1099, "saving", () => n, 0);
+          const deadline = (date, time) => storyExpiry({startDate:date,endDate:date,endTime:time,weekdays:[0,1,2,3,4,5,6]}).deadline;
+          const rejects = (fn, expected) => {
+            try { fn(); return false; } catch (error) { return error.message.includes(expected); }
+          };
+          const priced = catalogue.filter(item => item.regularCents !== null);
+          const checks = [
+            ["Catalogue completeness", () => priced.length > 0 && new Set(catalogue.map(i => i.id)).size === catalogue.length && priced.every(i => i.id && i.names["en-CA"] && i.names["fr-CA"] && i.names.es && i.image && i.regularCents > 0), priced.length + " priced options checked. " + (catalogue.length-priced.length) + " options await price confirmation."],
+            ["Percentage rounding", () => percent(5).saving === 55 && percent(5).special === 1044, "5% of $10.99 saves $0.55 and gives $10.44."],
+            ["Fixed savings", () => fixed(200).special === 899, "$2.00 off $10.99 gives $8.99."],
+            ["Same-day savings copy", () => sameDayCopy(5, percent(5)) === "5% off today only (You save $0.55)", "Checks the Canadian English same-day preview."],
+            ["Invalid discounts", () => rejects(() => percent(7), "valid percentage") && rejects(() => fixed(2000), "regular price"), "Rejects 7% and a $20 saving on $10.99."],
+            ["Ottawa clock changes", () => deadline("2026-11-21","10:00") === Date.UTC(2026,10,21,15) && deadline("2026-06-01","10:00") === Date.UTC(2026,5,1,14) && rejects(() => deadline("2026-03-08","02:30"), "does not exist"), "Checks winter, summer and the skipped spring hour."]
+          ];
+          return checks.map(([subject, check, observation]) => {
+            try { return {subject, outcome:check() ? "Pass" : "Fail", observation}; }
+            catch (error) { return {subject, outcome:"Fail", observation:error.message}; }
+          });
+        }
+        function displayAutomatic() {
+          const results = automaticResults();
+          $("automatic-results").replaceChildren(...results.map(result => {
+            const li = document.createElement("li");
+            li.textContent = result.subject + " · " + result.outcome + " · " + result.observation;
+            return li;
+          }));
+          $("automatic-count").textContent = results.filter(r => r.outcome === "Pass").length + " of 6 automatic checks passed.";
+        }
+        $("automatic-run").onclick = displayAutomatic;
+        $("automatic-review").ontoggle = () => { if ($("automatic-review").open) displayAutomatic(); };
         function renderReview() {
           const kind = $("review-kind").value, platform = $("review-platform").value;
           const testing = kind === "Test" || kind === "Retest";
@@ -1189,7 +1225,7 @@ In-store only</textarea>
         $("review-export").onclick = async () => {
           try {
             await loadReview();
-            const url = URL.createObjectURL(new Blob([JSON.stringify(releaseRecords,null,2)],{type:"application/json"}));
+            const url = URL.createObjectURL(new Blob([JSON.stringify([...releaseRecords,...automaticResults().map(r => ({...r,kind:"Test",platform:"Automatic",recorded_at:new Date().toISOString()}))],null,2)],{type:"application/json"}));
             const link = document.createElement("a"); link.href = url; link.download = "sdth-release-evidence.json"; link.click(); setTimeout(()=>URL.revokeObjectURL(url),60000);
           } catch(error) { $("review-message").textContent = error.message; }
         };
