@@ -351,7 +351,7 @@
               <label for="discount-percent" id="discount-percent-row"
                 >Percentage off
                 <select id="discount-percent"
-                  ><option value="5">5%</option
+                  ><option value="">Choose a percentage</option><option value="5">5%</option
                   ><option value="10">10%</option>
                   <option value="15">15%</option
                   ><option value="20">20%</option
@@ -444,6 +444,7 @@ In-store only</textarea>
       <dialog id="story-dialog" aria-labelledby="story-heading">
         <h2 id="story-heading">Instagram Story preview</h2>
         <p id="story-countdown"></p>
+        <strong id="story-clock" role="timer" style="display:block;font:700 1.6rem monospace;margin-bottom:1rem"></strong>
         <canvas
           id="story-preview"
           width="1080"
@@ -814,10 +815,12 @@ In-store only</textarea>
         const storyDialog = $("story-dialog");
         const storyCanvas = $("story-preview");
         let storyRequest = 0;
+        let storyTimer;
         let storyFile;
         let storyUrl;
         storyDialog.addEventListener("close", () => {
           ++storyRequest;
+          clearInterval(storyTimer);
           if (storyUrl) URL.revokeObjectURL(storyUrl);
           storyUrl = undefined;
           storyFile = undefined;
@@ -834,7 +837,16 @@ In-store only</textarea>
                 dateStyle: "long",
                 timeZone: "UTC",
               }).format(ending);
-              return day + " at " + (offer.endTime || "23:59") + " Ottawa time";
+              const time = offer.endTime || "23:59";
+              const date = ending.toISOString().slice(0, 10);
+              const formatter = new Intl.DateTimeFormat("sv-SE", {
+                timeZone: "America/Toronto", dateStyle: "short", timeStyle: "short",
+              });
+              const wall = Date.parse(date + "T" + time + ":00Z");
+              const deadline = [5, 4].map(hours => wall + hours * 3600000)
+                .find(value => formatter.format(value) === date + " " + time);
+              if (deadline === undefined) throw new Error("This end time does not exist in Ottawa.");
+              return { deadline, label: day + " at " + time + " Ottawa time" };
             }
             ending.setUTCDate(ending.getUTCDate() - 1);
           }
@@ -927,10 +939,20 @@ In-store only</textarea>
           storyCanvas.hidden = true;
           $("story-download").disabled = true;
           $("story-countdown").textContent = "";
+          $("story-clock").textContent = "";
           $("story-status").textContent = "Loading meal photo…";
           storyDialog.showModal();
           try {
-            const expiry = storyExpiry(offer);
+            const { deadline, label: expiry } = storyExpiry(offer);
+            const updateClock = () => {
+              const seconds = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+              const parts = [Math.floor(seconds / 3600), Math.floor(seconds / 60) % 60, seconds % 60];
+              $("story-clock").textContent = seconds ? parts.map(n => String(n).padStart(2, "0")).join(":") + " remaining" : "Offer ended";
+              if (!seconds) clearInterval(storyTimer);
+            };
+            clearInterval(storyTimer);
+            storyTimer = setInterval(updateClock, 1000);
+            updateClock();
             $("story-countdown").textContent = "Countdown ends: " + expiry;
             const photo = new Image();
             photo.src = offer.hasCustomPhoto
