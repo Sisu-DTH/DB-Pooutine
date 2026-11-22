@@ -104,6 +104,10 @@ def initialize():
         )""" if engine.dialect.name == "postgresql" else """CREATE TABLE IF NOT EXISTS audit_log (
             id INTEGER PRIMARY KEY AUTOINCREMENT, manager_id INTEGER NOT NULL,
             action TEXT NOT NULL, offer_id INTEGER, timestamp TEXT NOT NULL)"""))
+        conn.execute(text("""CREATE TABLE IF NOT EXISTS release_records (
+            id TEXT PRIMARY KEY, manager_id INTEGER NOT NULL, recorded_at TEXT NOT NULL,
+            kind TEXT NOT NULL, platform TEXT NOT NULL, subject TEXT NOT NULL,
+            outcome TEXT NOT NULL, observation TEXT NOT NULL)"""))
         total = conn.execute(text("SELECT COUNT(*) FROM managers")).scalar_one()
         if total == 0 and BOOTSTRAP_EMAIL and BOOTSTRAP_PASSWORD:
             if len(BOOTSTRAP_PASSWORD) < 14:
@@ -483,6 +487,34 @@ def delete_offer(offer_id: int, manager_id=Depends(require_write)):
         if not changed.rowcount: raise HTTPException(404, "Offer not found")
         record(conn, manager_id, "delete", offer_id)
     return {"id": offer_id, "status": "deleted"}
+
+class ReleaseRecord(BaseModel):
+    kind: str = Field(pattern="^(Test|Defect|Fix|Retest|Deployment evidence|Decision|Assumption|Readiness)$")
+    platform: str = Field(pattern="^(Mobile|Desktop|General)$")
+    subject: str = Field(min_length=1, max_length=160)
+    outcome: str = Field(pattern="^(Pass|Fail|Partial|Open|Resolved|Recorded)$")
+    observation: str = Field(min_length=1, max_length=4000)
+
+
+@app.get("/api/manage/release-records")
+def release_records(row=Depends(session)):
+    with engine.begin() as conn:
+        rows = conn.execute(text("""SELECT id, recorded_at, kind, platform, subject, outcome, observation
+                                    FROM release_records ORDER BY recorded_at DESC, id DESC""")).mappings()
+        return {"records": [dict(record) for record in rows]}
+
+
+@app.post("/api/manage/release-records", status_code=201)
+def add_release_record(record: ReleaseRecord, manager_id=Depends(require_write)):
+    values = record.model_dump()
+    values.update(id=secrets.token_hex(16), manager_id=manager_id,
+                  recorded_at=datetime.now(OTTAWA).isoformat(timespec="microseconds"))
+    with engine.begin() as conn:
+        conn.execute(text("""INSERT INTO release_records
+            (id, manager_id, recorded_at, kind, platform, subject, outcome, observation)
+            VALUES (:id,:manager_id,:recorded_at,:kind,:platform,:subject,:outcome,:observation)"""), values)
+    return {"id": values["id"]}
+
 
 @app.get("/api/manage/audit")
 def audit(row=Depends(session)):
