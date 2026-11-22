@@ -1022,11 +1022,11 @@ In-store only</textarea>
             box.textContent = "No saved offers. No promotions are active.";
             return;
           }
-          for (const [index, offer] of saved.entries()) {
+          for (const offer of saved) {
             const item = document.createElement("div");
             item.className = "offer";
             const title = document.createElement("strong");
-            title.textContent = offer.name["en-CA"] + " · #" + (index + 1);
+            title.textContent = offer.name["en-CA"] + " · #" + offer.id;
             item.appendChild(title);
             const desc = document.createElement("p");
             desc.textContent =
@@ -1048,6 +1048,28 @@ In-store only</textarea>
               " | " +
               (offer.approved ? "Approved" : "Not approved");
             item.appendChild(desc);
+            const history = document.createElement("details");
+            const summary = document.createElement("summary");
+            summary.textContent = "Offer history";
+            const events = document.createElement("ul");
+            history.append(summary, events);
+            history.addEventListener("toggle", async () => {
+              if (!history.open) return;
+              events.textContent = "Loading…";
+              try {
+                const result = await request("/api/manage/audit");
+                events.replaceChildren();
+                for (const event of result.events.filter(entry => String(entry.offer_id) === String(offer.id))) {
+                  const line = document.createElement("li");
+                  line.textContent = event.timestamp + " · " + event.action;
+                  events.appendChild(line);
+                }
+                if (!events.children.length) events.textContent = "No entries in the latest 100 workspace events.";
+              } catch (error) {
+                events.textContent = "History could not be loaded. Close and reopen to retry.";
+              }
+            });
+            item.appendChild(history);
             const buttons = document.createElement("div");
             buttons.className = "actions";
             for (const [label, kind, action] of [
