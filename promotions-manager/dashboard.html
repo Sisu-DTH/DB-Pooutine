@@ -749,7 +749,10 @@ In-store only</textarea>
                 : "Request failed (" + res.status + ")",
             );
             error.status = res.status;
-            if (res.status === 401) showSignIn();
+            if (res.status === 401) {
+              showSignIn();
+              status("Your session has ended. Sign in to continue.");
+            }
             throw error;
           }
           return data;
