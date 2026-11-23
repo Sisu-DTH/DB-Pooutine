@@ -209,10 +209,7 @@
     <main>
       <h1>Manage special offers</h1>
       <p class="notice"
-        >This management application is a standalone development MVP. Publishing
-        to the live D&amp;B Poutine site requires a separately configured API
-        connection. Do not use an illustrative price as a real offer. Restaurant
-        approval and redemption rules are required.</p
+        >Create and schedule approved D&amp;B Poutine offers. Confirm the prices, Ottawa dates and redemption details before enabling an offer on the restaurant website.</p
       >
       <section class="card" id="auth-card">
         <h2>Manager access</h2>
@@ -443,6 +440,8 @@ In-store only</textarea>
 <section class="card" id="release"><h2>QA workspace and release review</h2>
 <label>Workspace view<select id="review-kind"></select></label>
 <label>Platform<select id="review-platform"><option>Desktop</option><option>Mobile</option><option>General</option></select></label>
+<p id="release-total" aria-live="polite"></p>
+<button type="button" class="secondary" id="mobile-preview">Open mobile preview</button><p id="mobile-message" role="status"></p>
 <details id="automatic-review"><summary>Automatic checks</summary><p id="automatic-count" aria-live="polite"></p><ul id="automatic-results"></ul><button type="button" id="automatic-run">Run automatic checks</button></details>
 <div id="review-count"></div><div id="review-cases"></div>
 <form id="review-form"><label>Case or title<input id="review-subject" maxlength="160" required></label>
@@ -1182,7 +1181,20 @@ In-store only</textarea>
         }
         $("automatic-run").onclick = displayAutomatic;
         $("automatic-review").ontoggle = () => { if ($("automatic-review").open) displayAutomatic(); };
+        $("mobile-preview").onclick = () => {
+          const preview = window.open(location.pathname, "sdthMobileQA", "popup,width=390,height=844,resizable=yes,scrollbars=yes");
+          $("mobile-message").textContent = preview ? "Mobile preview opened in a separate window." : "Allow pop-ups to open the mobile preview.";
+        };
         function renderReview() {
+          const outcomes = automaticResults().map(r => r.outcome);
+          for (const device of ["Desktop", "Mobile"]) {
+            for (const subject of Object.keys(cases)) {
+              const run = releaseRecords.find(r => ["Test", "Retest"].includes(r.kind) && r.platform === device && r.subject === subject);
+              outcomes.push(run?.outcome || "Untested");
+            }
+          }
+          const count = status => outcomes.filter(value => value === status).length;
+          $("release-total").textContent = "Production QA · " + count("Pass") + " of " + outcomes.length + " passed · " + count("Partial") + " partial · " + count("Fail") + " failed · " + count("Untested") + " untested";
           const kind = $("review-kind").value, platform = $("review-platform").value;
           const testing = kind === "Test" || kind === "Retest";
           setOptions($("review-outcome"), testing ? ["Pass","Fail","Partial"] : ["Open","Recorded","Resolved"]);
