@@ -165,7 +165,10 @@
         flex-direction: row;
         align-items: center;
       }
-      @media (max-width: 650px) {
+      body { container-type: inline-size; }
+      body.phone-layout { width: min(390px, 100%); margin-inline: auto; }
+      body.phone-layout dialog { max-width: min(92vw, 358px); }
+      @container (max-width: 650px) {
         .grid {
           grid-template-columns: minmax(0, 1fr);
         }
@@ -1181,8 +1184,13 @@ In-store only</textarea>
         }
         $("automatic-run").onclick = displayAutomatic;
         $("automatic-review").ontoggle = () => { if ($("automatic-review").open) displayAutomatic(); };
+        if (new URLSearchParams(location.search).get("layout") === "phone") {
+          document.body.classList.add("phone-layout");
+          $("mobile-preview").hidden = true;
+          $("mobile-message").textContent = "Mobile layout preview · 390 CSS pixels maximum";
+        }
         $("mobile-preview").onclick = () => {
-          const preview = window.open(location.pathname, "sdthMobileQA", "popup,width=390,height=844,resizable=yes,scrollbars=yes");
+          const preview = window.open(location.pathname + "?layout=phone", "sdthMobileQA", "popup,width=390,height=844,resizable=yes,scrollbars=yes");
           $("mobile-message").textContent = preview ? "Mobile preview opened in a separate window." : "Allow pop-ups to open the mobile preview.";
         };
         function renderReview() {
