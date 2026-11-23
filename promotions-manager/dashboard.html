@@ -440,7 +440,7 @@ In-store only</textarea>
             ><button id="reload" class="secondary">Refresh list</button></div
           ><div id="offers" aria-live="polite">No offers loaded.</div></section
         >
-<section class="card" id="release"><h2>QA workspace and release review</h2>
+<section class="card" id="release" hidden><h2>QA workspace and release review</h2>
 <label>Workspace view<select id="review-kind"></select></label>
 <label>Platform<select id="review-platform"><option>Desktop</option><option>Mobile</option><option>General</option></select></label>
 <p id="release-total" aria-live="polite"></p>
@@ -1037,11 +1037,11 @@ In-store only</textarea>
             box.textContent = "No saved offers. No promotions are active.";
             return;
           }
-          for (const offer of saved) {
+          for (const [index, offer] of saved.entries()) {
             const item = document.createElement("div");
             item.className = "offer";
             const title = document.createElement("strong");
-            title.textContent = offer.name["en-CA"] + " · #" + offer.id;
+            title.textContent = offer.name["en-CA"] + " · " + (saved.length - index) + " of " + saved.length;
             item.appendChild(title);
             const desc = document.createElement("p");
             desc.textContent =
@@ -1067,7 +1067,9 @@ In-store only</textarea>
             const summary = document.createElement("summary");
             summary.textContent = "Offer history";
             const events = document.createElement("ul");
-            history.append(summary, events);
+            const reference = document.createElement("p");
+            reference.textContent = "Permanent offer ID: " + offer.id;
+            history.append(summary, reference, events);
             history.addEventListener("toggle", async () => {
               if (!history.open) return;
               events.textContent = "Loading…";
@@ -1193,7 +1195,7 @@ In-store only</textarea>
           $("mobile-message").textContent = "Mobile layout preview · 390 CSS pixels maximum";
         }
         $("mobile-preview").onclick = () => {
-          const preview = window.open(location.pathname + "?layout=phone", "sdthMobileQA", "popup,width=390,height=844,resizable=yes,scrollbars=yes");
+          const preview = window.open(location.pathname + "?view=qa&layout=phone", "sdthMobileQA", "popup,width=390,height=844,resizable=yes,scrollbars=yes");
           $("mobile-message").textContent = preview ? "Mobile preview opened in a separate window." : "Allow pop-ups to open the mobile preview.";
         };
         function renderReview() {
@@ -1265,7 +1267,9 @@ In-store only</textarea>
         async function openWorkspace(token) {
           csrf = token;
           await loadMenu();
-          loadReview().catch(error => { $("review-message").textContent = error.message; });
+          const reviewMode = new URLSearchParams(location.search).get("view") === "qa";
+          $("release").hidden = !reviewMode;
+          if (reviewMode) loadReview().catch(error => { $("review-message").textContent = error.message; });
           await refresh();
           clearForm();
           $("workspace").hidden = false;
