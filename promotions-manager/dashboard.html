@@ -1264,8 +1264,8 @@ In-store only</textarea>
         }
         async function openWorkspace(token) {
           csrf = token;
-          loadReview().catch(error => { $("review-message").textContent = error.message; });
           await loadMenu();
+          loadReview().catch(error => { $("review-message").textContent = error.message; });
           await refresh();
           clearForm();
           $("workspace").hidden = false;
@@ -1332,6 +1332,8 @@ In-store only</textarea>
           "saving-amount",
           "regular",
           "discount",
+          "start",
+          "end",
         ].forEach((id) => $(id).addEventListener("input", updatePreview));
         $("clear").addEventListener("click", clearForm);
         $("offer-form").addEventListener("submit", async (event) => {
